@@ -18,7 +18,6 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-
     @Column(name = "user_id")
     private String userId;
 
@@ -28,6 +27,10 @@ public class Board {
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn")
     private Check delCheck;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "notice_yn")
+    private Check noticeCheck;
 
     @Column(name = "create_dt")
     private Date createDt;

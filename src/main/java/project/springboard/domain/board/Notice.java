@@ -14,11 +14,8 @@ public class Notice {
     @Column(name = "notice_id")
     private Long id;
 
-    @Column(name = "user_id")
-    private String userId;
-
-    @Embedded
-    private Post post;
+    @Column(name = "board_id")
+    private String boardId;
 
     @Enumerated(EnumType.STRING)
     private Check showCheck;
