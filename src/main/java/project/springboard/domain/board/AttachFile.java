@@ -14,8 +14,9 @@ public class AttachFile {
     @Column(name = "file_id")
     private Long id;
 
-    @Column(name = "board_id")
-    private Long boardId;
+    @ManyToOne
+    @JoinColumn(name = "BOARD_ID")
+    private Board board;
 
     @Column(name = "file_name")
     private String fileName;
@@ -24,6 +25,7 @@ public class AttachFile {
 
     @Enumerated(EnumType.STRING)
     private Check delCheck;
+
 
 
 }

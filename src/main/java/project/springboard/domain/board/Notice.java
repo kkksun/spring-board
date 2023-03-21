@@ -14,8 +14,9 @@ public class Notice {
     @Column(name = "notice_id")
     private Long id;
 
-    @Column(name = "board_id")
-    private String boardId;
+    @OneToOne
+    @JoinColumn(name = "BOARD_ID")
+    private Board board;
 
     @Enumerated(EnumType.STRING)
     private Check showCheck;

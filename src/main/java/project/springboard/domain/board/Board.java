@@ -6,7 +6,9 @@ import lombok.Setter;
 import project.springboard.domain.member.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.FetchType.*;
 
@@ -18,8 +20,9 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private Member member;
 
     @Embedded
     private Post post;
@@ -38,4 +41,6 @@ public class Board {
     @Column(name = "modify_dt")
     private Date modifyDt;
 
+    @OneToMany(mappedBy = "board")
+    private List<AttachFile> attachFileList = new ArrayList<>();
 }
