@@ -3,9 +3,18 @@
 <head>
     <title>Hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/jumbotron-narrow.css}"
+          href="../css/jumbotron-narrow.css" rel="stylesheet">
 </head>
 <body>
-<a href="/login">로그인</a>
-<a href="/join">회원 가입</a>
+<div class="container">
+    <div class="jumbotron">
+        <h1>게시판</h1>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="join">회원 가입</a>
+            <a class="btn btn-lg btn-secondary" href="login">로그인</a>
+        </p>
+    </div>
+</div> <!-- /container -->
 </body>
 </html>
