@@ -83,9 +83,7 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logoutMember(HttpServletRequest request) {
-        System.out.println("=============================");
-        System.out.println(request.getSession().getId());
-
+        request.getSession().invalidate();
 //        System.out.println(session.getAttribute(member));
         return"redirect:/";
     }
