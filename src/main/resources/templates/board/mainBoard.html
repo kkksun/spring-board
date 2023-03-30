@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../../static/css/boardStyle.css" rel="stylesheet">
+    <style>
+        .container {
+            width: 1000px;
+            margin: 100px auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2 style="text-align: center"> 게시판</h2>
+        </div>
+        <div>
+            <span th:text="${session.member.get().loginId}"></span>
+            <span th:text="${session.member.get().userName}"></span>
+        </div>
+        <div class="menu" style="float:right;">
+            <span  th:if="${!session.member.get().getType().toString().equals('USER')}"><a href="/join" th:href="@{/manageMember}" style="text-align: right;"> 회원 관리</a></span>
+            <span><a href="/join" th:href="@{/memberInfo}" style="text-align: right;"> 회원 정보</a></span>
+            <span><a href="/logout" th:href="@{/logout}" style="text-align: right;"> 로그아웃</a></span>
+        </div>
+        <table class="board">
+            <tr class="top">
+                <td class="id">번호</td>
+                <td class="title">제목</td>
+                <td class="loginId">작성자</td>
+                <td class="createDt">작성일</td>
+            </tr>
+            <tr th:each="board : ${board}">
+                <td class="id"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.id}">1</a></td>
+                <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}">제목</a></td>
+                <td class="loginId" th:text="${board.loginId}">홍길동</td>
+                <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd')}">2022-01-01</td>
+            </tr>
+        </table>
+    </div>
+    <div class="btn">
+        <button class="add"
+                    onclick="location.href='/boardAdd'"
+                    th:onclick="|location.href='@{/}'|"
+                    type="button">등록</button>
+    </div>
+</body>
+</html>

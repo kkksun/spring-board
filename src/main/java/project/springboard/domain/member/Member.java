@@ -1,8 +1,9 @@
 package project.springboard.domain.member;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@Builder
+@AllArgsConstructor
 //@DynamicInsert
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
@@ -21,7 +24,7 @@ public class Member {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column(name = "login_id", unique = true)
+    @Column(name = "login_id", unique = true, nullable = false)
     private String loginId;
 
     private String password;
@@ -45,15 +48,24 @@ public class Member {
     @Column(name = "modify_dt")
     private LocalDateTime modifyDt;
 
+    public Member() {
+
+    }
+
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
-        Member member = new Member();
-        member.loginId = memberDTO.getLoginId();
-        member.userName = memberDTO.getUserName();
-        member.password = memberDTO.getPassword();
-        member.email = memberDTO.getEmail();
-        member.status = memberDTO.getStatus();
-        member.type = memberDTO.getType();
+        Member member = Member.builder()
+                .id(memberDTO.getId())
+                .loginId(memberDTO.getLoginId())
+                .password(memberDTO.getPassword())
+                .userName(memberDTO.getUserName())
+                .email(memberDTO.getEmail())
+                .type(memberDTO.getType())
+                .status(memberDTO.getStatus())
+                .createDt(memberDTO.getCreateDt())
+                .modifyDt(memberDTO.getModifyDt())
+                .build();
+
         return member;
     }
 

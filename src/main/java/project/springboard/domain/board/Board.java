@@ -3,6 +3,8 @@ package project.springboard.domain.board;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import project.springboard.domain.member.Member;
 
 import javax.persistence.*;
@@ -20,12 +22,13 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private Member member;
 
-    @Embedded
-    private Post post;
+    private String title;
+
+    private String content;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn")
@@ -35,9 +38,11 @@ public class Board {
     @Column(name = "notice_yn")
     private Check noticeCheck;
 
-    @Column(name = "create_dt")
+    @CreatedDate
+    @Column(name = "create_dt", updatable = false)
     private Date createDt;
 
+    @LastModifiedDate
     @Column(name = "modify_dt")
     private Date modifyDt;
 

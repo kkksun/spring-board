@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../../static/css/boardStyle.css" rel="stylesheet">
+    <style>
+        .container {
+            width: 1000px;
+            margin: 100px auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2 style="text-align: center"> 회원 관리</h2>
+        </div>
+        <div>
+            <span th:text="${session.member.get().loginId}"></span>
+            <span th:text="${session.member.get().userName}"></span>
+        </div>
+        <div class="menu" style="float:right;">
+            <span  th:if="${!session.member.get().getType().toString().equals('USER')}"><a href="/join" th:href="@{/manageMember}" style="text-align: right;"> 회원 관리</a></span>
+            <span><a href="/join" th:href="@{/memberInfo}" style="text-align: right;"> 회원 정보</a></span>
+            <span><a href="/login" th:href="@{/logout}" style="text-align: right;"> 로그아웃</a></span>
+        </div>
+
+        <table class ="memberList">
+            <tr class="top">
+                <td class="id">회원 번호</td>
+                <td class="loginId">로그인 아이디</td>
+                <td class="userName">이름</td>
+                <td class="email">이메일</td>
+                <td class="type">유형</td>
+                <td class="status">상태</td>
+                <td class="createDt">가입날짜</td>
+            </tr>
+            <tr th:each="memberList : ${memberList}">
+                <td class="id" name = "id" th:text="${memberList.id}">1</td>
+                <td class="loginId" name="loginId" th:text="${memberList.loginId}">test</td>
+                <td class="userName" name="userName" th:text="${memberList.userName}">test</td>
+                <td class="email" name="email" th:text="${memberList.email}">test</td>
+                <td class="type" name="type" th:text="${memberList.type}">test</td>
+                <td class="status" name="status" th:text="${memberList.status}">test</td>
+                <td class="createDt" name="createDt" th:text="${#temporals.format(memberList.createDt, 'yyyy-MM-dd')}">2022-01-01</td>
+            </tr>
+
+        </table>
+
+    </div>
+</body>
+</html>

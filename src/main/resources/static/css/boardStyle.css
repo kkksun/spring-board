@@ -1,0 +1,60 @@
+h2 {
+    font-size: 3rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.menu {
+    margin-bottom: 10px;
+}
+
+.menu > span {
+    margin-left : 10px;
+}
+
+table {
+    width: 100%;
+    border-top: 3px solid #000;
+    border-bottom: 3px solid #000;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table > .top, .top>td {
+    border-bottom: 2px solid #999;
+}
+
+table > tr, td {
+    border-bottom: 1px solid #ddd;
+     padding: 10px;
+}
+
+.board tr td.id { width:10%; }
+.board tr td.title {width:65%; }
+.board tr td.loginId {width:10%;}
+.board tr td.createDt {width:15%;}
+
+.btn {
+    text-align: center;
+}
+.btn > .add {
+    display: inline-block;
+    min-width: 80px;
+    margin-left: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 20px;
+    color: white;
+    background-color: black;
+}
+.memberList tr td.id {width: 9%}
+.memberList tr td.loginId {width: 15%}
+.memberList tr td.userName {width: 10%}
+.memberList tr td.email {width: 21%}
+.memberList tr td.type {width: 10%}
+.memberList tr td.status {width: 10%}
+.memberList tr td.createDt {width: 15%}

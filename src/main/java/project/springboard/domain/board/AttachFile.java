@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @Entity
 @Getter @Setter
 public class AttachFile {
@@ -14,7 +15,7 @@ public class AttachFile {
     @Column(name = "file_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 

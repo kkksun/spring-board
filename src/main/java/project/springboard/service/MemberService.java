@@ -1,38 +1,22 @@
 package project.springboard.service;
 
-import com.fasterxml.jackson.annotation.OptBoolean;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import project.springboard.domain.member.Member;
 import project.springboard.dto.MemberDTO;
-import project.springboard.repository.MemberRepository;
 
+import java.util.List;
 import java.util.Optional;
 
+public interface MemberService {
 
-@Service
-@RequiredArgsConstructor
+     void saveMember(MemberDTO memberDTO);
 
-public class MemberService {
+     boolean loginIdCheck(String loginId);
 
+     List<MemberDTO> allMember();
 
-    private final MemberRepository memberRepository;
+     Optional<MemberDTO> findMember(Long memberId);
 
-    @Transactional
-    public void saveMember(MemberDTO memberDTO) {
+     Optional<MemberDTO> findMember(MemberDTO memberDTO);
 
-        Member memberEntity = Member.toMemberEntity(memberDTO);
-        memberRepository.save(memberEntity);
-    }
+     void adminSave();
 
-    @Transactional
-    public String loginIdCheck(String loginId) {
-        Optional<Member> member = memberRepository.findByMember(loginId);
-        if(member.isEmpty()) {
-            return "ok";
-        } else {
-            return "false";
-        }
-    }
 }

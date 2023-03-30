@@ -5,11 +5,12 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <style>
         .container {
-            max-width: 560px;
+            width: 1000px;
+            margin: 100px auto;
         }
     </style>
     <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
+             src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
 </head>
@@ -18,28 +19,36 @@
     <div class="py-5 text-center">
         <h2> 회원 가입</h2>
     </div>
-    <form th:action method="post">
+    <form th:onsubmit="return vaildCheck()" th:action method="post">
         <div>
             <label for="loginId">아이디</label>
             <input type="text" id="loginId" name ="loginId" class="form-control" th:onblur="loginIdCheck()" >
-            <span id="check-result"></span>
+            <span id="loginId_check_result"></span>
+            <input type="hidden" id="idDuplicateCheck"/>
+
         </div>
         <div>
             <label for="password">비밀번호</label>
             <input type="password" id="password" name ="password" class="form-control">
+            <span id="password_check_result"></span>
         </div>
         <div>
             <label for="userName">이름</label>
             <input type="text" id="userName" name ="userName" class="form-control">
+            <span id="userName_check_result"></span>
         </div>
         <div>
             <label for="email">이메일</label>
             <input type="text" id="email" name ="email" class="form-control">
+            <span id="email_check_result"></span>
         </div>
         <div>
             <label >유형
-                <input type="radio"  name="selectType" value="M" > MANAGER
-                <input type="radio"  name="selectType" value="U" > MEMBER
+                <div>
+                    <input type="radio" class ="selectType" name="selectType" value="M" > MANAGER
+                    <input type="radio" class ="selectType" name="selectType" value="U" > USER
+                </div>
+                <span id="type_check_result"></span>
             </label>
         </div>
 
@@ -47,11 +56,10 @@
 
         <div class="row">
             <div class="col">
-                <button class="w-100 btn btn-primary btn-lg" type="submit">가입 </button>
+                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit" >가입 </button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='items.html'"
                         th:onclick="|location.href='@{/}'|"
                         type="button">취소</button>
             </div>
@@ -59,30 +67,85 @@
     </form>
 </div>
 </body>
-<script th:inline="javascript" >
+<script th:inline="javascript">
+    let loginIdResult;
     const loginIdCheck = () => {
-        const loginId = document.getElementById("loginId").value;
-        const checkResult =  document.getElementById("check-result");
-        console.log("입력값: ", loginId);
-        $.ajax({
-            type: "post",
-            url: "/member/loginIdCheck",
-            data: {
-                "loginId" : loginId
-            },
-            success: function(result) {
-                if (result == "ok") {
-                    checkResult.style.color="red";
-                    checkResult.innerHTML ="사용가능한 아이디입니다.";
-                } else {
-                    checkResult.style.color="red";
-                    checkResult.innerHTML ="이미존재하는 아이디입니다.";
+        let loginId = $('#loginId').val();
+        let checkResult = $('#loginId_check_result')[0];
+
+        if(loginId.trim().length == 0 || loginId == null) {
+            checkResult.style.color="red";
+            checkResult.innerHTML ="아이디를 입력해주세요.";
+            $("#joinBtn").prop("disabled", true);
+        } else {
+            $.ajax({
+                type: "post",
+                url: "/member/loginIdCheck",
+                data: {
+                    "loginId": loginId
+                },
+                success: function (result) {
+                    if (result) {
+                        checkResult.style.color="red";
+                        checkResult.innerHTML = "사용가능한 아이디입니다.";
+                        $("#joinBtn").prop("disabled", false);
+                        console.log(loginId.trim().length);
+                    } else {
+                        checkResult.style.color="red";
+                        checkResult.innerHTML = "이미존재하는 아이디입니다.";
+                        $("#joinBtn").prop("disabled", true);
+                    }
+                    $("#idDuplicateCheck").val(result);
+                },
+                error: function () {
+                    alert("Error");
                 }
-            },
-            error: function(a,b,c) {
-                alert(c);
-            }
-        });
+            });
+        }
+    }
+
+    function vaildCheck()  {
+        let loginId = $('#loginId').val();
+        let password = $('#password').val();
+        let userName = $('#userName').val();
+        let email = $('#email').val();
+        let selectType = $('.selectType').is(':checked');
+        let idDuplicateCheck = $.parseJSON($('#idDuplicateCheck').val());
+        let joinPossible = true;
+
+        if(loginId.trim().length == 0 || loginId == null) {
+            joinPossible = false;
+            $("#loginId_check_result").text("아이디를 입력해주세요.");
+            $("#loginId_check_result").css("color","red");
+        }
+        if(!idDuplicateCheck) {
+            joinPossible = false;
+            $("#loginId_check_result").text("이미 존재하는 아이디입니다. 다시 입력해주세요.");
+            $("#loginId_check_result").css("color","red");
+        }
+        if(password.trim().length == 0 || password == null) {
+            joinPossible = false;
+            $("#password_check_result").text("비밀번호를 입력해주세요.");
+            $("#password_check_result").css("color","red");
+        }
+        if(userName.trim().length == 0 || userName == null) {
+            joinPossible = false;
+            $("#userName_check_result").text("이름을 입력해주세요.");
+            $("#userName_check_result").css("color","red");
+        }
+        if(email.trim().length == 0 || email == null) {
+            joinPossible = false;
+            $("#email_check_result").text("이메일 입력해주세요.");
+            $("#email_check_result").css("color","red");
+        }
+        if(!selectType) {
+            joinPossible = false;
+            $("#type_check_result").text("유형을 선택해주세요.");
+            $("#type_check_result").css("color","red");
+        }
+
+            return joinPossible;
+
     }
 </script>
 </html>
