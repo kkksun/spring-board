@@ -14,17 +14,26 @@
 </head>
 <body>
     <div class="container">
-        <div class="py-5 text-center">
+        <div>
             <h2 style="text-align: center"> 게시판</h2>
         </div>
         <div>
-            <span th:text="${session.member.get().loginId}"></span>
-            <span th:text="${session.member.get().userName}"></span>
+<!--            <span th:text="${session.loginMember.get().loginId}"></span>-->
+<!--            <span th:text="${session.loginMember.get().userName}"></span>           -->
+            <span th:text="${loginMember.get().id}"></span>
+            <span th:text="${loginMember.get().userName}"></span>
+            <span th:text="${loginMember.get().loginId}"></span>
         </div>
         <div class="menu" style="float:right;">
-            <span  th:if="${!session.member.get().getType().toString().equals('USER')}"><a href="/join" th:href="@{/manageMember}" style="text-align: right;"> 회원 관리</a></span>
-            <span><a href="/join" th:href="@{/memberInfo}" style="text-align: right;"> 회원 정보</a></span>
-            <span><a href="/logout" th:href="@{/logout}" style="text-align: right;"> 로그아웃</a></span>
+            <span  th:if="${!loginMember.get().getType().equals('USER') && !loginMember.isEmpty()}">
+                <a href="/manageMember" th:href="@{/manageMember}" style="text-align: right;"> 회원 관리</a>
+            </span>
+            <span>
+                <a href="/memberInfo" th:href="@{/memberInfo/}" th:value="${loginMember.get().getId()}" style="text-align: right;" > 회원 정보</a>
+            </span>
+            <span>
+                <a href="/logout" th:href="@{/logout}" style="text-align: right;"> 로그아웃</a>
+            </span>
         </div>
         <table class="board">
             <tr class="top">

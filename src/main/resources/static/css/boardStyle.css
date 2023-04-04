@@ -6,6 +6,15 @@ a {
     text-decoration: none;
     color: inherit;
 }
+form > div {
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align:center
+}
+
+div > a {
+    text-align:center;
+}
 
 .menu {
     margin-bottom: 10px;
