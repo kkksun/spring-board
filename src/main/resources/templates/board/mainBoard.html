@@ -1,60 +1,51 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
-          href="../../static/css/boardStyle.css" rel="stylesheet">
-    <style>
-        .container {
-            width: 1000px;
-            margin: 100px auto;
-        }
-
-    </style>
+          href="../css/boardStyle.css" rel="stylesheet">
+    <title>Title</title>
 </head>
 <body>
-    <div class="container">
-        <div>
-            <h2 style="text-align: center"> 게시판</h2>
-        </div>
-        <div>
-<!--            <span th:text="${session.loginMember.get().loginId}"></span>-->
-<!--            <span th:text="${session.loginMember.get().userName}"></span>           -->
-            <span th:text="${loginMember.get().id}"></span>
-            <span th:text="${loginMember.get().userName}"></span>
-            <span th:text="${loginMember.get().loginId}"></span>
-        </div>
-        <div class="menu" style="float:right;">
-            <span  th:if="${!loginMember.get().getType().equals('USER') && !loginMember.isEmpty()}">
-                <a href="/manageMember" th:href="@{/manageMember}" style="text-align: right;"> 회원 관리</a>
-            </span>
-            <span>
-                <a href="/memberInfo" th:href="@{/memberInfo/}" th:value="${loginMember.get().getId()}" style="text-align: right;" > 회원 정보</a>
-            </span>
-            <span>
-                <a href="/logout" th:href="@{/logout}" style="text-align: right;"> 로그아웃</a>
-            </span>
-        </div>
-        <table class="board">
-            <tr class="top">
-                <td class="id">번호</td>
-                <td class="title">제목</td>
-                <td class="loginId">작성자</td>
-                <td class="createDt">작성일</td>
-            </tr>
-            <tr th:each="board : ${board}">
-                <td class="id"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.id}">1</a></td>
-                <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}">제목</a></td>
-                <td class="loginId" th:text="${board.loginId}">홍길동</td>
-                <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd')}">2022-01-01</td>
-            </tr>
-        </table>
+<div class="container">
+    <div>
+        <h2 class="title">게시판</h2>
     </div>
+    <div>
+        <!--            <span th:text="${session.loginMember.get().loginId}"></span>-->
+        <!--            <span th:text="${session.loginMember.get().userName}"></span>           -->
+        <span th:text="${loginMember.get().id}"></span>
+        <span th:text="${loginMember.get().userName}"></span>
+        <span th:text="${loginMember.get().loginId}"></span>
+    </div>
+    <div class="menu">
+            <span th:if="${!loginMember.get().getType().equals('USER') && !loginMember.isEmpty()}">
+                <a href="../member/memberManage.html" th:href="@{/manageMember}"> 회원관리</a>
+            </span>
+        <span>
+                <a href="../member/memberInfo.html"th:href="@{/memberInfo/}" th:value="${loginMember.get().getId()}" > 회원정보</a>
+            </span>
+        <span>
+                <a href="../member/login.html" th:href="@{/logout}"> 로그아웃</a>
+            </span>
+    </div><br>
+    <table class="board">
+        <tr class="top">
+            <td class="id">번호</td>
+            <td class="title">제목</td>
+            <td class="loginId">작성자</td>
+            <td class="createDt">작성일</td>
+        </tr>
+        <tr th:each="board : ${board}">
+            <td class="id"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.id}">1</a></td>
+            <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}" href="viewBoard.html">제목</a></td>
+            <td class="loginId" th:text="${board.loginId}">홍길동</td>
+            <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd')}">2022-01-01</td>
+        </tr>
+    </table>
     <div class="btn">
-        <button class="add"
-                    onclick="location.href='/boardAdd'"
-                    th:onclick="|location.href='@{/}'|"
-                    type="button">등록</button>
+        <button class="btn_a" onclick="location.href='addBoard.html'" type="button" th:onclick="|location.href='@{/}'|">등록</button>
     </div>
+</div>
 </body>
 </html>

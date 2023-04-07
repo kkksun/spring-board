@@ -1,65 +1,167 @@
-h2 {
-    font-size: 3rem;
+body .container {
+    width: 1000px;
+    margin: 100px auto;
+    /*background-color: darkviolet;*/
 }
 
-a {
+input, textarea {
+    outline: none;
+}
+
+h2.title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    /*background-color: aliceblue;*/
+}
+
+.loginForm, .joinForm{
+    margin-left : 30%;
+    margin-right : 30%;
+    /*background-color: aqua;*/
+}
+
+.loginForm a{
     text-decoration: none;
     color: inherit;
-}
-form > div {
-    margin-left: 20%;
-    margin-right: 20%;
-    text-align:center
-}
-
-div > a {
-    text-align:center;
+    float: right;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: right;
 }
 
 .menu {
-    margin-bottom: 10px;
+    float:right;
 }
 
-.menu > span {
-    margin-left : 10px;
+.menu a {
+    text-decoration: none;
+    color: inherit;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: right;
+}
+
+.memberInfo, .editMember, .boardForm, .viewBoardForm, .editBoardForm, .editManageMemberForm  {
+    border-top: 3px solid #009688;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+.editManageMemberForm {
+    text-align: left;
+}
+.loginForm label, .joinForm label, .memberInfo label, .editMember label, .editManageMember label {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: left
+    /*text-color*/
+}
+.loginForm input, .joinForm input:not(.selectType) {
+    width: 98%;
+    height: 40px;
+    margin : 5px 0px 5px 0px;
+    border-radius: 6px;
+    border:  2px solid lightgray;
+}
+
+.loginForm .line, .joinForm .line, table .top, .memberInfo .line, .editMember .line, .viewBoardForm .line, .editManageMember .line {
+    margin : 20px 0px 20px 0px;
+    border-bottom:  2px solid #E0E0E0;
+}
+.loginForm .row, .joinForm .row, .editManageMember .row {
+    width: 100%;
+    height: 40px;
+}
+
+.loginForm .btn .btn_l {
+    width: 100%;
+    height: 46px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    border:  2px solid #607D8B;
+    color : white;
+    background-color: #607D8B;
+}
+
+.joinForm .btn .btn_j {
+    width: 48%;
+    height: 46px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    color : white;
+}
+
+.joinForm .btn .btn_1 {
+    margin-right: 2%;
+    border:  2px solid #607D8B;
+    background-color: #607D8B;
+}
+.joinForm .btn .btn_2 {
+    background-color: #BDBDBD;
+    border:  2px solid #BDBDBD;
 }
 
 table {
+    /*background-color: aquamarine;*/
     width: 100%;
-    border-top: 3px solid #000;
-    border-bottom: 3px solid #000;
+    border-top: 3px solid #009688;
+    border-bottom: 3px solid #009688;
     border-collapse: collapse;
     text-align: center;
+    margin-top: 10px;
 }
 
-table > .top, .top>td {
-    border-bottom: 2px solid #999;
+table .top {
+    height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    font-size: 16px;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
 }
-
-table > tr, td {
-    border-bottom: 1px solid #ddd;
-     padding: 10px;
-}
-
 .board tr td.id { width:10%; }
 .board tr td.title {width:65%; }
 .board tr td.loginId {width:10%;}
 .board tr td.createDt {width:15%;}
 
 .btn {
+    margin-top: 30px;
     text-align: center;
 }
-.btn > .add {
+/*.editManageMember .btn {*/
+/*    text-align: left;*/
+/*}*/
+.btn > .btn_a , .btn > .btn_e{
     display: inline-block;
-    min-width: 80px;
-    margin-left: 10px;
+    /*min-width: 80px;*/
+    /*margin-left: 10px;*/
+    width:200px;
     padding: 10px;
-    border: 1px solid #000;
-    border-radius: 5px;
-    font-size: 20px;
+    border: 1px solid #00695C;
+    border-radius: 6px;
+    font-size: 16px;
     color: white;
-    background-color: black;
+    background-color: #00695C;
 }
+
+.btn > .btn_d, .btn > .btn_c{
+    display: inline-block;
+    /*min-width: 80px;*/
+    margin-left: 15px;
+    width : 200px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    background-color: #BDBDBD;
+
+}
+
 .memberList tr td.id {width: 9%}
 .memberList tr td.loginId {width: 15%}
 .memberList tr td.userName {width: 10%}
@@ -67,3 +169,116 @@ table > tr, td {
 .memberList tr td.type {width: 10%}
 .memberList tr td.status {width: 10%}
 .memberList tr td.createDt {width: 15%}
+
+
+.memberInfo div, .editMember div, .editManageMember div {
+    margin :0% 15% 0% 15%;
+    /*width: 50%;*/
+    /*background-color: blanchedalmond;*/
+}
+.memberInfo .col, .editMember .col, .editManageMember .col {
+    display: inline-block;
+    text-align: right;
+    width: 15%;
+    padding-right: 20px;
+    border-right: 2px solid #9E9E9E;
+    /*width :60px;*/
+    /*font-weight: bold;*/
+    /*background-color: darkviolet;*/
+}
+
+.memberInfo input, .editMember input, .editMember .loginId, .editMember .type, .editManageMember input:not(.selectType, .selectStatus){
+    text-align: left;
+    width: 50%;
+    height: 40px;
+    margin : 30px 0px 5px 15px;
+    border: 0px;
+    font-size: 14px;
+}
+
+.editMember input, .editManageMember input:not(.loginId){
+    border:  2px solid lightgray;
+    border-radius: 6px;
+}
+
+.addBoard, .viewBoard, .editBoard {
+    margin : 10px 10% 0px 10%;
+    /*background-color: beige;*/
+}
+
+.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea {
+    width: 100%;
+    text-align: left;
+    border:  2px solid lightgray;
+    border-radius: 2px;
+}
+
+.addBoard .notice, .editBoard .notice {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    vertical-align: text-top;
+}
+
+/*edit도 추가하기*/
+.addBoard #notice, #show {
+    width: auto;
+}
+
+
+.addBoard input.title, .editBoard input.title{
+    margin: 30px 0px 20px 0px;
+    height: 50px;
+}
+.addBoard textarea.contents, .editBoard textarea.contents {
+    margin: 1px 0px 20px 0px;
+    height: 400px;
+}
+
+.viewBoard #title {
+    margin: 30px 0px 10px 0px;
+    height: 50px;
+}
+.viewBoard .title {
+    margin-left: 5px;
+    text-align: left;
+    font-size: 2rem;
+}
+
+.viewBoard #loginId, .viewBoard #createDt {
+    margin: 0px 0px 5px 0px;
+    height: 20px;
+}
+
+.viewBoard .loginId, .viewBoard .createDt {
+    margin-left: 5px;
+    text-align: left;
+    font-size: 12px;
+}
+.viewBoard .loginId {
+    font-weight: bold;
+}
+
+.viewBoard .contents {
+    height: 400px;
+    text-align: left;
+    /*background-color: #146c43;*/
+}
+
+.editManageMember .radio_btn {
+    display: inline;
+    width: 50%;
+    height: 40px;
+    margin : 30px 0px 5px 15px;
+}
+
+.editManageMember .btn {
+    margin-left: 15px;
+    text-align: left;
+}
+
+.editManageMember .typeCheck, .editManageMember .statusCheck { margin-top: 30px}
+
+.editManageMember .btn_d {
+    background-color: #C62828 ;
+}

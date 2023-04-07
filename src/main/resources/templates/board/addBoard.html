@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../css/boardStyle1.css" rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h2 class="title">게시글 쓰기</h2>
+        </div>
+        <div class="menu">
+            <span>
+                <a href="../board/main.html"> 게시판</a>
+            </span>
+            <span>
+                <a href="memberManage.html"> 회원관리</a>
+            </span>
+            <span>
+                <a href="memberInfo.html" > 회원정보</a>
+            </span>
+            <span>
+                <a href="login.html" > 로그아웃</a>
+            </span>
+        </div><br>
+        <div class="boardForm">
+            <form class="addBoard">
+                <div >
+                    <input type="text" class="title" name="title" placeholder="제목을 입력하세요.">
+                </div>
+
+                <div>
+                    <textarea class="contents" name="contents" placeholder="내용을 입력하세요"></textarea>
+                </div>
+                <div>
+                    <input type="file">
+                </div>
+                <div class="notice">
+                    <input type="checkbox" id ="notice"> <label for="notice">공지 사항</label>
+                    <div class="noticeInfo" hidden>
+                        <input type="checkbox" id ="show"> <label for="show">보여지기</label>
+                        <div>
+                            <label for="showStartDt">시작일</label><input class="date" id="showStartDt" name="showStartDt" type="date">
+                            <label for="showEndDt">종료일</label><input class="date" id="showEndDt" name="shoEndDt" type="date">
+                        </div>
+                    </div>
+                </div>
+                <div class="btn">
+                    <button class="btn_e" onclick="location.href='main.html'" type="button">등록</button>
+                    <button class="btn_d" onclick="location.href='main.html'" type="button">취소</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+<select>
+<option></option>
+
+</select>
+</body>
+</html>

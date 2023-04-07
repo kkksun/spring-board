@@ -1,72 +1,68 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <style>
-        .container {
-            width: 1000px;
-            margin: 100px auto;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+    <title>Title</title>
     <script
-             src="https://code.jquery.com/jquery-3.6.4.min.js"
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container">
-    <div class="py-5 text-center">
-        <h2> 회원 가입</h2>
+    <div>
+        <h2 class="title">회원 가입</h2>
     </div>
-    <form th:onsubmit="return vaildCheck()" th:action method="post">
-        <div>
-            <label for="loginId">아이디</label>
-            <input type="text" id="loginId" name ="loginId" class="form-control" th:onblur="loginIdCheck()" >
-            <span id="loginId_check_result"></span>
-            <input type="hidden" id="idDuplicateCheck"/>
-
-        </div>
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name ="password" class="form-control">
-            <span id="password_check_result"></span>
-        </div>
-        <div>
-            <label for="userName">이름</label>
-            <input type="text" id="userName" name ="userName" class="form-control">
-            <span id="userName_check_result"></span>
-        </div>
-        <div>
-            <label for="email">이메일</label>
-            <input type="text" id="email" name ="email" class="form-control">
-            <span id="email_check_result"></span>
-        </div>
-        <div>
-            <label >유형
-                <div>
-                    <input type="radio" class ="selectType" name="selectType" value="M" > MANAGER
-                    <input type="radio" class ="selectType" name="selectType" value="U" > USER
+    <div class="joinForm">
+        <form action="/main" th:onsubmit="return vaildCheck()" th:action method="post">
+            <div>
+                <label for="loginId">아이디</label><br>
+                <input type="text" id="loginId" name ="loginId" th:onblur="loginIdCheck()" >
+                <span id="loginId_check_result"></span>
+                <input type="hidden" id="idDuplicateCheck"/>
+            </div>
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name ="password" >
+                <span id="password_check_result"></span>
+            </div>
+            <div>
+                <label for="userName">이름</label>
+                <input type="text" id="userName" name ="userName" >
+                <span id="userName_check_result"></span>
+            </div>
+            <div>
+                <label for="email">이메일</label>
+                <input type="text" id="email" name ="email" >
+                <span id="email_check_result"></span>
+            </div>
+            <div>
+                <label>유형
+                    <div class="radio_btn">
+<!--                        <input type="radio" class ="selectType" name="selectType" value="M" > MANAGER-->
+<!--                        <input type="radio" class ="selectType" name="selectType" value="U" > USER-->
+                        <input type="radio" class ="selectType" name="selectType" value="M"  th:value="${T(project.springboard.domain.member.MemberType).MANAGER}"><span th:text="${T(project.springboard.domain.member.MemberType).MANAGER}"></span>
+                        <input type="radio" class ="selectType" name="selectType" value="M"  th:value="${T(project.springboard.domain.member.MemberType).USER}" ><span th:text="${T(project.springboard.domain.member.MemberType).USER}"></span>
+                    </div>
+                    <span id="type_check_result"></span>
+                </label>
+            </div>
+            <div class="line"></div>
+            <div class="row">
+                <div class="btn">
+                    <button class="btn_j btn_1" id="submit" type="submit" >가입 </button>
+                    <button class="btn_j btn_2"  type="button" onclick="location.href='login.html'" th:onclick="|location.href='@{/login}'|">취소</button>
                 </div>
-                <span id="type_check_result"></span>
-            </label>
-        </div>
-
-        <hr class="my-4">
-
-        <div class="row">
-            <div class="col">
-                <button class="w-100 btn btn-primary btn-lg" id="submit" type="submit" >가입 </button>
             </div>
-            <div class="col">
-                <button class="w-100 btn btn-secondary btn-lg"
-                        th:onclick="|location.href='@{/}'|"
-                        type="button">취소</button>
-            </div>
-        </div>
-    </form>
+
+        </form>
+
+    </div>
 </div>
 </body>
+
 <script th:inline="javascript">
     let loginIdResult;
     const loginIdCheck = () => {
@@ -144,7 +140,7 @@
             $("#type_check_result").css("color","red");
         }
 
-            return joinPossible;
+        return joinPossible;
 
     }
 </script>
