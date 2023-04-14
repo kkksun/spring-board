@@ -1,9 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="../css/boardStyle1.css" rel="stylesheet">
-    <title>Title</title>
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        const deleteMember = () => {
+            let loginId = [[${memberInfo.loginId}]];
+            let url =  $(location).attr('origin') + [[@{/member/delete/{memberId}(memberId=${memberInfo.id})}]];
+
+                if (loginId ==  "admin") {
+                    alert("admin 계정은 탈퇴 불가합니다.");
+                    // $(".btn_d").prop("disabled", true);
+                } else {
+                    if(confirm('탈퇴하시겠습니까?')) {
+                        location.href = url;
+                    }
+                }
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -11,45 +31,45 @@
         <h2 class="title">회원 정보</h2>
     </div>
     <div class="menu">
-            <span>
-                <a href="../board/main.html"> 게시판</a>
-            </span>
         <span>
-                <a href="memberManage.html"> 회원관리</a>
-            </span>
+            <a  th:href="@{/board}">게시판</a>
+        </span>
+        <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
+            <a th:href="@{/manage/member}" > 회원관리</a>
+        </span>
         <span>
-                <a href="memberInfo.html" > 회원정보</a>
-            </span>
+            <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
+        </span>
         <span>
-                <a href="login.html" > 로그아웃</a>
-            </span>
+            <a th:href="@{/logout}"> 로그아웃</a>
+        </span>
     </div><br>
-    <div class="memberInfo">
+    <div class="memberInfo" >
         <div>
             <label class="col">아이디</label>
-            <input class="loginId" value="admin" readonly>
+            <input class="loginId" th:field="${memberInfo.loginId}" readonly>
         </div>
         <div>
             <label class="col">비밀번호</label>
-            <input class="password" type="password" value="admin" readonly>
+            <div class="btn_p"><button class="pwChangeBtn"  type="button" th:onclick="|location.href='@{/member/edit/{memberId}(memberId=${memberInfo.id}, pwChange=true)}'|">변경하기</button></div>
         </div>
         <div>
             <label class="col">이름</label>
-            <input class="userName" value="admin" readonly>
+            <input class="userName" th:field="${memberInfo.userName}" readonly>
         </div>
         <div>
             <label class="col">이메일</label>
-            <input class="email" value="admin" readonly>
+            <input class="email" th:field="${memberInfo.email}" readonly>
         </div>
         <div>
             <label class="col">유형</label>
-            <input class="type" value="USER" readonly>
+            <input class="type" th:field="${memberInfo.type}" readonly>
         </div>
         <div class="line"></div>
         <div class="row">
             <div class="btn">
-                <button class="btn_e" onclick="location.href='editMember.html'" type="button">수정</button>
-                <button class="btn_d" onclick="location.href='/boardAdd'" type="button">탈퇴</button>
+                <button class="btn_e" th:onclick="|location.href='@{/member/edit/{memberId}(memberId=${memberInfo.id}, pwChange=false)}'|" type="button">수정</button>
+                <button class="btn_d" th:onclick="deleteMember()" type="button">탈퇴</button>
             </div>
         </div>
     </div>

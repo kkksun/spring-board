@@ -1,10 +1,10 @@
 package project.springboard.repository;
 
-import project.springboard.domain.member.Member;
+import project.springboard.domain.member.dto.MemberDTO;
+import project.springboard.domain.member.entity.Member;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public interface MemberRepository {
 
@@ -13,4 +13,12 @@ public interface MemberRepository {
     Optional<Member> findByMember(String loginId);
 
     List<Member> allMember();
+
+    void deleteMember(Long memberId);
+
+    void manageMemberEdit(Long memberId, Member editMEmber);
+
+    void memberEdit(Long memberId, Member editMEmber);
+
+
 }

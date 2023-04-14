@@ -1,4 +1,4 @@
-package project.springboard.domain.member;
+package project.springboard.domain.member.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import project.springboard.dto.MemberDTO;
+import project.springboard.domain.member.dto.MemberDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

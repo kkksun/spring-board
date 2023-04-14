@@ -1,6 +1,6 @@
 package project.springboard.service;
 
-import project.springboard.dto.MemberDTO;
+import project.springboard.domain.member.dto.MemberDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,14 +9,18 @@ public interface MemberService {
 
      void saveMember(MemberDTO memberDTO);
 
-     boolean loginIdCheck(String loginId);
+     boolean loginIdDuplicateCheck(String loginId);
 
      List<MemberDTO> allMember();
 
-     Optional<MemberDTO> findMember(Long memberId);
+     MemberDTO findMember(Long memberId);
 
-     Optional<MemberDTO> findMember(MemberDTO memberDTO);
+     MemberDTO findMember(MemberDTO memberDTO);
 
      void adminSave();
 
+     void manageMemberEdit(Long memberId, MemberDTO editMEmber);
+     void memberEdit(Long memberId, MemberDTO editMEmber);
+
+     void deleteMember(Long memberId);
 }

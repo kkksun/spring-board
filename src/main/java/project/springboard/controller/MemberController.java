@@ -1,106 +1,160 @@
 package project.springboard.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import project.springboard.SessionConst;
-import project.springboard.domain.member.MemberStatus;
-import project.springboard.dto.MemberDTO;
+import project.springboard.domain.member.dto.MemberDTO;
+import project.springboard.domain.member.entity.MemberStatus;
+import project.springboard.domain.member.entity.MemberType;
+import project.springboard.domain.member.form.*;
 import project.springboard.service.MemberService;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Optional;
 
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostConstruct
-    public void init() {
-        memberService.adminSave();
-    }
+    @ModelAttribute("memberTypes")
+    public MemberType[] memberTypes() { return  MemberType.values(); }
 
-    @GetMapping("/login")
-    public String loginMember(Model model) {
-        return "member/login";
-    }
+    @ModelAttribute("memberStatuses")
+    public MemberStatus[] memberStatus() { return  MemberStatus.values(); }
+
 
     /**
-     * 로그인
-     * */
-    @PostMapping("/login")
-    public String loginMember(@ModelAttribute MemberDTO memberDTO, Model model, HttpServletRequest request) {
-        Optional<MemberDTO> member = memberService.findMember(memberDTO);
+     * 회원 관리 - 전체 회원
+     */
+    @GetMapping("/manage/member")
+    public String memberManage(Model model) {
 
-        if(member.isPresent() && member.get().getStatus() == MemberStatus.ACTIVE) {
-            HttpSession session = request.getSession();
-            session.setAttribute(SessionConst.LOGIN_MEMBER, member);
-            return "redirect:/board";
-        } else {
-            if (member.isPresent() && member.get().getStatus() == MemberStatus.STANDBY) {
-                model.addAttribute("msg", "승인이 완료되지 않았습니다. 관리자에게 문의해주세요.");
-            } else {
-                model.addAttribute("msg", "아이디 또는 비밀번호가 일치하지않습니다. 다시 입력해주세요.");
-            }
-            return "member/login";
-        }
-    }
-
-
-    
-    @GetMapping("/join")
-    public String saveMember(Model model) {
-        return "member/join";
-    }
-
-    /**
-     * 회원 등록
-     * */
-    @PostMapping("/join")
-    public String saveMember(@ModelAttribute MemberDTO memberDTO) {
-
-        memberService.saveMember(memberDTO);
-        return "redirect:/";
-    }
-
-    /**
-     * 로그인아이디 중복 체크*/
-    @PostMapping("/member/loginIdCheck")
-    public @ResponseBody boolean loginIdCheck(@RequestParam("loginId") String loginId) {
-        boolean checkResult = memberService.loginIdCheck(loginId);
-        return checkResult;
-    }
-
-
-    @GetMapping("/manageMember")
-    public String allMember(Model model) {
         List<MemberDTO> memberList = memberService.allMember();
+//        List<MemberListForm> memberListForms = memberList.stream().map(MemberListForm :: new).collect(Collectors.toList());
+
         model.addAttribute("memberList", memberList);
         return "member/manageMember";
     }
 
+    /**
+     * 회원 관리 - 회원 정보 수정
+     */
+    @GetMapping("/manage/memberInfo/{memberId}")
+    public String manageMemberInfo(@PathVariable Long memberId, Model model) {
+
+        EditManageMemberForm memberInfo = EditManageMemberForm.toEditForm(memberService.findMember(memberId));
+         model.addAttribute("memberInfo", memberInfo);
+        return "member/manageMemberEdit";
+
+    }
+
+    @PostMapping("/manage/memberInfo/{memberId}")
+    public String manageMemberEdit(@PathVariable Long memberId,
+                                   @Validated @ModelAttribute("memberInfo") EditManageMemberForm memberInfo,
+                                   BindingResult bindingResult,
+                                   Model model) {
+
+        log.info("memberInfo ={}", memberInfo);
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("memberId", memberId);
+            return "member/manageMemberEdit";
+        }
+
+        MemberDTO editMember = new MemberDTO(memberInfo);
+        memberService.manageMemberEdit(memberId, editMember);
+
+        return "redirect:/manage/member";
+
+    }
+
+    /**
+     * 회원 관리 - 회원 삭제
+     */
+    @GetMapping("/manage/member/delete/{memberId}")
+    public String manageMemberDelete(@PathVariable("memberId") Long memberId)  {
+
+        memberService.deleteMember(memberId);
+        return "notice/deleteComplete";
+    }
+
+    /**
+     * 마이페이지 - 회원 정보 조회
+     */
+    @GetMapping("/member/Info/{memberId}")
+    public String memberInfo(@PathVariable Long memberId, Model model) {
+        MemberDTO memberInfo = memberService.findMember(memberId);
+        model.addAttribute("memberInfo", memberInfo);
+
+        return "member/memberInfo";
+    }
+
+    /**
+     * 마이페이지 - 회원 정보 수정
+     */
+    @GetMapping("/member/edit/{memberId}")
+    public String memberEditForm(@PathVariable Long memberId, @RequestParam("pwChange") boolean pwChange, Model model) {
+        EditMemberForm memberInfo = EditMemberForm.toEditForm(memberService.findMember(memberId));
+        memberInfo.setPwChange(pwChange);
+        model.addAttribute("memberInfo", memberInfo);
+
+        return "memberEdit";
+    }
+
+
+    @PostMapping("/member/edit/{memberId}")
+    public String memberEdit(@PathVariable Long memberId,
+                             @Validated @ModelAttribute("memberInfo") EditMemberForm memberInfo,
+                             BindingResult bindingResult,
+                             Model model){
+        log.info("editMember = {}", memberInfo);
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("memberId", memberId);
+            return "memberEdit";
+        }
+
+        MemberDTO editMember = new MemberDTO(memberInfo);
+        memberService.memberEdit(memberId, editMember);
+
+        return "redirect:/member/Info/{memberId}";
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    @GetMapping("/member/delete/{memberId}")
+    public String deleteMember(@PathVariable("memberId") Long memberId,HttpServletRequest request)  {
+
+        memberService.deleteMember(memberId);
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+        return "notice/deleteComplete";
+    }
+
+    /**
+     * 로그아웃
+     */
     @GetMapping("/logout")
     public String logoutMember(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if(session != null) {
             session.invalidate();
         }
-//        System.out.println(session.getAttribute(member));
         return"redirect:/";
     }
 
-    @PostMapping("/memberInfo")
-    public String memberInfo( @ModelAttribute  Model model){
-//        model.
-//        MemberDTO member = memberService.findMember(request.getSession())
-        return "member/memberInfo";
-    }
 }
+
+
+

@@ -1,9 +1,8 @@
 package project.springboard.service;
 
-import project.springboard.dto.BoardDTO;
+import project.springboard.domain.board.dto.BoardDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BoardService {
     public List<BoardDTO> allBoard() ;

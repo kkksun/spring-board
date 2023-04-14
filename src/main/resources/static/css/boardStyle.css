@@ -15,10 +15,21 @@ h2.title {
     /*background-color: aliceblue;*/
 }
 
-.loginForm, .joinForm{
+.field-error:not(input) {
+    color : #dc3545;
+    font-weight: bold;
+    margin : 1px 0px 1px 0px;
+}
+
+.loginForm, .joinForm, .complete{
     margin-left : 30%;
     margin-right : 30%;
     /*background-color: aqua;*/
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
 
 .loginForm a{
@@ -43,16 +54,16 @@ h2.title {
     text-align: right;
 }
 
-.memberInfo, .editMember, .boardForm, .viewBoardForm, .editBoardForm, .editManageMemberForm  {
+.memberInfo, .editMemberForm, .boardForm, .viewBoardForm, .editBoardForm, .editManageMemberForm  {
     border-top: 3px solid #009688;
     width: 100%;
     text-align: center;
     margin-top: 10px;
 }
-.editManageMemberForm {
+.editManageMemberForm, .editMemberForm {
     text-align: left;
 }
-.loginForm label, .joinForm label, .memberInfo label, .editMember label, .editManageMember label {
+.loginForm label, .joinForm label, .memberInfo label, .editMember label, .editManageMember label{
     font-weight: bold;
     font-size: 20px;
     text-align: left
@@ -132,9 +143,7 @@ table .top {
     margin-top: 30px;
     text-align: center;
 }
-/*.editManageMember .btn {*/
-/*    text-align: left;*/
-/*}*/
+
 .btn > .btn_a , .btn > .btn_e{
     display: inline-block;
     /*min-width: 80px;*/
@@ -187,13 +196,23 @@ table .top {
     /*background-color: darkviolet;*/
 }
 
-.memberInfo input, .editMember input, .editMember .loginId, .editMember .type, .editManageMember input:not(.selectType, .selectStatus){
+.memberInfo input, .editMember input, .editMember .loginId, .editMember .type, .editManageMember input:not(.selectType, .selectStatus), .pwChange{
     text-align: left;
     width: 50%;
     height: 40px;
     margin : 30px 0px 5px 15px;
     border: 0px;
     font-size: 14px;
+}
+
+ .editManageMember .pwChangeBtn, .editMember .pwChangeBtn {
+    text-align: left;
+     /*width: 10px;*/
+    height: 40px;
+    margin : 30px 0px 5px 15px;
+    border: 0px;
+    font-size: 14px;
+    border-radius: 6px;
 }
 
 .editMember input, .editManageMember input:not(.loginId){
@@ -281,4 +300,40 @@ table .top {
 
 .editManageMember .btn_d {
     background-color: #C62828 ;
+}
+
+.complete {
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+}
+
+.complete .btn .btn_o {
+    display: inline-block;
+    width:100px;
+    padding: 10px;
+    border: 1px solid #00695C;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    background-color: #00695C;
+}
+
+.memberInfo .btn_p {
+    /*background-color: aquamarine;*/
+    display: inline-block;
+    text-align: left;
+    width: 50%;
+    height: 40px;
+    margin : 30px 0px 5px 15px;
+    border: 0px;
+    font-size: 14px;
+}
+
+.memberInfo .pwChangeBtn {
+    text-align: left;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 0px;
 }

@@ -2,7 +2,7 @@ package project.springboard.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.springboard.domain.board.Board;
+import project.springboard.domain.board.entity.Board;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

@@ -12,39 +12,36 @@
         <h2 class="title">게시판</h2>
     </div>
     <div>
-        <!--            <span th:text="${session.loginMember.get().loginId}"></span>-->
-        <!--            <span th:text="${session.loginMember.get().userName}"></span>           -->
-        <span th:text="${loginMember.get().id}"></span>
-        <span th:text="${loginMember.get().userName}"></span>
-        <span th:text="${loginMember.get().loginId}"></span>
+        <span th:text="${session.loginMember.id}"></span>
+        <span th:text="${session.loginMember.loginId}"></span>
     </div>
     <div class="menu">
-            <span th:if="${!loginMember.get().getType().equals('USER') && !loginMember.isEmpty()}">
-                <a href="../member/memberManage.html" th:href="@{/manageMember}"> 회원관리</a>
-            </span>
+        <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
+            <a th:href="@{/manage/member}" > 회원관리</a>
+        </span>
         <span>
-                <a href="../member/memberInfo.html"th:href="@{/memberInfo/}" th:value="${loginMember.get().getId()}" > 회원정보</a>
-            </span>
+            <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
+        </span>
         <span>
-                <a href="../member/login.html" th:href="@{/logout}"> 로그아웃</a>
-            </span>
+            <a th:href="@{/logout}"> 로그아웃</a>
+        </span>
     </div><br>
-    <table class="board">
+    <table class="board" >
         <tr class="top">
             <td class="id">번호</td>
             <td class="title">제목</td>
             <td class="loginId">작성자</td>
             <td class="createDt">작성일</td>
         </tr>
-        <tr th:each="board : ${board}">
-            <td class="id"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.id}">1</a></td>
-            <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}" href="viewBoard.html">제목</a></td>
+        <tr th:each="board : ${boardList}">
+            <td class="id" th:text="${board.id}">1</a></td>
+            <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}" >제목</a></td>
             <td class="loginId" th:text="${board.loginId}">홍길동</td>
-            <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd')}">2022-01-01</td>
+            <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd hh:mm')}">2022-01-01</td>
         </tr>
     </table>
     <div class="btn">
-        <button class="btn_a" onclick="location.href='addBoard.html'" type="button" th:onclick="|location.href='@{/}'|">등록</button>
+        <button class="btn_a" onclick="location.href='addBoard.html'" type="button" th:onclick="|location.href='@{/board/add}'|">등록</button>
     </div>
 </div>
 </body>

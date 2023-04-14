@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+    <title>Title</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        const admin = "ADMIN";
+        const manager = "MANAGER";
+        const adminLoginId = "admin";
+
+        let loginId = [[${memberInfo.loginId}]];
+        $(document).ready(function(){
+            if (loginId ==  adminLoginId && [[${session.loginMember.loginId}]] == loginId) {
+                alert("admin 계정은 유형, 상태 정보 변경 및 삭제는 불가합니다. ");
+            } else if(loginId == adminLoginId && [[${session.loginMember.loginId}]] != loginId) {
+                $(".pwChangeBtn").prop("disabled", true).css("border", "0px");
+                $(".userName").prop("readonly", true).css("border", "0px");
+                $(".email").prop("readonly", true).css("border", "0px");
+                alert("admin 계정 정보 수정이 불가합니다.")
+            }
+            // } else if ( [[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin ){
+            //     $(".pwChangeBtn").prop("disabled", true);
+            //     $(".selectType").prop("disabled", true);
+            //     $(".userName").prop("readonly", true).css("border", "0px");
+            //     $(".email").prop("readonly", true).css("border", "0px");
+            //     $(".btn_e").prop("disabled", true).css("border", "0px");
+            //     alert("MANAGER 권한으로 ADMIN 권한의 계정 정보 수정이 불가합니다.")
+            // }
+
+        });
+
+        const passwordChange = () => {
+
+            if($(".password").css("display") == 'none') {
+                $(".password").css("display", "inline-block");
+                $(".pwChange").prop("checked",true);
+                $(".pwChangeBtn").prop("innerText", "취소");
+
+            } else {
+                $(".password").css("display", "none");
+                $(".pwChange").prop("checked",false);
+                $(".pwChangeBtn").prop("innerText", "변경");
+            }
+
+        }
+        const deleteMember = () => {
+            let url = '';// $(location).attr('origin') + [[@{/manage/member/delete/{memberId}(memberId=${memberId})}]]
+            if (loginId ==  adminLoginId) {
+                alert("admin 계정은 삭제 불가합니다.");
+                // $(".btn_d").prop("disabled", true);
+            } else if ( [[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin ){
+                alert("MANAGER 권한으로 ADMIN 권한의 계정 삭제는 불가합니다.")
+            }else {
+                if(confirm('삭제하시겠습니까?')) {
+                    location.href = url;
+                }
+            }
+        }
+
+        const editCheck = () => {
+            if ( [[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin ) {
+                alert("MANAGER 권한으로 ADMIN 권한의 계정 정보 수정이 불가합니다.")
+                return false;
+            } else {
+                if(loginId) {
+                    $(".selectType").prop("disabled", false);
+                }
+                $(".pwChange").css("display", "inline-block");
+                if(!$(".pwChange").prop("checked")) {
+                    $(".password").val([[${memberInfo.password}]]);
+                }
+                return true;
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h2 class="title">회원 정보</h2>
+        </div>
+        <div class="menu">
+            <span>
+                <a  th:href="@{/board}">게시판</a>
+            </span>
+            <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
+                <a th:href="@{/manage/member}" > 회원관리</a>
+            </span>
+            <span>
+                <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
+            </span>
+            <span>
+                <a th:href="@{/logout}"> 로그아웃</a>
+            </span>
+        </div><br>
+        <div class="editManageMemberForm">
+            <form class="editManageMember" th:onsubmit="return editCheck()" th:object="${memberInfo}" th:action method="post">
+                <div>
+                    <label class="col">아이디</label>
+                    <input class="loginId" th:field="*{loginId}" readonly>
+                </div>
+                <div>
+                    <label class="col">비밀번호</label>
+                    <input class="password" type="password" th:field="*{password}" style="display: none">
+                    <button class="pwChangeBtn"  th:type="button" th:onclick="passwordChange()">변경</button>
+                    <input type="checkbox" class="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
+                    <div class="field-error"  th:errors="*{password}"></div>
+                </div>
+                <div>
+                    <label class="col">이름</label>
+                    <input class="userName" th:field="*{userName}">
+                    <div class="field-error"  th:errors="*{userName}"></div>
+                </div>
+                <div>
+                    <label class="col">이메일</label>
+                    <input class="email" th:field="*{email}">
+                    <div class="field-error"  th:errors="*{loginId}"></div>
+                </div>
+                <div class = "typeCheck">
+                    <label class="col">유형</label>
+                    <div class="radio_btn">
+                        <th:block th:each="memberType : ${memberTypes}" >
+                            <input type="radio" class="selectType type"  th:field="*{type}" th:value="${memberType.name()}"  th:disabled="*{loginId.equals('admin')} ? 'disabled'" th:errorclass="field-error">
+                            <span th:for="${#ids.prev('type')}" th:text="${memberType.name()}"></span>
+                        </th:block>
+                    </div>
+                    <div class="field-error"  th:errors="*{type}"></div>
+                </div>
+                <div class = "statusCheck">
+                    <label class="col">상태</label>
+                    <div class="radio_btn">
+                        <th:block th:each="memberStatus : ${memberStatuses}" >
+                            <input type="radio" class="selectType status"  th:field="*{status}" th:value="${memberStatus.name()}" th:disabled="*{loginId.equals('admin')} ? 'disabled'"  th:errorclass="field-error">
+                            <span th:for="${#ids.prev('status')}" th:text="${memberStatus.name()}"></span>
+                        </th:block>
+                    </div>
+                    <div class="field-error"  th:errors="*{status}"></div>
+                </div>
+                <div class="line"></div>
+                <div class="row">
+                    <div class="btn">
+                        <button class="btn_e"  id="submit" type="submit" >수정</button>
+<!--                        <button class="btn_d" th:onclick="|location.href='@{/manage/member/delete/{memberId}(memberId=${memberId})}'|" type="button">삭제</button>-->
+                        <button class="btn_d" th:onclick="deleteMember()"  type="button">삭제</button>
+                        <button class="btn_c" th:onclick="|location.href='@{/manage/member}'|" type="button">취소</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

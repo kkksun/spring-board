@@ -11,18 +11,18 @@
             <h2 class="title">게시글</h2>
         </div>
         <div class="menu">
-        <span>
-            <a href="../board/main.html"> 게시판</a>
-        </span>
             <span>
-            <a href="memberManage.html"> 회원관리</a>
-        </span>
+                <a  th:href="@{/board}">게시판</a>
+            </span>
+            <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
+                <a th:href="@{/manage/member}" > 회원관리</a>
+            </span>
             <span>
-            <a href="memberInfo.html" > 회원정보</a>
-        </span>
+                <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
+            </span>
             <span>
-            <a href="login.html" > 로그아웃</a>
-        </span>
+                <a th:href="@{/logout}"> 로그아웃</a>
+            </span>
         </div><br>
         <div class="viewBoardForm">
             <div class="viewBoard">

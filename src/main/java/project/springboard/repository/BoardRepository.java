@@ -1,6 +1,6 @@
 package project.springboard.repository;
 
-import project.springboard.domain.board.Board;
+import project.springboard.domain.board.entity.Board;
 
 import java.util.List;
 

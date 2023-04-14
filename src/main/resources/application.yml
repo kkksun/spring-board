@@ -1,8 +1,7 @@
 server:
-  port: 9090
   servlet:
     session:
-      timeout: 1800
+      tracking-modes: cookie
 
 spring:
   datasource:
@@ -13,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
 #        show_sql: true

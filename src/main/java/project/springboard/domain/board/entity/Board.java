@@ -1,18 +1,16 @@
-package project.springboard.domain.board;
+package project.springboard.domain.board.entity;
 
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import project.springboard.domain.member.Member;
+import project.springboard.domain.member.entity.Member;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter
@@ -40,11 +38,11 @@ public class Board {
 
     @CreatedDate
     @Column(name = "create_dt", updatable = false)
-    private Date createDt;
+    private LocalDateTime createDt;
 
     @LastModifiedDate
     @Column(name = "modify_dt")
-    private Date modifyDt;
+    private LocalDateTime modifyDt;
 
     @OneToMany(mappedBy = "board")
     private List<AttachFile> attachFileList = new ArrayList<>();

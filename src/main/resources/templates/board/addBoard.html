@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="../css/boardStyle1.css" rel="stylesheet">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
 </head>
 <body>
@@ -12,26 +13,26 @@
         </div>
         <div class="menu">
             <span>
-                <a href="../board/main.html"> 게시판</a>
+                <a  th:href="@{/board}">게시판</a>
             </span>
-            <span>
-                <a href="memberManage.html"> 회원관리</a>
+            <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
+                <a th:href="@{/manage/member}" > 회원관리</a>
             </span>
-            <span>
-                <a href="memberInfo.html" > 회원정보</a>
+                <span>
+                <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
             </span>
-            <span>
-                <a href="login.html" > 로그아웃</a>
+                <span>
+                <a th:href="@{/logout}"> 로그아웃</a>
             </span>
         </div><br>
         <div class="boardForm">
-            <form class="addBoard">
+            <form class="addBoard" th:object="${board}">
                 <div >
-                    <input type="text" class="title" name="title" placeholder="제목을 입력하세요.">
+                    <input type="text" class="title" th:field="*{title}" placeholder="제목을 입력하세요.">
                 </div>
 
                 <div>
-                    <textarea class="contents" name="contents" placeholder="내용을 입력하세요"></textarea>
+                    <textarea class="contents"  th:field="*{content}" name="contents" placeholder="내용을 입력하세요"></textarea>
                 </div>
                 <div>
                     <input type="file">
