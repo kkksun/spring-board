@@ -50,7 +50,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public void manageMemberEdit(Long memberId, Member editMEmber) {
         Member member = em.find(Member.class, memberId);
-        if(!editMEmber.getPassword().isEmpty()) {
+        if(editMEmber.getPassword() != null) {
             member.setPassword(editMEmber.getPassword());
         }
         member.setEmail(editMEmber.getEmail());

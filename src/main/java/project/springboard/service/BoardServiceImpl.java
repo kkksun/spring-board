@@ -41,24 +41,24 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     public void addBoard(BoardDTO addBoard) {
 
-        Board board = new Board(addBoard);
-
         Member member = memberRepository.findByMember(addBoard.getMember().getId());
-        board.setMember(member);
+
+        List<AttachFile> attachFiles = null;
+        if(!addBoard.getAttachFileList().isEmpty()) {
+            attachFiles = addBoard.getAttachFileList().stream().map(AttachFile::createAttachFile)
+                            .collect(Collectors.toList());
+        }
+
+        Board board = Board.createBoard(addBoard, member, attachFiles);
 
        boardRepository.addBoard(board);
 
-
-        if(board.getAttachFileList()!= null) {
-            for (AttachFile file : board.getAttachFileList()) {
-
-                System.out.println(board.getId()== null);
-                System.out.println(board.getId());
-
-                file.getBoard().setId(board.getId());
-                file.setPath("/" + board.getId());
-            }
-        }
+       if(!board.getAttachFileList().isEmpty()) {
+           String path = "\\" + board.getId() + "\\";
+           for (AttachFile attachFile : board.getAttachFileList()) {
+               attachFile.setPath(path);
+           }
+       }
 
 
     }

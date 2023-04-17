@@ -49,17 +49,26 @@ public class Board {
     private LocalDateTime modifyDt;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<AttachFile> attachFileList ;
+    private List<AttachFile> attachFileList = new ArrayList<>();
 
-    public Board() {}
+    public void addAttachFile(AttachFile file) {
+        attachFileList.add(file);
+        file.setBoard(this);
+    }
 
-    public Board(BoardDTO board) {
-        this.title = board.getTitle();
-        this.content = board.getContent();
-        this.delCheck = Check.N;
-        if (!board.getAttachFileList().isEmpty()) {
-            attachFileList = board.getAttachFileList().stream().map(AttachFile::new).collect(Collectors.toList());
+    public static Board createBoard(BoardDTO boardDTO, Member member, List<AttachFile> attachFiles ){
+        Board board = new Board();
+        board.setMember(member);
+        board.setTitle(boardDTO.getTitle());
+        board.setContent(boardDTO.getContent());
+        board.setDelCheck(Check.N);
+        if(attachFiles != null) {
+            for (AttachFile file : attachFiles) {
+                board.addAttachFile(file);
+            }
         }
+        return board;
+
     }
 
 }

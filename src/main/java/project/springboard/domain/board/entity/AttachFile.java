@@ -5,6 +5,7 @@ import lombok.Setter;
 import project.springboard.domain.board.dto.AttachFileDTO;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -33,9 +34,12 @@ public class AttachFile {
     public AttachFile() {
     }
 
-    public AttachFile(AttachFileDTO attachFileDTO) {
-        this.originalFilename = attachFileDTO.getOriginalFilename();
-        this.serverFileName = attachFileDTO.getServerFileName();
-        this.delCheck = Check.N;
+
+    public static AttachFile createAttachFile(AttachFileDTO attachFile) {
+        AttachFile file = new AttachFile();
+        file.setOriginalFilename(attachFile.getOriginalFilename());
+        file.setServerFileName(attachFile.getServerFileName());
+        file.setDelCheck(Check.N);
+        return file;
     }
 }

@@ -14,7 +14,9 @@ import java.util.Optional;
 
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
+@Builder
 public class MemberDTO {
     private Long id;
     private String loginId;
@@ -26,22 +28,6 @@ public class MemberDTO {
     private LocalDateTime createDt;
     private LocalDateTime modifyDt;
 
-
-    // 생성자? static? 어느게 더 나은 방법인지 생각해보기,
-    // DTO 하나로 member 관련된 form을 다 받는게 맞는지 더 생각해보기
-    @Builder
-    public MemberDTO (Long id, String loginId, String password, String userName, String email, MemberType type, MemberStatus status, LocalDateTime createDt, LocalDateTime modifyDt) {
-        this.id = id;
-        this.loginId = loginId;
-        this.password = password;
-        this.userName = userName;
-        this.email = email;
-        this.type = type;
-        this.status = status;
-        this.createDt = createDt;
-        this.modifyDt =modifyDt;
-
-    }
 
     public MemberDTO (EditManageMemberForm editMember) {
         this.loginId = editMember.getLoginId();
@@ -64,8 +50,6 @@ public class MemberDTO {
         this.type = editMember.getType();
     }
 
-    public MemberDTO(Member member) {
-    }
 
 
     public static MemberDTO toMemberDTO(Optional<Member> member) {

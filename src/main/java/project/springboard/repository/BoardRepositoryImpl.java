@@ -24,7 +24,6 @@ public class BoardRepositoryImpl implements BoardRepository{
     @Override
     public void addBoard(Board addBoard) {
         em.persist(addBoard);
-//       return  addBoard;
     }
 
     public void findBoard(Long addBoard) {

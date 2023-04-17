@@ -41,6 +41,9 @@ public class BoardController {
     }
 
 
+    /**
+     * 게시글 등록
+     */
     @GetMapping("/board/add")
     public String addBoardForm(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) LoginSessionDTO loginMember,
                                @ModelAttribute("board") AddBoardForm form) {
