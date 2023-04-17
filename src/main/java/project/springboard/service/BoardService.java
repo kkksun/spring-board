@@ -7,7 +7,7 @@ import java.util.List;
 public interface BoardService {
     public List<BoardDTO> allBoard() ;
 
-//    public void addBoard();
+    public void addBoard(BoardDTO addBoard);
 
 //    public void editBoard();
 

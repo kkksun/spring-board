@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 
-    @PersistenceContext
+//    @PersistenceContext
     private final EntityManager em;
 
     public void saveMember(Member member) {
@@ -50,7 +50,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public void manageMemberEdit(Long memberId, Member editMEmber) {
         Member member = em.find(Member.class, memberId);
-        if(editMEmber.getPassword() != null) {
+        if(!editMEmber.getPassword().isEmpty()) {
             member.setPassword(editMEmber.getPassword());
         }
         member.setEmail(editMEmber.getEmail());

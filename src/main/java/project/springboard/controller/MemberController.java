@@ -106,7 +106,7 @@ public class MemberController {
         memberInfo.setPwChange(pwChange);
         model.addAttribute("memberInfo", memberInfo);
 
-        return "memberEdit";
+        return "member/memberEdit";
     }
 
 
@@ -119,7 +119,7 @@ public class MemberController {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("memberId", memberId);
-            return "memberEdit";
+            return "member/memberEdit";
         }
 
         MemberDTO editMember = new MemberDTO(memberInfo);

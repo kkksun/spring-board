@@ -5,15 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import project.springboard.domain.board.dto.BoardDTO;
 import project.springboard.domain.member.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
 
     @Id @GeneratedValue
@@ -32,9 +36,9 @@ public class Board {
     @Column(name = "del_yn")
     private Check delCheck;
 
-    @Enumerated(EnumType.STRING)
+/*    @Enumerated(EnumType.STRING)
     @Column(name = "notice_yn")
-    private Check noticeCheck;
+    private Check noticeCheck;*/
 
     @CreatedDate
     @Column(name = "create_dt", updatable = false)
@@ -44,6 +48,18 @@ public class Board {
     @Column(name = "modify_dt")
     private LocalDateTime modifyDt;
 
-    @OneToMany(mappedBy = "board")
-    private List<AttachFile> attachFileList = new ArrayList<>();
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<AttachFile> attachFileList ;
+
+    public Board() {}
+
+    public Board(BoardDTO board) {
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.delCheck = Check.N;
+        if (!board.getAttachFileList().isEmpty()) {
+            attachFileList = board.getAttachFileList().stream().map(AttachFile::new).collect(Collectors.toList());
+        }
+    }
+
 }

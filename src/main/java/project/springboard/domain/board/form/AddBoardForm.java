@@ -1,13 +1,9 @@
 package project.springboard.domain.board.form;
 
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.web.multipart.MultipartFile;
 import project.springboard.domain.board.entity.AttachFile;
-import project.springboard.domain.board.entity.Check;
-import project.springboard.domain.member.entity.Member;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +18,11 @@ public class AddBoardForm {
 
     private String content;
 
-    private Check noticeCheck;
-
     private LocalDateTime createDt;
 
     private LocalDateTime modifyDt;
 
-    private List<AttachFile> attachFileList = new ArrayList<>();
+    private List<MultipartFile> attachFileList;
+
+    private Boolean fileCheck;
 }

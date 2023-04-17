@@ -46,24 +46,25 @@ public class MemberDTO {
     public MemberDTO (EditManageMemberForm editMember) {
         this.loginId = editMember.getLoginId();
         if(editMember.getPwChange()) {
-            this.password = this.getPassword();
+            this.password = editMember.getPassword();
         }
         this.userName = editMember.getUserName();
         this.email = editMember.getEmail();
         this.type = editMember.getType();
         this.status = editMember.getStatus();
-        this.modifyDt = LocalDateTime.now();
     }
 
     public MemberDTO (EditMemberForm editMember) {
         this.loginId = editMember.getLoginId();
         if(editMember.getPwChange()) {
-            this.password = this.getPassword();
+            this.password = editMember.getPassword();
         }
         this.userName = editMember.getUserName();
         this.email = editMember.getEmail();
         this.type = editMember.getType();
-        this.modifyDt = LocalDateTime.now();
+    }
+
+    public MemberDTO(Member member) {
     }
 
 

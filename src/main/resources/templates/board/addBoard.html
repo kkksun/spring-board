@@ -5,6 +5,36 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $("#file").on('change',function(){
+                let fileName ="";
+                 let files = $("input[name='attachFileList']")[0].files;
+                for(let i=0; i<files.length; i++) {
+                    fileName += files[i].name + "\n";
+                }
+                fileName = fileName.substring(0, fileName.length - 1);
+                $(".upload-name").val(fileName);
+            });
+        });
+
+        const fileCheck = () => {
+            let files = $("input[name='attachFileList']")[0].files;
+            if(files.length > 0) {
+                $(".fileCheck").val(true);
+
+            } else {
+                $(".fileCheck").val(false);
+            }
+            alert($(".fileCheck").val());
+
+        }
+
+    </script>
 </head>
 <body>
     <div class="container">
@@ -26,7 +56,7 @@
             </span>
         </div><br>
         <div class="boardForm">
-            <form class="addBoard" th:object="${board}">
+            <form class="addBoard" th:object="${board}" method="post" enctype="multipart/form-data">
                 <div >
                     <input type="text" class="title" th:field="*{title}" placeholder="제목을 입력하세요.">
                 </div>
@@ -34,22 +64,15 @@
                 <div>
                     <textarea class="contents"  th:field="*{content}" name="contents" placeholder="내용을 입력하세요"></textarea>
                 </div>
-                <div>
-                    <input type="file">
-                </div>
-                <div class="notice">
-                    <input type="checkbox" id ="notice"> <label for="notice">공지 사항</label>
-                    <div class="noticeInfo" hidden>
-                        <input type="checkbox" id ="show"> <label for="show">보여지기</label>
-                        <div>
-                            <label for="showStartDt">시작일</label><input class="date" id="showStartDt" name="showStartDt" type="date">
-                            <label for="showEndDt">종료일</label><input class="date" id="showEndDt" name="shoEndDt" type="date">
-                        </div>
-                    </div>
+                <div class="fileAdd">
+                    <label for="file">파일등록</label>
+                    <input type="file" multiple="multiple" id="file" th:field="*{attachFileList}">
+                    <span class = "fileCheck" name="fileCheck" th:field="*{fileCheck}"></span>
+                    <textarea wrap="off" class="upload-name" value="첨부파일" placeholder="첨부파일"  readonly></textarea>
                 </div>
                 <div class="btn">
-                    <button class="btn_e" onclick="location.href='main.html'" type="button">등록</button>
-                    <button class="btn_d" onclick="location.href='main.html'" type="button">취소</button>
+                    <button class="btn_e" type="submit" id="submit" th:onclick="fileCheck()">등록</button>
+                    <button class="btn_d" type="button" th:onclick="|location.href='@{/board}'|" >취소</button>
                 </div>
             </form>
 

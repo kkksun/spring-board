@@ -12,13 +12,21 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10GB
+      max-request-size: 10GB
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+file:
+  dir: D:/board/file/
+

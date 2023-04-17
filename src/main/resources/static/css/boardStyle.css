@@ -8,6 +8,10 @@ input, textarea {
     outline: none;
 }
 
+textarea {
+    resize: none;
+}
+
 h2.title {
     text-align: center;
     font-size: 3rem;
@@ -225,7 +229,7 @@ table .top {
     /*background-color: beige;*/
 }
 
-.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea {
+.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea, .fileAdd .upload-name {
     width: 100%;
     text-align: left;
     border:  2px solid lightgray;
@@ -336,4 +340,40 @@ table .top {
     font-size: 14px;
     border-radius: 6px;
     border: 0px;
+}
+
+.fileAdd {
+    text-align: left;
+    width: 100%;
+}
+
+.fileAdd .upload-name {
+    display: inline-block;
+    height: 100px;
+    /*padding: 0 10px;*/
+    vertical-align: middle;
+    /*width: 82%;*/
+    color: #999999;
+    /*width: 100%;*/
+    white-space:pre;
+}
+
+.fileAdd label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    /*height: 40px;*/
+    margin-bottom: 12px;
+}
+
+.fileAdd input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
 }

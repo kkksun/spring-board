@@ -7,4 +7,6 @@ import java.util.List;
 public interface BoardRepository {
 
     public List<Board> boardList ();
+
+    public void addBoard(Board addBoard);
 }
