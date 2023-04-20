@@ -1,8 +1,6 @@
 package project.springboard.domain.board.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import project.springboard.domain.board.entity.AttachFile;
@@ -20,6 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardDTO {
 
         private Long id;
@@ -45,7 +46,7 @@ public class BoardDTO {
                     this.content = board.getContent();
                     this.delCheck = board.getDelCheck();
                     this.createDt = board.getCreateDt();
-//                    this.noticeCheck = board.getNoticeCheck();
+
             }
 
             public BoardDTO(AddBoardForm form) {
@@ -54,6 +55,23 @@ public class BoardDTO {
                     this.member = new MemberDTO();
                     this.member.setId(form.getUserId());
                     attachFileList = form.getAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList());
+            }
+
+            public static BoardDTO toBoardDTO(Board board) {
+                    BoardDTO viewBoard = BoardDTO.builder()
+                            .id(board.getId())
+                            .member(MemberDTO.toMemberDTO(board.getMember()))
+                            .title(board.getTitle())
+                            .content(board.getContent())
+                            .delCheck(board.getDelCheck())
+                            .createDt(board.getCreateDt())
+                            .modifyDt(board.getModifyDt())
+                            .attachFileList(board.getAttachFileList().stream()
+                                                                     .filter(f -> f.getDelCheck() == Check.N)
+                                                                     .map(AttachFileDTO::new)
+                                                                     .collect(Collectors.toList()))
+                            .build();
+                    return viewBoard;
             }
 }
 

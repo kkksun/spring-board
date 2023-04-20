@@ -1,9 +1,6 @@
 package project.springboard.domain.member.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,8 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-//@DynamicInsert
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -24,12 +21,12 @@ public class Member {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column(name = "login_id", unique = true, nullable = false)
+    @Column(name = "LOGIN_ID", unique = true, nullable = false)
     private String loginId;
 
     private String password;
 
-    @Column(name = "user_name")
+    @Column(name = "USER_NAME")
     private String userName;
 
     private String email;
@@ -41,29 +38,24 @@ public class Member {
     private MemberStatus status;
 
     @CreatedDate
-    @Column(name = "create_dt", updatable = false)
+    @Column(name = "CREATE_DT", updatable = false)
     private LocalDateTime createDt;
 
     @LastModifiedDate
-    @Column(name = "modify_dt")
+    @Column(name = "MODIFY_DT")
     private LocalDateTime modifyDt;
 
-    public Member() {
-
-    }
 
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
         Member member = Member.builder()
-                .id(memberDTO.getId())
+//                .id(memberDTO.getId())
                 .loginId(memberDTO.getLoginId())
                 .password(memberDTO.getPassword())
                 .userName(memberDTO.getUserName())
                 .email(memberDTO.getEmail())
                 .type(memberDTO.getType())
                 .status(memberDTO.getStatus())
-                .createDt(memberDTO.getCreateDt())
-                .modifyDt(memberDTO.getModifyDt())
                 .build();
 
         return member;

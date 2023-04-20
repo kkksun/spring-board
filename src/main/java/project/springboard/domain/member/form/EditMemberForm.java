@@ -9,6 +9,7 @@ import project.springboard.domain.member.entity.MemberType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 @Data
@@ -18,20 +19,22 @@ public class EditMemberForm {
     private String loginId;
 
     @NotBlank
-    @Length(min=8, max=12)
+    @Length(min=8, max=100)
+    @Pattern(regexp = "^[A-Za-z\\d!@#$%^&*,.\\/?]*$")
     private String password;
 
     @NotNull
     private Boolean pwChange;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z가-힣]*$")
     private String userName;
 
     @NotBlank
     @Email
+    @Pattern(regexp = "^[A-Za-z\\d@.]*$")
     private String email;
 
-    @NotNull
     private MemberType type;
 
 
