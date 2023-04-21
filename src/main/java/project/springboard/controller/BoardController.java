@@ -80,6 +80,7 @@ public class BoardController {
         model.addAttribute("board", viewBoard);
 
         return "board/viewBoard";
-
     }
+
+
 }

@@ -1,9 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="../../static/css/boardStyle.css" rel="stylesheet">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            const DEFAULT_HEIGHT =  $(".content").css("height").replace('px', '');
+            let scrollHeight = $(".content").prop("scrollHeight");
+
+            if(scrollHeight > DEFAULT_HEIGHT) {
+                scrollHeight = scrollHeight + "px";
+                $(".content").height(scrollHeight);
+            }
+        });
+        const fileDownload = (fileId) => {
+            // th:href="|attach/${file.id}|"
+            alert("file id = " + fileId);
+        }
+
+    </script>
 </head>
 <body>
     <div class="container">
@@ -27,21 +48,24 @@
         <div class="viewBoardForm">
             <div class="viewBoard">
                 <div id="title">
-                    <div class="title">게시글 제목 테스트</div>
+                    <div class="title" name="title" th:text="${board.title}">게시글 제목 테스트</div>
                 </div>
                 <div id="loginId">
-                    <div class="loginId">admin</div>
+                    <div class="loginId" name="loginId" th:text="${board.member.loginId}">admin</div>
                 </div>
                 <div id="createDt">
-                    <div class="createDt">2023-04-02 12:20</div>
+                    <div class="createDt" name="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd HH:mm:ss')}">2023-04-02 12:20</div>
                 </div>
                 <div class="line"></div>
-                <div id="contents">
-                    <div class="contents">내용</div>
+                <div id="content">
+                    <textarea  class="content" name="content" th:text="${board.content}" readonly></textarea>
                 </div>
                 <div class="line"></div>
-                <div class="fileList">
-                    <div>첨부 파일</div>
+                <div class="fileList" >
+                    <div th:if="${board.attachFileList.size()} == 0">첨부 파일</div>
+                    <th:block th:each="file : ${board.attachFileList}">
+                        <div><a  th:onclick="fileDownload('\''+${file.id}+'\'')" th:text="${file.originalFilename}"></a></div>
+                    </th:block>
                 </div>
                 <div class="line"></div>
             </div>
