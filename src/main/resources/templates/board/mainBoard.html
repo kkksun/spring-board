@@ -35,7 +35,7 @@
         </tr>
         <tr th:each="board : ${boardList}">
             <td class="id" th:text="${board.id}">1</a></td>
-            <td class="title"><a th:href="@{board/{boardId}(boardId=${board.id})}" th:text="${board.title}" >제목</a></td>
+            <td class="title"><a th:href="@{board/view/{boardId}(boardId=${board.id})}" th:text="${board.title}" >제목</a></td>
             <td class="loginId" th:text="${board.member.loginId}">홍길동</td>
             <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd hh:mm')}">2022-01-01</td>
         </tr>

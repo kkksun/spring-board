@@ -22,17 +22,6 @@
             });
         });
 
-        const fileCheck = () => {
-            let files = $("input[name='attachFileList']")[0].files;
-            if(files.length > 0) {
-                $(".fileCheck").val(true);
-
-            } else {
-                $(".fileCheck").val(false);
-            }
-            alert($(".fileCheck").val());
-
-        }
 
     </script>
 </head>
@@ -59,19 +48,21 @@
             <form class="addBoard" th:object="${board}" method="post" enctype="multipart/form-data">
                 <div >
                     <input type="text" class="title" th:field="*{title}" placeholder="제목을 입력하세요.">
+                    <div class="field-error"  th:errors="*{title}"></div>
                 </div>
 
                 <div>
                     <textarea class="contents"  th:field="*{content}" name="contents" placeholder="내용을 입력하세요"></textarea>
+                    <div class="field-error"  th:errors="*{content}"></div>
                 </div>
                 <div class="fileAdd">
                     <label for="file">파일등록</label>
                     <input type="file" multiple="multiple" id="file" th:field="*{attachFileList}">
-                    <span class = "fileCheck" name="fileCheck" th:field="*{fileCheck}"></span>
                     <textarea wrap="off" class="upload-name" value="첨부파일" placeholder="첨부파일"  readonly></textarea>
+                    <div class="field-error"  th:errors="*{attachFileList}"></div>
                 </div>
                 <div class="btn">
-                    <button class="btn_e" type="submit" id="submit" th:onclick="fileCheck()">등록</button>
+                    <button class="btn_e" type="submit" id="submit" >등록</button>
                     <button class="btn_d" type="button" th:onclick="|location.href='@{/board}'|" >취소</button>
                 </div>
             </form>

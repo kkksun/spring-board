@@ -11,9 +11,11 @@
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
+        <!-- 변경될 시 같이 변경해줘야 하는 번거로움이 있음 -->
         const admin = "ADMIN";
         const manager = "MANAGER";
         const adminLoginId = "admin";
+        let checkedVal = "";
 
         let loginId = [[${memberInfo.loginId}]];
         $(document).ready(function(){
@@ -25,17 +27,37 @@
                 $(".email").prop("readonly", true).css("border", "0px");
                 alert("admin 계정 정보 수정이 불가합니다.")
             }
-            // } else if ( [[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin ){
-            //     $(".pwChangeBtn").prop("disabled", true);
-            //     $(".selectType").prop("disabled", true);
-            //     $(".userName").prop("readonly", true).css("border", "0px");
-            //     $(".email").prop("readonly", true).css("border", "0px");
-            //     $(".btn_e").prop("disabled", true).css("border", "0px");
-            //     alert("MANAGER 권한으로 ADMIN 권한의 계정 정보 수정이 불가합니다.")
-            // }
 
+            $(".type").each(function(){
+                if($(this).prop("checked")) {
+                    checkedVal = $(this)
+                }
+            });
+
+            console.log("첫번째 checkedVal = " + checkedVal);
+
+            $(".type").change(function () {
+                if($(".type").is(":checked")) {
+                    console.log("체크박스 변경");
+                    let changeVal = $(this).val();
+                    console.log("changeVal = " + changeVal);
+                    if([[${session.loginMember.type}]] == manager && changeVal == admin) {
+                        console.log("manager => admin 권한 변경");
+                        alert("Manager 권한으로 Admin 권한 부여가 불가합니다.");
+                        checkChange();
+                    } else if([[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin) {
+                        alert("Manager 권한으로 Admin 계정의 권한 변경이 불가합니다.");
+                        checkChange();
+                    }
+
+                }
+            });
         });
 
+        function checkChange() {
+            $(this).prop("checked", false);
+            checkedVal.prop("checked", true);
+        }
         const passwordChange = () => {
 
             if($(".password").css("display") == 'none') {
@@ -51,7 +73,7 @@
 
         }
         const deleteMember = () => {
-            let url = '';// $(location).attr('origin') + [[@{/manage/member/delete/{memberId}(memberId=${memberId})}]]
+            let url =  $(location).attr('origin') + [[@{/manage/member/delete/{memberId}(memberId=${memberId})}]];
             if (loginId ==  adminLoginId) {
                 alert("admin 계정은 삭제 불가합니다.");
                 // $(".btn_d").prop("disabled", true);
@@ -123,7 +145,7 @@
                 <div>
                     <label class="col">이메일</label>
                     <input class="email" th:field="*{email}">
-                    <div class="field-error"  th:errors="*{loginId}"></div>
+                    <div class="field-error"  th:errors="*{email}"></div>
                 </div>
                 <div class = "typeCheck">
                     <label class="col">유형</label>
@@ -149,7 +171,6 @@
                 <div class="row">
                     <div class="btn">
                         <button class="btn_e"  id="submit" type="submit" >수정</button>
-<!--                        <button class="btn_d" th:onclick="|location.href='@{/manage/member/delete/{memberId}(memberId=${memberId})}'|" type="button">삭제</button>-->
                         <button class="btn_d" th:onclick="deleteMember()"  type="button">삭제</button>
                         <button class="btn_c" th:onclick="|location.href='@{/manage/member}'|" type="button">취소</button>
                     </div>

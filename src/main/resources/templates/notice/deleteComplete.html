@@ -14,9 +14,10 @@
     </div><br>
     <div class="complete">
     <!--        -->
-        <div for="complete"> 탈퇴가 완료되었습니다.</div>
+        <div for="complete" th:text="${type.equals('MANAGE')}? '삭제가 완료되었습니다.':_"> 탈퇴가 완료되었습니다.</div>
+
         <div class="btn">
-            <button id = "complete" class="btn_o" th:onclick="|location.href='@{/login}'|" onclick="location.href='/login'" type="button">확인</button>
+            <button id = "complete" class="btn_o" th:onclick="|location.href=${type.equals('MANAGE')}?'@{/manage/member}' : '@{/login}'|"  type="button">확인</button>
         </div>
     </div>
 </div>
