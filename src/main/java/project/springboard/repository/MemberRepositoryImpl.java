@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 
-//    @PersistenceContext
+    @PersistenceContext
     private final EntityManager em;
 
     public void saveMember(Member member) {

@@ -126,7 +126,6 @@ public class MainController {
     @ResponseBody
     public boolean loginIdDuplicateCheck(@RequestParam("loginId") String loginId) {
         boolean checkResult = memberService.loginIdDuplicateCheck(loginId);
-        System.out.println("checkResult = " + checkResult);
         return checkResult;
     }
 

@@ -1,6 +1,7 @@
 package project.springboard.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.springboard.domain.member.entity.Member;
@@ -22,6 +23,7 @@ public class MemberServiceImpl implements MemberService{
 
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     /**admin 계정 생성 */
@@ -31,29 +33,27 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> admin = memberRepository.findByMember("admin");
 
         if(admin.isEmpty()) {
-            MemberDTO memberDTO = MemberDTO.builder()
-                    .loginId("admin")
-                    .password("admin")
-                    .userName("admin")
-                    .email("admin@gmail.com")
-                    .type(MemberType.ADMIN)
-                    .status(MemberStatus.ACTIVE)
-                    .build();
-            Member memberEntity = Member.toMemberEntity(memberDTO);
+            Member adminMember = Member.builder()
+                                       .loginId("admin")
+                                       .password(passwordEncoder.encode("admin"))
+                                       .userName("admin")
+                                       .email("admin@gmail.com")
+                                       .type(MemberType.ADMIN)
+                                       .status(MemberStatus.ACTIVE)
+                                       .build();
 
-            memberRepository.saveMember(memberEntity);
+            memberRepository.saveMember(adminMember);
 
-            MemberDTO testMember = MemberDTO.builder()
+            Member testMember = Member.builder()
                     .loginId("test")
-                    .password("test")
+                    .password(passwordEncoder.encode("test"))
                     .userName("test")
                     .email("test@gmail.com")
                     .type(MemberType.USER)
                     .status(MemberStatus.STANDBY)
                     .build();
-            Member testMemberEntity = Member.toMemberEntity(testMember);
 
-            memberRepository.saveMember(testMemberEntity);
+            memberRepository.saveMember(testMember);
 
 
         }
@@ -61,13 +61,18 @@ public class MemberServiceImpl implements MemberService{
 
 
     /**
-     * 로그인 loginId와 password로 회원 조회
+     * 로그인 - loginId와 password로 회원 조회
      */
     @Override
-    public MemberDTO findMember(MemberDTO memberDTO) {
-        Optional<Member> member = memberRepository.findByMember(memberDTO.getLoginId());
-        if(member.isPresent() && memberDTO.getPassword().equals(member.get().getPassword())) {
-            return new MemberDTO().toMemberDTO(member);
+    public MemberDTO findMember(MemberDTO member) {
+        Optional<Member> findMember = memberRepository.findByMember(member.getLoginId());
+
+        if(findMember.isPresent() && passwordEncoder.matches(member.getPassword(),findMember.get().getPassword())) {
+            MemberDTO loginMember = new MemberDTO().toMemberDTO(findMember);
+            if(loginMember.getStatus() != MemberStatus.ACTIVE) {
+                loginMember.addMsg();
+            }
+            return loginMember;
         } else {
             return null;
         }
@@ -77,9 +82,11 @@ public class MemberServiceImpl implements MemberService{
     /**
      * 회원 등록
      * */
-
-    public void saveMember(MemberDTO memberDTO) {
-        Member memberEntity = Member.toMemberEntity(memberDTO);
+    // 결과에 대한 return이 있는게 더 나은지
+    public void saveMember(MemberDTO saveMember) {
+        Member memberEntity = Member.toMemberEntity(saveMember);
+        String passwordEncode  = passwordEncoder.encode(memberEntity.getPassword());
+        memberEntity.setPassword(passwordEncode);
         memberRepository.saveMember(memberEntity);
 
     }
@@ -89,11 +96,7 @@ public class MemberServiceImpl implements MemberService{
  * 중복아이디 체크 */
     public boolean loginIdDuplicateCheck(String loginId) {
         Optional<Member> member = memberRepository.findByMember(loginId);
-        if(member.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return member.isEmpty()? true : false;
     }
 
 
@@ -105,18 +108,17 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public List<MemberDTO> allMember() {
         List<Member> allMember = memberRepository.allMember();
-        List<MemberDTO> memberList = allMember.stream().map(MemberDTO::toMemberDTO)
+        return allMember.stream()
+                        .map(MemberDTO::toMemberDTO)
                         .collect(toList());
 
-        return memberList;
     }
 
     /**
      * 아이디로 회원 조회*/
     @Override
     public MemberDTO findMember(Long memberId) {
-        MemberDTO member = MemberDTO.toMemberDTO(memberRepository.findByMember(memberId));
-        return member;
+        return MemberDTO.toMemberDTO(memberRepository.findByMember(memberId));
     }
 
     /**
