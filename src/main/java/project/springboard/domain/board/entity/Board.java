@@ -33,6 +33,7 @@ public class Board {
     private String title;
 
 
+    @Lob
     private String content;
 
     @Enumerated(EnumType.STRING)

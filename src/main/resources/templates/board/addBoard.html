@@ -10,7 +10,8 @@
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
-        $(document).ready(function(){
+
+    $(document).ready(function(){
             $("#file").on('change',function(){
                 let fileName ="";
                  let files = $("input[name='attachFileList']")[0].files;
@@ -20,9 +21,20 @@
                 fileName = fileName.substring(0, fileName.length - 1);
                 $(".upload-name").val(fileName);
             });
+            let height = Number($(".content").css("height").replace('px', ''));
+            let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+            const DEFAULT_HEIGHT = height + padding;
+
+        $("textarea.content").on('property-change change keyup paste input', function () {
+            let scrollHeight = $(this).prop('scrollHeight');
+            if(scrollHeight > DEFAULT_HEIGHT) {
+                let test = scrollHeight - DEFAULT_HEIGHT;
+                console.log(test);
+                $(this).height(test).height($(this).prop('scrollHeight')+12 );
+            }
         });
 
-
+    });
     </script>
 </head>
 <body>
@@ -52,7 +64,7 @@
                 </div>
 
                 <div>
-                    <textarea class="contents"  th:field="*{content}" name="contents" placeholder="내용을 입력하세요"></textarea>
+                    <textarea class="content"  th:field="*{content}" name="content" placeholder="내용을 입력하세요"></textarea>
                     <div class="field-error"  th:errors="*{content}"></div>
                 </div>
                 <div class="fileAdd">
