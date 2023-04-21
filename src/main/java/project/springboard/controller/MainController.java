@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import project.springboard.SessionConst;
+import project.springboard.domain.member.SessionConst;
 import project.springboard.domain.member.dto.LoginSessionDTO;
 import project.springboard.domain.member.dto.MemberDTO;
 import project.springboard.domain.member.entity.MemberStatus;
@@ -44,41 +44,39 @@ public class MainController {
      * 로그인
      */
     @GetMapping("/login")
-    public String mainLogin(@ModelAttribute("loginMember") LoginForm form) {
+    public String mainLogin( @ModelAttribute("loginMember") LoginForm form) {
 
         return "member/login";
     }
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute("loginMember") LoginForm form,
+                        @RequestParam(defaultValue = "/board") String redirectURL,
                         BindingResult bindingResult,
                         HttpServletRequest request) {
 
-        log.info("loginForm = {}", form);
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
             return "member/login";
         }
-        MemberDTO memberDTO = MemberDTO.builder()
-                .loginId(form.getLoginId())
-                .password(form.getPassword())
-                .build();
+        MemberDTO loginMember = MemberDTO.builder()
+                                       .loginId(form.getLoginId())
+                                       .password(form.getPassword())
+                                       .build();
 
 
-        MemberDTO member = memberService.findMember(memberDTO);
+        MemberDTO member = memberService.findMember(loginMember);
 
-        // 이게 최선일까...??  줄일 수 있는 방법 생각해보기!
+
         if (member != null) {
-            if (member.getStatus() == MemberStatus.ACTIVE) {
+            if (member.getMsg() == null) {
                 HttpSession session = request.getSession();
                 //세션에는 필요한 정보만 담기 위해 DTO를 따로 생성
                 session.setAttribute(SessionConst.LOGIN_MEMBER, new LoginSessionDTO(member));
-                return "redirect:/board";
-            } else if (member.getStatus() == MemberStatus.DEACTIVE) {
-                bindingResult.reject("mismatch", "계정이 비활성화 되었습니다. 관리자에게 문의해주세요.");
-                return "member/login";
-            } else if (member.getStatus() == MemberStatus.STANDBY) {
-                bindingResult.reject("unapproved", "승인이 완료되지 않았습니다. 관리자에게 문의해주세요.");
+                return "redirect:" + redirectURL;
+            } else {
+                String keyName = member.getMsg().keySet().toArray()[0].toString();
+                bindingResult.reject(keyName, member.getMsg().get(keyName));
                 return "member/login";
             }
         } else {
@@ -86,7 +84,7 @@ public class MainController {
             return "member/login";
         }
 
-        return null;
+
     }
 
     /**
@@ -107,10 +105,16 @@ public class MainController {
             return "member/join";
         }
 
-        MemberDTO memberDTO = MemberDTO.toMemberDTO(form);
+        MemberDTO joinMember = MemberDTO.builder()
+                                       .loginId(form.getLoginId())
+                                       .password(form.getPassword())
+                                       .userName(form.getUserName())
+                                       .email(form.getEmail())
+                                       .type(form.getType())
+                                       .status(MemberStatus.STANDBY)
+                                       .build();
 
-
-        memberService.saveMember(memberDTO);   // 정상적으로 입력 후 등록 과정에서 오류 발생 시 오류 처리 필요
+        memberService.saveMember(joinMember);   // 정상적으로 입력 후 등록 과정에서 오류 발생 시 오류 처리 필요
 
         return "notice/joinComplete";
     }
@@ -122,7 +126,21 @@ public class MainController {
     @ResponseBody
     public boolean loginIdDuplicateCheck(@RequestParam("loginId") String loginId) {
         boolean checkResult = memberService.loginIdDuplicateCheck(loginId);
+        System.out.println("checkResult = " + checkResult);
         return checkResult;
+    }
+
+
+    /**
+     * 로그아웃
+     */
+    @GetMapping("/logout")
+    public String logoutMember(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+        return"redirect:/login";
     }
 
 }

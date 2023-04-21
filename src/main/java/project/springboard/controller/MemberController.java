@@ -59,17 +59,27 @@ public class MemberController {
 
     @PostMapping("/manage/memberInfo/{memberId}")
     public String manageMemberEdit(@PathVariable Long memberId,
-                                   @Validated @ModelAttribute("memberInfo") EditManageMemberForm memberInfo,
+                                   @Validated @ModelAttribute("memberInfo") EditManageMemberForm member,
                                    BindingResult bindingResult,
                                    Model model) {
 
-        log.info("memberInfo ={}", memberInfo);
+        log.info("memberInfo ={}", member);
         if(bindingResult.hasErrors()) {
             model.addAttribute("memberId", memberId);
             return "member/manageMemberEdit";
         }
 
-        MemberDTO editMember = new MemberDTO(memberInfo);
+        MemberDTO editMember = MemberDTO.builder()
+                                        .loginId(member.getLoginId())
+                                        .userName(member.getUserName())
+                                        .email(member.getEmail())
+                                        .type(member.getType())
+                                        .status(member.getStatus())
+                                        .build();
+        if(member.getPwChange()) {
+            editMember.setPassword(member.getPassword());
+        }
+
         memberService.manageMemberEdit(memberId, editMember);
 
         return "redirect:/manage/member";
@@ -80,9 +90,11 @@ public class MemberController {
      * 회원 관리 - 회원 삭제
      */
     @GetMapping("/manage/member/delete/{memberId}")
-    public String manageMemberDelete(@PathVariable("memberId") Long memberId)  {
+    public String manageMemberDelete(@PathVariable("memberId") Long memberId, Model model)  {
 
         memberService.deleteMember(memberId);
+        model.addAttribute("type", "MANAGE");
+
         return "notice/deleteComplete";
     }
 
@@ -112,17 +124,25 @@ public class MemberController {
 
     @PostMapping("/member/edit/{memberId}")
     public String memberEdit(@PathVariable Long memberId,
-                             @Validated @ModelAttribute("memberInfo") EditMemberForm memberInfo,
+                             @Validated @ModelAttribute("memberInfo") EditMemberForm member,
                              BindingResult bindingResult,
                              Model model){
-        log.info("editMember = {}", memberInfo);
+        log.info("editMember = {}", member);
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("memberId", memberId);
             return "member/memberEdit";
         }
 
-        MemberDTO editMember = new MemberDTO(memberInfo);
+        MemberDTO editMember = MemberDTO.builder()
+                .loginId(member.getLoginId())
+                .userName(member.getUserName())
+                .email(member.getEmail())
+                .build();
+        if(member.getPwChange()) {
+            editMember.setPassword(member.getPassword());
+        }
+
         memberService.memberEdit(memberId, editMember);
 
         return "redirect:/member/Info/{memberId}";
@@ -132,27 +152,17 @@ public class MemberController {
      * 회원 탈퇴
      */
     @GetMapping("/member/delete/{memberId}")
-    public String deleteMember(@PathVariable("memberId") Long memberId,HttpServletRequest request)  {
+    public String deleteMember(@PathVariable("memberId") Long memberId,HttpServletRequest request, Model model)  {
 
         memberService.deleteMember(memberId);
         HttpSession session = request.getSession(false);
         if(session != null) {
             session.invalidate();
         }
+        model.addAttribute("type", "USER");
         return "notice/deleteComplete";
     }
 
-    /**
-     * 로그아웃
-     */
-    @GetMapping("/logout")
-    public String logoutMember(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session != null) {
-            session.invalidate();
-        }
-        return"redirect:/";
-    }
 
 }
 
