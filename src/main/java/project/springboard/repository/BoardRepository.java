@@ -9,4 +9,6 @@ public interface BoardRepository {
     public List<Board> boardList ();
 
     public void addBoard(Board addBoard);
+
+    public Board viewBoard(Long boardId);
 }
