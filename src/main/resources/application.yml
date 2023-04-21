@@ -12,21 +12,25 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
-#        show_sql: true
+        show_sql: true
         format_sql: true
   servlet:
     multipart:
       max-file-size: 10GB
       max-request-size: 10GB
 
-logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-file:
-  dir: D:/board/file/
+#  messages:
+#    basename: error
 
+
+
+
+file:
+  dir: D:/board
