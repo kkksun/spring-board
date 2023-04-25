@@ -12,16 +12,6 @@
     <script th:inline="javascript">
 
     $(document).ready(function(){
-            /*$("#file").on('change',function(){
-                let fileName ="";
-                 let files = $("input[name='attachFileList']")[0].files;
-                for(let i=0; i<files.length; i++) {
-                    fileName += files[i].name + "\r\n";
-                }
-                fileName = fileName.substring(0, fileName.length - 1);
-                $(".upload-name").text(fileName);
-            });*/
-
             let height = Number($(".content").css("height").replace('px', ''));
             let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
 
@@ -35,7 +25,6 @@
             }
         });
 
-
         const fileInput = document.querySelector('#file');
         const fileList = document.querySelector('.fileList')
         fileInput.addEventListener('change', () => {
@@ -44,81 +33,33 @@
             console.log(files);
             fileList.innerHTML = '';
             files.forEach(file => {
-                fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <span data-index="${file.lastModified}" class='file-remove' th:onclick="removeFile" >X</span></div>`;
+                fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <button type="button" data-index="${file.lastModified}" class="removeFile" >X</button></div>`;
             });
-        });
+         });
 
 
+        document.addEventListener('click', (e) => {
+            if(e.target.className != 'removeFile') return;
+            const removeTargetId = e.target.dataset.index;
+            const removeTarget = document.getElementById(removeTargetId);
+            const files = document.querySelector("#file").files;
+            const dataTransfer = new DataTransfer();
 
-        // document.querySelector('.file-remove').addEventListener('click', (e)=> {
-        //     const removeTargetId = e.target.dataset.index;
-        //     alert("removeTargetId = " + removeTargetId);
-            // const removeTarget = document.getElementById(removeTargetId);
-            // const files = document.querySelector("#file").files;
-            // const dataTransfer = new DataTransfer();
-            //
-            // Array.from(files)
-            //     .filter(file => file.lastModified != removeTargetId)
-            //     .forEach(file => {
-            //         dataTransfer.items.add(file);
-            //     });
-            //
-            // document.querySelector("#file").files = dataTransfer.files;
-            //
-            // removeTarget.remove();
-        // });
-   /*     $('#file').on('change', () => {
-            console.log("첨부파일 변경");
-            // console.log($(this).)
-            console.log(Array.from($(this).files));
-        })*/
-
-       /* const fileHandler = {
-            init: ()=> {
-                const fileInput = document.querySelector('#file');
-                // const fileInput = document.querySelector('#file-input');
-                const fileList = document.querySelector('.fileList')
-                fileInput.addEventListener('change', () => {
-                    console.dir(fileInput);
-                    const files = Array.from(fileInput.files);
-                    console.log(files);
-                    fileList.innerHTML = '';
-                    files.forEach(file => {
-                        fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <button data-index="${file.lastModified}" class='file-remove' th:onclick="fileHandler.removeFile()">X</button></div>`;
-                    });
+            Array.from(files)
+                .filter(file => file.lastModified != removeTargetId)
+                .forEach(file => {
+                    dataTransfer.items.add(file);
                 });
-            },
 
-            removeFile: () => {
-                alert("removeFile Start");
-                document.querySelector('.file-remove').addEventListener('click', (e)=> {
-                    const removeTargetId = e.target.dataset.index;
-                    alert("removeTargetId = "+ removeTargetId);
-                    // const removeTarget = document.getElementById(removeTargetId);
-                    // const files = document.querySelector("#file").files;
-                    // const dataTransfer = new DataTransfer();
-                    //
-                    // Array.from(files)
-                    //     .filter(file => file.lastModified != removeTargetId)
-                    //     .forEach(file => {
-                    //         dataTransfer.items.add(file);
-                    //     });
-                    //
-                    // document.querySelector("#file").files = dataTransfer.files;
-                    //
-                    // removeTarget.remove();
+            document.querySelector("#file").files = dataTransfer.files;
 
-                })
+            removeTarget.remove();
+            if(document.querySelector("#file").files.length == 0) {
+                document.querySelector('.fileList').innerText = "첨부파일";
             }
-        };
-
-        fileHandler.init();
-        fileHandler.removeFile();*/
-
+        })
     });
-    const removeFile = () => {
-        alert("발생");
-    }
+
     </script>
 </head>
 <body>
@@ -154,7 +95,7 @@
                 <div class="fileAdd">
                     <label for="file">파일등록</label>
                     <input type="file" multiple="multiple" id="file"  th:field="*{attachFileList}">
-                    <div class="fileList upload-name" >
+                    <div class="fileList upload-name"  >
                         첨부파일
                     </div>
                     <div class="field-error"  th:errors="*{attachFileList}"></div>
@@ -167,10 +108,5 @@
 
         </div>
     </div>
-
-<select>
-<option></option>
-
-</select>
 </body>
 </html>
