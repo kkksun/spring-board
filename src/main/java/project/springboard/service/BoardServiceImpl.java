@@ -3,8 +3,12 @@ package project.springboard.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriUtils;
 import project.springboard.domain.board.dto.BoardDTO;
 import project.springboard.domain.board.entity.AttachFile;
 import project.springboard.domain.board.entity.Board;
@@ -15,8 +19,11 @@ import project.springboard.repository.MemberRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,8 +107,63 @@ public class BoardServiceImpl implements BoardService{
      * 게시글 조회
      */
     @Override
-    public BoardDTO viewBoard(Long boardId) {
-        Board board = boardRepository.viewBoard(boardId);
+    public BoardDTO findBoard(Long boardId) {
+        Board board = boardRepository.findBoard(boardId);
         return BoardDTO.toBoardDTO(board);
     }
+
+    /**
+     * 파일 다운로드
+     */
+    @Override
+    public UrlResource fileDownload(Long fileId, HttpHeaders headers) throws MalformedURLException {
+        AttachFile attachFile = boardRepository.fileDownload(fileId);
+        String originalFileName = attachFile.getOriginalFilename();
+        String serverFileName = attachFile.getServerFileName();
+
+        String fullPath = fileDir + attachFile.getPath() + serverFileName;
+
+        String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
+
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
+
+
+        return new UrlResource("file:" + fullPath );
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @Override
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        Board board = boardRepository.findBoard(boardId);
+        board.setDelCheck(Check.Y);
+
+        List<AttachFile> attachFileList = board.getAttachFileList();
+        String folderPath = fileDir + "/" + boardId;
+        for (AttachFile attachFile : attachFileList) {
+            attachFile.setDelCheck(Check.Y);
+        }
+        if(!attachFileList.isEmpty())  deleteFolder(folderPath);
+
+    }
+
+    public void deleteFolder(String folderPath) {
+        File folder = new File(folderPath);
+        if(folder.exists()){
+            File[] files = folder.listFiles();
+            for (File file : files) {
+                if(file.isFile()) {
+                    file.delete();
+                } else  {
+                    deleteFolder(file.getPath());
+                }
+            }
+            folder.delete();
+        }
+    }
+
+
 }

@@ -152,6 +152,6 @@ class BoardRepositoryImplTest {
     @Transactional
     @DisplayName("게시글 조회")
     public void findViewBoard() {
-        boardRepositoryImpl.viewBoard(2L);
+        boardRepositoryImpl.findBoard(2L);
     }
 }

@@ -16,9 +16,6 @@ public interface MemberRepository {
 
     void deleteMember(Long memberId);
 
-    void manageMemberEdit(Long memberId, Member editMEmber);
-
-    void memberEdit(Long memberId, Member editMEmber);
 
 
 }

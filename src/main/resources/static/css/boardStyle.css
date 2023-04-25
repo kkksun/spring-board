@@ -43,6 +43,10 @@ a {
     color: black;
 }
 
+.fileList a {
+    cursor : pointer;
+}
+
 .loginForm a{
     text-decoration: none;
     color: inherit;
@@ -251,11 +255,6 @@ table .top {
     vertical-align: text-top;
 }
 
-/*edit도 추가하기*/
-.addBoard #notice, #show {
-    width: auto;
-}
-
 
 .addBoard input.title, .editBoard input.title{
     margin: 30px 0px 0px 0px;
@@ -263,7 +262,7 @@ table .top {
 }
 .addBoard textarea.content, .editBoard textarea.content {
     margin: 21px 0px 20px 0px;
-    height: 400px;
+    min-height: 400px;
 }
 
 .viewBoard #title {
@@ -368,7 +367,7 @@ table .top {
 .viewBoard .fileList div {
     font-size: 16px;
     text-align: left;
-    margin-left:3px;
+    margin:0px 0px 3px 3px;
 }
 .fileAdd label {
     display: inline-block;
@@ -382,10 +381,11 @@ table .top {
 }
 
 .fileAdd input[type="file"] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
+    /*position: absolute;*/
+    /*width: 0;*/
+    /*height: 0;*/
+    /*padding: 0;*/
+    /*!*overflow: hidden;*!*/
+    /*border: 0;*/
 }
+

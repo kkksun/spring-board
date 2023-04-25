@@ -1,9 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link href="../css/boardStyle1.css" rel="stylesheet">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+
+        $(document).ready(function(){
+/*            $("#file").on('change',function(){
+                let fileName ="";
+                let files = $("input[name='attachFileList']")[0].files;
+                for(let i=0; i<files.length; i++) {
+                    fileName += files[i].name + "\n";
+                }
+                fileName = fileName.substring(0, fileName.length - 1);
+                $(".upload-name").val(fileName);
+            });*/
+
+
+            let height = Number($(".content").css("height").replace('px', ''));
+            let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+
+            const DEFAULT_HEIGHT = height + padding;
+
+            let viewScrollHeight = $(".content").prop("scrollHeight");
+
+            if(viewScrollHeight > DEFAULT_HEIGHT) {
+                viewScrollHeight = viewScrollHeight + "px";
+                $(".content").height(viewScrollHeight);
+            }
+
+
+            $("textarea.content").on('property-change change keyup paste input', function () {
+                let currentScrollHeight = $(this).prop('scrollHeight');
+                if(currentScrollHeight > DEFAULT_HEIGHT) {
+                    let position = currentScrollHeight - DEFAULT_HEIGHT;
+                    $(this).height(position).height($(this).prop('scrollHeight')+12 );
+                }
+            });
+
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -25,30 +67,27 @@
         </span>
     </div><br>
     <div class="editBoardForm">
-        <form class="editBoard">
+        <form class="editBoard" th:object="${board}" method="post" enctype="multipart/form-data">
             <div >
-                <input type="text" class="title" name="title" placeholder="제목을 입력하세요." value="테스트 글 제목">
+                <input type="text" class="title" placeholder="제목을 입력하세요." th:field="*{title}">
             </div>
 
             <div>
-                <textarea class="content" name="content" placeholder="내용을 입력하세요">내용</textarea>
+                <textarea class="content" placeholder="내용을 입력하세요" th:field="*{content}">내용</textarea>
             </div>
-            <div>
-                <input type="file">
-            </div>
-            <div class="notice">
-                <input type="checkbox" id ="notice"> <label for="notice">공지 사항</label>
-                <div class="noticeInfo" hidden>
-                    <input type="checkbox" id ="show"> <label for="show">보여지기</label>
-                    <div>
-                        <label for="showStartDt">시작일</label><input class="date" id="showStartDt" name="showStartDt" type="date">
-                        <label for="showEndDt">종료일</label><input class="date" id="showEndDt" name="shoEndDt" type="date">
-                    </div>
+            <div class="fileAdd">
+                <label for="file">파일등록</label>
+                <input type="file" multiple="multiple" id="file" th:field="*{attachFileList}">
+                <div class="fileList" >
+
                 </div>
+                <textarea wrap="off" class="upload-name" value="첨부파일" placeholder="첨부파일"  readonly></textarea>
+                <div class="field-error"  th:errors="*{attachFileList}"></div>
             </div>
+
             <div class="btn">
-                <button class="btn_e" onclick="location.href='main.html'" type="button">수정</button>
-                <button class="btn_d" onclick="location.href='viewBoard.html'" type="button">취소</button>
+                <button class="btn_e" id="submit" type="submit">수정</button>
+                <button class="btn_d" th:onclick="|location.href='@{/board/view/{boardId}(boardId=${board.id})}'|" type="button">취소</button>
             </div>
         </form>
 

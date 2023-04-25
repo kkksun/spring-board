@@ -9,23 +9,40 @@
             src="https://code.jquery.com/jquery-3.6.4.min.js"
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            const DEFAULT_HEIGHT =  $(".content").css("height").replace('px', '');
-            let scrollHeight = $(".content").prop("scrollHeight");
+</head>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        let height = Number($(".content").css("height").replace('px', ''));
+        let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
 
-            if(scrollHeight > DEFAULT_HEIGHT) {
-                scrollHeight = scrollHeight + "px";
-                $(".content").height(scrollHeight);
+        const DEFAULT_HEIGHT = height + padding;
+        let scrollHeight = $(".content").prop("scrollHeight");
+
+        if(scrollHeight > DEFAULT_HEIGHT) {
+            $(".content").height(scrollHeight + "px");
+
+        }
+    });
+
+    const boardDelete = () => {
+        let url =  $(location).attr('origin') + [[@{/board/delete/{boardId}(boardId=${board.id}, memberId=${board.member.id})}]];
+        if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
+            if(confirm('삭제하시겠습니까?')) {
+                location.href = url;
             }
-        });
-        const fileDownload = (fileId) => {
-            // th:href="|attach/${file.id}|"
-            alert("file id = " + fileId);
         }
 
-    </script>
-</head>
+    }
+
+    const boardModify = () => {
+        let url =  $(location).attr('origin') + [[@{/board/edit/{boardId}(boardId=${board.id}, memberId=${board.member.id})}]];
+        if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
+            location.href = url;
+        }
+    }
+
+
+</script>
 <body>
     <div class="container">
         <div>
@@ -64,16 +81,15 @@
                 <div class="fileList" >
                     <div th:if="${board.attachFileList.size()} == 0">첨부 파일</div>
                     <th:block th:each="file : ${board.attachFileList}">
-                        <div><a  th:onclick="fileDownload('\''+${file.id}+'\'')" th:text="${file.originalFilename}"></a></div>
+                        <div><a  th:href="|/file/${file.id}|" th:text="${file.originalFilename}"></a></div>
                     </th:block>
                 </div>
                 <div class="line"></div>
             </div>
-
             <div class="row">
                 <div class="btn">
-                    <button class="btn_e" onclick="location.href='editBoard.html'" type="button">수정</button>
-                    <button class="btn_c" onclick="location.href='memberInfo.html'" type="button">삭제</button>
+                    <a class="btn_e" th:onclick="boardModify()" type="button">수정</a>
+                    <a class="btn_c" th:onclick="boardDelete()" type="button">삭제</a>
                 </div>
             </div>
         </div>

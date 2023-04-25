@@ -12,30 +12,113 @@
     <script th:inline="javascript">
 
     $(document).ready(function(){
-            $("#file").on('change',function(){
+            /*$("#file").on('change',function(){
                 let fileName ="";
                  let files = $("input[name='attachFileList']")[0].files;
                 for(let i=0; i<files.length; i++) {
-                    fileName += files[i].name + "\n";
+                    fileName += files[i].name + "\r\n";
                 }
                 fileName = fileName.substring(0, fileName.length - 1);
-                $(".upload-name").val(fileName);
-            });
+                $(".upload-name").text(fileName);
+            });*/
+
             let height = Number($(".content").css("height").replace('px', ''));
             let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
 
             const DEFAULT_HEIGHT = height + padding;
 
-        $("textarea.content").on('property-change change keyup paste input', function () {
-            let scrollHeight = $(this).prop('scrollHeight');
-            if(scrollHeight > DEFAULT_HEIGHT) {
-                let test = scrollHeight - DEFAULT_HEIGHT;
-                console.log(test);
-                $(this).height(test).height($(this).prop('scrollHeight')+12 );
+        $("textarea.content").on('property-change change keyup paste input',  () => {
+            let currentScrollHeight = $(this).prop('scrollHeight');
+            if(currentScrollHeight > DEFAULT_HEIGHT) {
+                let position = currentScrollHeight - DEFAULT_HEIGHT;
+                $(this).height(position).height($(this).prop('scrollHeight')+12 );
             }
         });
 
+
+        const fileInput = document.querySelector('#file');
+        const fileList = document.querySelector('.fileList')
+        fileInput.addEventListener('change', () => {
+            console.dir(fileInput);
+            const files = Array.from(fileInput.files);
+            console.log(files);
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <span data-index="${file.lastModified}" class='file-remove' th:onclick="removeFile" >X</span></div>`;
+            });
+        });
+
+
+
+        // document.querySelector('.file-remove').addEventListener('click', (e)=> {
+        //     const removeTargetId = e.target.dataset.index;
+        //     alert("removeTargetId = " + removeTargetId);
+            // const removeTarget = document.getElementById(removeTargetId);
+            // const files = document.querySelector("#file").files;
+            // const dataTransfer = new DataTransfer();
+            //
+            // Array.from(files)
+            //     .filter(file => file.lastModified != removeTargetId)
+            //     .forEach(file => {
+            //         dataTransfer.items.add(file);
+            //     });
+            //
+            // document.querySelector("#file").files = dataTransfer.files;
+            //
+            // removeTarget.remove();
+        // });
+   /*     $('#file').on('change', () => {
+            console.log("첨부파일 변경");
+            // console.log($(this).)
+            console.log(Array.from($(this).files));
+        })*/
+
+       /* const fileHandler = {
+            init: ()=> {
+                const fileInput = document.querySelector('#file');
+                // const fileInput = document.querySelector('#file-input');
+                const fileList = document.querySelector('.fileList')
+                fileInput.addEventListener('change', () => {
+                    console.dir(fileInput);
+                    const files = Array.from(fileInput.files);
+                    console.log(files);
+                    fileList.innerHTML = '';
+                    files.forEach(file => {
+                        fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <button data-index="${file.lastModified}" class='file-remove' th:onclick="fileHandler.removeFile()">X</button></div>`;
+                    });
+                });
+            },
+
+            removeFile: () => {
+                alert("removeFile Start");
+                document.querySelector('.file-remove').addEventListener('click', (e)=> {
+                    const removeTargetId = e.target.dataset.index;
+                    alert("removeTargetId = "+ removeTargetId);
+                    // const removeTarget = document.getElementById(removeTargetId);
+                    // const files = document.querySelector("#file").files;
+                    // const dataTransfer = new DataTransfer();
+                    //
+                    // Array.from(files)
+                    //     .filter(file => file.lastModified != removeTargetId)
+                    //     .forEach(file => {
+                    //         dataTransfer.items.add(file);
+                    //     });
+                    //
+                    // document.querySelector("#file").files = dataTransfer.files;
+                    //
+                    // removeTarget.remove();
+
+                })
+            }
+        };
+
+        fileHandler.init();
+        fileHandler.removeFile();*/
+
     });
+    const removeFile = () => {
+        alert("발생");
+    }
     </script>
 </head>
 <body>
@@ -58,7 +141,7 @@
             </span>
         </div><br>
         <div class="boardForm">
-            <form class="addBoard" th:object="${board}" method="post" enctype="multipart/form-data">
+            <form class="addBoard" th:object="${board}" method="post"  enctype="multipart/form-data">
                 <div >
                     <input type="text" class="title" th:field="*{title}" placeholder="제목을 입력하세요.">
                     <div class="field-error"  th:errors="*{title}"></div>
@@ -70,8 +153,10 @@
                 </div>
                 <div class="fileAdd">
                     <label for="file">파일등록</label>
-                    <input type="file" multiple="multiple" id="file" th:field="*{attachFileList}">
-                    <textarea wrap="off" class="upload-name" value="첨부파일" placeholder="첨부파일"  readonly></textarea>
+                    <input type="file" multiple="multiple" id="file"  th:field="*{attachFileList}">
+                    <div class="fileList upload-name" >
+                        첨부파일
+                    </div>
                     <div class="field-error"  th:errors="*{attachFileList}"></div>
                 </div>
                 <div class="btn">

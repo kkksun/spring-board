@@ -19,8 +19,8 @@ public interface MemberService {
 
      void adminSave();
 
-     void manageMemberEdit(Long memberId, MemberDTO editMEmber);
-     void memberEdit(Long memberId, MemberDTO editMEmber);
+     void editManageMember(Long memberId, MemberDTO editMEmber);
+     void editMember(Long memberId, MemberDTO editMEmber);
 
      void deleteMember(Long memberId);
 }

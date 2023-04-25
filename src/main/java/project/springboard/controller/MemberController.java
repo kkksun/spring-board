@@ -80,7 +80,7 @@ public class MemberController {
             editMember.setPassword(member.getPassword());
         }
 
-        memberService.manageMemberEdit(memberId, editMember);
+        memberService.editManageMember(memberId, editMember);
 
         return "redirect:/manage/member";
 
@@ -143,7 +143,7 @@ public class MemberController {
             editMember.setPassword(member.getPassword());
         }
 
-        memberService.memberEdit(memberId, editMember);
+        memberService.editMember(memberId, editMember);
 
         return "redirect:/member/Info/{memberId}";
     }
@@ -152,7 +152,7 @@ public class MemberController {
      * 회원 탈퇴
      */
     @GetMapping("/member/delete/{memberId}")
-    public String deleteMember(@PathVariable("memberId") Long memberId,HttpServletRequest request, Model model)  {
+    public String memberDelete(@PathVariable("memberId") Long memberId,HttpServletRequest request, Model model)  {
 
         memberService.deleteMember(memberId);
         HttpSession session = request.getSession(false);

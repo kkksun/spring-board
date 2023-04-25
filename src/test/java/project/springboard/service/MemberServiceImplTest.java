@@ -98,7 +98,7 @@ class MemberServiceImplTest {
         member.setUserName("테스트");
         member.setEmail("test1@gmail.com");
 
-        memberServiceImpl.memberEdit(findMember.getId(), member);
+        memberServiceImpl.editMember(findMember.getId(), member);
 
         findMember = memberServiceImpl.findMember(findMember.getId());
 

@@ -1,8 +1,11 @@
 package project.springboard.service;
 
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import project.springboard.domain.board.dto.BoardDTO;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 public interface BoardService {
@@ -10,9 +13,11 @@ public interface BoardService {
 
     public void addBoard(BoardDTO addBoard) throws IOException;
 
-    public BoardDTO viewBoard(Long boardId);
+    public BoardDTO findBoard(Long boardId);
+
+    UrlResource fileDownload(Long fileId, HttpHeaders headers) throws MalformedURLException;
 
 //    public void editBoard();
 
-//    public void deleteBoard();
+    public void deleteBoard(Long boardId);
 }

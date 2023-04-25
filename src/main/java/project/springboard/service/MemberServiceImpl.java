@@ -126,16 +126,31 @@ public class MemberServiceImpl implements MemberService{
      */
     // 관리자와 회원이 수정하는 범위가 다름, 구분자 파라미터를 추가하여 하나로 통합할 지 따로 할 지 생각해보기
     @Override
-    public void manageMemberEdit(Long memberId, MemberDTO editMEmber) {
-         memberRepository.manageMemberEdit(memberId, Member.toMemberEntity(editMEmber));
+    public void editManageMember(Long memberId, MemberDTO editMEmber) {
+        Member member = memberRepository.findByMember(memberId);
+
+        if(editMEmber.getPassword() != null) {
+            member.setPassword(editMEmber.getPassword());
+        }
+        member.setEmail(editMEmber.getEmail());
+        member.setUserName(editMEmber.getUserName());
+        member.setType(editMEmber.getType());
+        member.setStatus(editMEmber.getStatus());
     }
 
     /**
      * 마이 페이지 - 회원 수정
      */
     @Override
-    public void memberEdit(Long memberId, MemberDTO editMEmber) {
-        memberRepository.memberEdit(memberId, Member.toMemberEntity(editMEmber));
+    public void editMember(Long memberId, MemberDTO editMEmber) {
+        Member member = memberRepository.findByMember(memberId);
+
+        if(editMEmber.getPassword() != null) {
+            member.setPassword(editMEmber.getPassword());
+        }
+        member.setEmail(editMEmber.getEmail());
+        member.setUserName(editMEmber.getUserName());
+        member.setModifyDt(editMEmber.getModifyDt());
     }
 
     /**
