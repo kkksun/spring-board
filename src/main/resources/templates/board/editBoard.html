@@ -12,37 +12,24 @@
     <script th:inline="javascript">
 
         $(document).ready(function(){
-/*            $("#file").on('change',function(){
-                let fileName ="";
-                let files = $("input[name='attachFileList']")[0].files;
-                for(let i=0; i<files.length; i++) {
-                    fileName += files[i].name + "\n";
-                }
-                fileName = fileName.substring(0, fileName.length - 1);
-                $(".upload-name").val(fileName);
-            });*/
-
-
+            // 내용 길이 Handler
             let height = Number($(".content").css("height").replace('px', ''));
             let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
 
             const DEFAULT_HEIGHT = height + padding;
 
-            let viewScrollHeight = $(".content").prop("scrollHeight");
-
-            if(viewScrollHeight > DEFAULT_HEIGHT) {
-                viewScrollHeight = viewScrollHeight + "px";
-                $(".content").height(viewScrollHeight);
-            }
-
-
-            $("textarea.content").on('property-change change keyup paste input', function () {
+            $("textarea.content").on('property-change change keyup paste input',  () => {
                 let currentScrollHeight = $(this).prop('scrollHeight');
                 if(currentScrollHeight > DEFAULT_HEIGHT) {
                     let position = currentScrollHeight - DEFAULT_HEIGHT;
                     $(this).height(position).height($(this).prop('scrollHeight')+12 );
                 }
             });
+
+            // 첨부 파일 Handler
+            // 기존에 등록된 파일리스트
+            // console.log("========파일리스트 Handler==========")
+            // console.log([[${board.preFileList}]]);
 
         });
     </script>
@@ -77,20 +64,20 @@
             </div>
             <div class="fileAdd">
                 <label for="file">파일등록</label>
-                <input type="file" multiple="multiple" id="file" th:field="*{attachFileList}">
-                <div class="fileList" >
-
+                <input type="file" multiple="multiple" id="file"  th:field="*{attachFileList}">
+                <div class="fileList">
+                    <div th:if="*{preFileList == null}">첨부 파일</div>
+                    <th:block th:if="*{preFileList != null}" th:each="preFile : *{preFileList}">
+                        <div > [[${preFile.originalFilename}]] <button type="button" th:data-fileId="${preFile.id}"class="btn_remove" >×</button></div>
+                    </th:block>
                 </div>
-                <textarea wrap="off" class="upload-name" value="첨부파일" placeholder="첨부파일"  readonly></textarea>
                 <div class="field-error"  th:errors="*{attachFileList}"></div>
             </div>
-
             <div class="btn">
-                <button class="btn_e" id="submit" type="submit">수정</button>
+                <button class="btn_e" id="submit" type="submit">수정 완료</button>
                 <button class="btn_d" th:onclick="|location.href='@{/board/view/{boardId}(boardId=${board.id})}'|" type="button">취소</button>
             </div>
         </form>
-
     </div>
 </div>
 </body>

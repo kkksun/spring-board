@@ -27,7 +27,7 @@ public class EditBoardForm {
 
     private List<MultipartFile> attachFileList;
 
-    private List<AttachFileDTO> uploadFileList;
+    private List<AttachFileDTO> preFileList;
 
 
 }

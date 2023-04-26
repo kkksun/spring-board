@@ -141,12 +141,9 @@ public class BoardServiceImpl implements BoardService{
         Board board = boardRepository.findBoard(boardId);
         board.setDelCheck(Check.Y);
 
-        List<AttachFile> attachFileList = board.getAttachFileList();
+         board.getAttachFileList().stream().forEach(file -> file.setDelCheck(Check.Y));
         String folderPath = fileDir + "/" + boardId;
-        for (AttachFile attachFile : attachFileList) {
-            attachFile.setDelCheck(Check.Y);
-        }
-        if(!attachFileList.isEmpty())  deleteFolder(folderPath);
+        if(!board.getAttachFileList().isEmpty())  deleteFolder(folderPath);
 
     }
 

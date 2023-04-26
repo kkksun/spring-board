@@ -240,7 +240,7 @@ table .top {
     /*background-color: beige;*/
 }
 
-.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea, .fileAdd .upload-name, .viewBoard .fileList {
+.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea, .fileAdd .fileList, .viewBoard .fileList {
     width: 100%;
     text-align: left;
     border:  2px solid lightgray;
@@ -293,7 +293,7 @@ table .top {
     width: 100%;
     height: 400px;
     text-align: left;
-    font-size: 20px;
+    font-size: 16px;
     border : 0px;
     /*background-color: #146c43;*/
 }
@@ -356,18 +356,18 @@ table .top {
     text-align: left;
     width: 100%;
 }
-
-.fileAdd .upload-name, .viewBoard .fileList {
+/*fileAdd .upload-name, .viewBoard*/
+.fileList {
     display: inline-block;
-    height: 100px;
+    height: 110px;
     vertical-align: middle;
     color: #999999;
-    font-size: 16px;
+    font-size: 12px;
 }
-.viewBoard .fileList div {
-    font-size: 16px;
+.fileList > div {
+    font-size: 12px;
     text-align: left;
-    margin:0px 0px 3px 3px;
+    margin:3px 0px 0px 5px;
 }
 .fileAdd label {
     display: inline-block;
@@ -381,11 +381,20 @@ table .top {
 }
 
 .fileAdd input[type="file"] {
-    /*position: absolute;*/
-    /*width: 0;*/
-    /*height: 0;*/
-    /*padding: 0;*/
-    /*!*overflow: hidden;*!*/
-    /*border: 0;*/
+/*    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    !*overflow: hidden;*!
+    border: 0;*/
+}
+
+.fileList .btn_remove {
+    padding: 1px;
+    width: 14px;
+    height: 14px;
+    align-items: stretch;
+    flex-direction: column-reverse;
+    justify-content: center;
 }
 

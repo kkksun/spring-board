@@ -112,7 +112,7 @@ public class BoardController {
                 .userId(board.getMember().getId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .uploadFileList(board.getAttachFileList())
+                .preFileList(board.getAttachFileList())
                 .build();
 
         model.addAttribute("board", form);
