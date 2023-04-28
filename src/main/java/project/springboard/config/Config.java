@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.springboard.config.interceptor.BoardAuthInterceptor;
 import project.springboard.config.interceptor.LoginSessionInterceptor;
+import project.springboard.config.interceptor.ManageAuthInterceptor;
 
 
 @Configuration
@@ -20,7 +21,11 @@ public class Config implements WebMvcConfigurer {
 
         registry.addInterceptor(new BoardAuthInterceptor())
                 .order(2)
-                .addPathPatterns("/board/edit/**", "/board/delete/**");
+                .addPathPatterns("/board/edit/{memberId}/{boardId}**", "/board/delete/{memberId}/{boardId}**");
+
+        registry.addInterceptor(new ManageAuthInterceptor())
+                .order(3)
+                .addPathPatterns("/manage/**");
 
     }
 
