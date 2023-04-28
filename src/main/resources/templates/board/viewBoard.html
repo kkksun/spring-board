@@ -25,7 +25,7 @@
     });
 
     const boardDelete = () => {
-        let url =  $(location).attr('origin') + [[@{/board/delete/{boardId}(boardId=${board.id}, memberId=${board.member.id})}]];
+        let url =  $(location).attr('origin') + [[@{/board/delete/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
         if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
             if(confirm('삭제하시겠습니까?')) {
                 location.href = url;
@@ -35,7 +35,7 @@
     }
 
     const boardModify = () => {
-        let url =  $(location).attr('origin') + [[@{/board/edit/{boardId}(boardId=${board.id}, memberId=${board.member.id})}]];
+        let url =  $(location).attr('origin') + [[@{/board/edit/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
         if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
             location.href = url;
         }
@@ -79,9 +79,9 @@
                 </div>
                 <div class="line"></div>
                 <div class="fileList" >
-                    <div th:if="${board.attachFileList.size()} == 0">첨부 파일</div>
+                    <div th:if="${board.attachFileList.isEmpty()}">첨부 파일</div>
                     <th:block th:each="file : ${board.attachFileList}">
-                        <div><a  th:href="|/file/${file.id}|" th:text="${file.originalFilename}"></a></div>
+                        <div><a  th:href="|/file/${file.id}|" th:text="${file.originalFileName}"></a></div>
                     </th:block>
                 </div>
                 <div class="line"></div>
