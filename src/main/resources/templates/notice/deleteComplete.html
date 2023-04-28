@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
+    <script>
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            if(alert("계정이 이미 삭제되었습니다."));
+        }
+    </script>
 </head>
 <body>
 <div class="container">
