@@ -76,32 +76,13 @@ public class BoardServiceImpl implements BoardService{
        boardRepository.addBoard(board);
 
        if(!board.getAttachFileList().isEmpty()) {
-           String path = createFilePath(board.getId());
            for (AttachFile attachFile : board.getAttachFileList()) {
-               attachFile.setPath(path);
-               storeFile(attachFile);
+               attachFile.setPath(createAddFolderPath(board.getId()));
+               saveFile(attachFile);
            }
        }
     }
 
-    /**
-     * 첨부 파일 저장
-     */
-    private void storeFile(AttachFile attachFile) throws IOException {
-        String directory = fileDir + attachFile.getPath();
-        String fullPath = directory + attachFile.getServerFileName();
-        if(!new File(directory).exists()) {
-            Files.createDirectories(Paths.get(directory));
-        }
-        attachFile.getMultipartFile().transferTo(new File(fullPath));
-    }
-
-    /**
-     *파일 경로 생성
-     */
-    public String createFilePath(Long boardId) {
-        return  "/" + boardId + "/file/";
-    }
 
     /**
      * 게시글 조회
@@ -113,12 +94,75 @@ public class BoardServiceImpl implements BoardService{
     }
 
     /**
-     * 파일 다운로드
+     * 게시글 수정
      */
     @Override
+    @Transactional
+    public void editBoard(Long boardId, BoardDTO editBoard, List<Long> preFileIdList) throws IOException {
+        Board board = boardRepository.findBoard(boardId);
+        board.setTitle(editBoard.getTitle());
+        board.setContent(editBoard.getContent());
+
+        if(!board.getAttachFileList().isEmpty() ) { // 여기 삭제와 파일 삭제 에 대해서 한번에 할 수 있는 방법이 없는지 생각해 보기
+           if(preFileIdList != null) {
+               board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).forEach(f -> f.setDelCheck(Check.Y));
+               List<AttachFile> deleteFileList = board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).collect(Collectors.toList());
+               for (AttachFile attachFile : deleteFileList) {
+                   deleteFile(createDeleteFilePath(attachFile));
+               }
+           } else {
+               board.getAttachFileList().stream().forEach(f -> f.setDelCheck(Check.Y));
+               deleteFolder(createDeleteFolderPath(boardId));
+           }
+        }
+
+        if(!editBoard.getAttachFileList().isEmpty()) {
+            List<AttachFile> newAttachFiles =  editBoard.getAttachFileList().stream().map(AttachFile::createAttachFile)
+                        .collect(Collectors.toList());
+
+            for (AttachFile newAttachFile : newAttachFiles) {
+                newAttachFile.setPath(createAddFolderPath(board.getId()));
+                board.addAttachFile(newAttachFile);
+                saveFile(newAttachFile);
+            }
+        }
+
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @Override
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        Board board = boardRepository.findBoard(boardId);
+        board.setDelCheck(Check.Y);
+
+        board.getAttachFileList().stream().forEach(file -> file.setDelCheck(Check.Y));
+        deleteFolder(createDeleteFolderPath(boardId));
+
+    }
+
+    /**
+     * 첨부 파일 저장
+     */
+    public void saveFile(AttachFile attachFile) throws IOException {
+        String directory = fileDir + attachFile.getPath();
+        String fullPath = directory + attachFile.getServerFileName();
+        if(!new File(directory).exists()) {
+            Files.createDirectories(Paths.get(directory));
+        }
+        attachFile.getMultipartFile().transferTo(new File(fullPath));
+    }
+
+
+    /**
+     * 첨부 파일 다운로드
+     */
+
     public UrlResource fileDownload(Long fileId, HttpHeaders headers) throws MalformedURLException {
         AttachFile attachFile = boardRepository.fileDownload(fileId);
-        String originalFileName = attachFile.getOriginalFilename();
+        String originalFileName = attachFile.getOriginalFileName();
         String serverFileName = attachFile.getServerFileName();
 
         String fullPath = fileDir + attachFile.getPath() + serverFileName;
@@ -132,21 +176,11 @@ public class BoardServiceImpl implements BoardService{
         return new UrlResource("file:" + fullPath );
     }
 
+
+
     /**
-     * 게시글 삭제
+     * 폴더 삭제
      */
-    @Override
-    @Transactional
-    public void deleteBoard(Long boardId) {
-        Board board = boardRepository.findBoard(boardId);
-        board.setDelCheck(Check.Y);
-
-         board.getAttachFileList().stream().forEach(file -> file.setDelCheck(Check.Y));
-        String folderPath = fileDir + "/" + boardId;
-        if(!board.getAttachFileList().isEmpty())  deleteFolder(folderPath);
-
-    }
-
     public void deleteFolder(String folderPath) {
         File folder = new File(folderPath);
         if(folder.exists()){
@@ -162,5 +196,25 @@ public class BoardServiceImpl implements BoardService{
         }
     }
 
+    /**
+     * 파일 삭제
+     */
+    public void deleteFile(String deleteFilePath) {
+        File file = new File(deleteFilePath);
+        if(file.exists()) {
+            file.delete();
+        }
+    }
+
+    /**
+     *파일 경로 생성
+     */
+
+    public String createDeleteFilePath(AttachFile file) { return fileDir + file.getPath() + file.getServerFileName(); }
+    /**
+     *폴더 경로 생성
+     */
+    public String createDeleteFolderPath(Long boardId) { return  fileDir + "/" + boardId; }
+    public String createAddFolderPath(Long boardId) { return  "/" + boardId + "/file/"; }
 
 }

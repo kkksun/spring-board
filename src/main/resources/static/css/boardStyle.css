@@ -356,7 +356,7 @@ table .top {
     text-align: left;
     width: 100%;
 }
-/*fileAdd .upload-name, .viewBoard*/
+
 .fileList {
     display: inline-block;
     height: 110px;
@@ -381,15 +381,15 @@ table .top {
 }
 
 .fileAdd input[type="file"] {
-/*    position: absolute;
+    position: absolute;
     width: 0;
     height: 0;
     padding: 0;
-    !*overflow: hidden;*!
-    border: 0;*/
+    /*overflow: hidden;*/
+    border: 0;
 }
 
-.fileList .btn_remove {
+.btn_remove, .btn_preRemove {
     padding: 1px;
     width: 14px;
     height: 14px;

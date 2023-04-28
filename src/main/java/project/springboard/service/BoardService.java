@@ -17,7 +17,7 @@ public interface BoardService {
 
     UrlResource fileDownload(Long fileId, HttpHeaders headers) throws MalformedURLException;
 
-//    public void editBoard();
+    public void editBoard(Long boardId, BoardDTO editBoard, List<Long> preFileIdList) throws IOException;
 
     public void deleteBoard(Long boardId);
 }

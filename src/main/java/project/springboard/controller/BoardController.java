@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import project.springboard.domain.board.dto.AttachFileDTO;
 import project.springboard.domain.board.form.EditBoardForm;
 import project.springboard.domain.member.SessionConst;
 import project.springboard.domain.board.dto.BoardDTO;
@@ -18,11 +19,13 @@ import project.springboard.domain.board.form.AddBoardForm;
 import project.springboard.domain.member.dto.LoginSessionDTO;
 import project.springboard.service.BoardService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -102,12 +105,12 @@ public class BoardController {
     /**
      * 게시판 수정
      */
-    @GetMapping("board/edit/{boardId}")
-    public String editBoardForm(@PathVariable("boardId") Long boardId, Model model) {
+    @GetMapping("board/edit/{memberId}/{boardId}")
+    public String editBoardForm(@PathVariable("boardId") Long boardId, Model model, @PathVariable("memberId") Long memberId) {
 
         BoardDTO board = boardService.findBoard(boardId);
 
-        EditBoardForm form = EditBoardForm.builder()
+        EditBoardForm editBoard = EditBoardForm.builder()
                 .id(board.getId())
                 .userId(board.getMember().getId())
                 .title(board.getTitle())
@@ -115,12 +118,23 @@ public class BoardController {
                 .preFileList(board.getAttachFileList())
                 .build();
 
-        model.addAttribute("board", form);
+        log.info("attachFileList = {}", editBoard.getPreFileList());
+        model.addAttribute("board", editBoard);
         return "board/editBoard";
     }
 
-    @PostMapping("board/edit/{boardId}")
-    public String editBoard(@PathVariable("boardId")Long boardId, @ModelAttribute("board")EditBoardForm form)  {
+    @PostMapping("board/edit/{memberId}/{boardId}")
+    public String editBoard(@PathVariable("boardId")Long boardId, @ModelAttribute("board")EditBoardForm form, @PathVariable("memberId") Long memberId) throws IOException {
+
+        log.info("form = {}", form);
+
+        BoardDTO editBoard = BoardDTO.builder()
+                                     .title(form.getTitle())
+                                     .content(form.getContent())
+                                     .attachFileList(form.getNewAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList()))
+                                     .build();
+        boardService.editBoard(boardId, editBoard, form.getPreFileIdList());
+
         return "redirect:/board/view/" + boardId;
     }
 
@@ -128,8 +142,8 @@ public class BoardController {
     /**
      * 게시글 삭제
      */
-    @GetMapping("board/delete/{boardId}")
-    public String deleteBoard(@PathVariable("boardId")Long boardId) {
+    @GetMapping("board/delete/{memberId}/{boardId}")
+    public String deleteBoard(@PathVariable("boardId")Long boardId, @PathVariable("memberId") Long memberId) {
         boardService.deleteBoard(boardId);
         return "notice/deleteBoardComplete";
     }

@@ -28,7 +28,7 @@ public class AttachFile {
     private Board board;
 
     @Column(name = "ORIGINAL_FILE_NAME")
-    private String originalFilename;
+    private String originalFileName;
 
     @Column(name = "SERVER_FILE_NAME")
     private String serverFileName;
@@ -52,7 +52,7 @@ public class AttachFile {
 
     public static AttachFile createAttachFile(AttachFileDTO attachFile) {
         AttachFile file = new AttachFile();
-        file.setOriginalFilename(attachFile.getOriginalFilename());
+        file.setOriginalFileName(attachFile.getOriginalFileName());
         file.setServerFileName(attachFile.getServerFileName());
         file.setDelCheck(Check.N);
         file.setMultipartFile(attachFile.getMultipartFile());

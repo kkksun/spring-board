@@ -12,10 +12,11 @@
     <script th:inline="javascript">
 
     $(document).ready(function(){
-            let height = Number($(".content").css("height").replace('px', ''));
-            let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+        // 내용 길이 Handler
+        let height = Number($(".content").css("height").replace('px', ''));
+        let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
 
-            const DEFAULT_HEIGHT = height + padding;
+        const DEFAULT_HEIGHT = height + padding;
 
         $("textarea.content").on('property-change change keyup paste input',  () => {
             let currentScrollHeight = $(this).prop('scrollHeight');
@@ -25,24 +26,47 @@
             }
         });
 
+        // 첨부 파일 Handler
         const fileInput = document.querySelector('#file');
         const fileList = document.querySelector('.fileList')
+        let totalFiles = new Array() ;
+
+
+        document.addEventListener('click', (e) => {
+            if(e.target.id != 'file') return;
+            const preFiles = Array.from(fileInput.files);// 업로드한 파일 목록
+            totalFiles = [];
+            preFiles.forEach(file => totalFiles.push(file));
+        })
+
         fileInput.addEventListener('change', () => {
-            console.dir(fileInput);
-            const files = Array.from(fileInput.files);
-            console.log(files);
-            fileList.innerHTML = '';
-            files.forEach(file => {
-                fileList.innerHTML +=` <div id="${file.lastModified}"> ${file.name} <button type="button" data-index="${file.lastModified}" class="removeFile" >X</button></div>`;
+            const newFiles = Array.from(fileInput.files); // 등록 시 파일을 수정할 때 새로 업로드한 파일
+            const dataTransfer = new DataTransfer();
+
+            // 새로 업로드한 파일 중 먼저 업로드한 파일과 중복이 된 파일 제외
+            const addFileCount = newFiles.filter(newFile => !(totalFiles.some(file => newFile.lastModified == file.lastModified && newFile.name == file.name))).length;
+
+            if((addFileCount + totalFiles.length)  > 5) {
+                alert("첨부 파일은 5개까지만 가능합니다.");
+            } else {
+                 newFiles.filter(newFile => !(totalFiles.some(file => newFile.lastModified == file.lastModified && newFile.name == file.name))).forEach(file => totalFiles.push(file));
+            }
+
+            dataTransfer.items .clear();
+            totalFiles.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+            fileList.innerHTML = "";
+            totalFiles.forEach(file => {
+                fileList.innerHTML += ` <div id="${file.lastModified}"> ${file.name} <button type="button" data-index="${file.lastModified}" class="btn_remove" >×</button></div>`;
             });
          });
 
 
         document.addEventListener('click', (e) => {
-            if(e.target.className != 'removeFile') return;
+            if(e.target.className != 'btn_remove') return;
             const removeTargetId = e.target.dataset.index;
             const removeTarget = document.getElementById(removeTargetId);
-            const files = document.querySelector("#file").files;
+            const files = fileInput.files;
             const dataTransfer = new DataTransfer();
 
             Array.from(files)
@@ -51,13 +75,13 @@
                     dataTransfer.items.add(file);
                 });
 
-            document.querySelector("#file").files = dataTransfer.files;
+            fileInput.files = dataTransfer.files;
 
             removeTarget.remove();
-            if(document.querySelector("#file").files.length == 0) {
-                document.querySelector('.fileList').innerText = "첨부파일";
+            if(fileInput.files.length == 0) {
+                fileList.innerText = "첨부파일";
             }
-        })
+        });
     });
 
     </script>
@@ -95,7 +119,7 @@
                 <div class="fileAdd">
                     <label for="file">파일등록</label>
                     <input type="file" multiple="multiple" id="file"  th:field="*{attachFileList}">
-                    <div class="fileList upload-name"  >
+                    <div class="fileList">
                         첨부파일
                     </div>
                     <div class="field-error"  th:errors="*{attachFileList}"></div>

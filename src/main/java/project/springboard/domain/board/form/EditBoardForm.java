@@ -10,6 +10,7 @@ import project.springboard.domain.board.dto.AttachFileDTO;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -25,9 +26,10 @@ public class EditBoardForm {
 
     private String content;
 
-    private List<MultipartFile> attachFileList;
+    private List<MultipartFile> newAttachFileList;
 
     private List<AttachFileDTO> preFileList;
 
+    private List<Long> preFileIdList;
 
 }

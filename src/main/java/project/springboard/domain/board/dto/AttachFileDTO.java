@@ -12,12 +12,14 @@ import java.util.UUID;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AttachFileDTO {
     private Long id;
 
     private Board board;
 
-    private String originalFilename;
+    private String originalFileName;
 
     private String serverFileName;
 
@@ -28,7 +30,7 @@ public class AttachFileDTO {
     private MultipartFile multipartFile;
 
     public AttachFileDTO(MultipartFile multipartFile) {
-        this.originalFilename = multipartFile.getOriginalFilename();
+        this.originalFileName = multipartFile.getOriginalFilename();
         this.serverFileName = changeServerFileName(multipartFile.getOriginalFilename());
         this.multipartFile = multipartFile;
     }
@@ -36,8 +38,8 @@ public class AttachFileDTO {
     public AttachFileDTO(AttachFile attachFile) {
         this.id = attachFile.getId();
         this.board = attachFile.getBoard();
-        this.originalFilename = attachFile.getOriginalFilename();
-        this.serverFileName = getServerFileName();
+        this.originalFileName = attachFile.getOriginalFileName();
+        this.serverFileName = attachFile.getServerFileName();
         this.path = getPath();
     }
 
