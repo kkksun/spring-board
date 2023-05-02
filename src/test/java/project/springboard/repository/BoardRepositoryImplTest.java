@@ -78,12 +78,12 @@ class BoardRepositoryImplTest {
 
         List<AttachFile> fileList = new ArrayList<>();
         AttachFile file1 = AttachFile.builder()
-                                     .originalFilename("testFile1.txt")
+                                     .originalFileName("testFile1.txt")
                                      .serverFileName(UUID.randomUUID()+ ".txt")
                                      .delCheck(Check.N)
                                      .build();
         AttachFile file2 = AttachFile.builder()
-                                     .originalFilename("testFile2.txt")
+                                     .originalFileName("testFile2.txt")
                                      .serverFileName(UUID.randomUUID()+ ".txt")
                                      .delCheck(Check.N)
                                      .build();

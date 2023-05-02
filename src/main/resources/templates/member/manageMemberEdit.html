@@ -107,23 +107,8 @@
 </head>
 <body>
     <div class="container">
-        <div>
-            <h2 class="title">회원 정보</h2>
-        </div>
-        <div class="menu">
-            <span>
-                <a  th:href="@{/board}">게시판</a>
-            </span>
-            <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
-                <a th:href="@{/manage/member}" > 회원관리</a>
-            </span>
-            <span>
-                <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
-            </span>
-            <span>
-                <a th:href="@{/logout}"> 로그아웃</a>
-            </span>
-        </div><br>
+        <div th:replace="~{fragment/topFrag :: topTitle ('회원 정보')}"></div>
+        <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div><br>
         <div class="editManageMemberForm">
             <form class="editManageMember" th:onsubmit="return editCheck()" th:object="${memberInfo}" th:action method="post">
                 <div>

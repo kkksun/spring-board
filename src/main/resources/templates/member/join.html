@@ -49,9 +49,7 @@
 </head>
 <body>
 <div class="container">
-    <div>
-        <h2 class="title">회원 가입</h2>
-    </div>
+    <div th:replace="~{fragment/topFrag :: topTitle ('회원 가입')}"></div>
     <div class="joinForm">
         <form action="/join" th:action th:object="${joinMember}" method="post">
             <div th:if="${#fields.hasGlobalErrors()}">

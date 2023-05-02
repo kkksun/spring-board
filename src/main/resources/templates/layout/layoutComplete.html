@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="notiLayout(script, command, btn)">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}" rel="stylesheet">
+    <th:block th:replace="${script}"></th:block>
+</head>
+<body>
+<div class="container">
+    <div>
+        <h2 class="title"> </h2>
+    </div>
+    <div class="menu">
+    </div><br>
+    <div class="complete">
+        <!--        -->
+        <div for="complete" > [[${command}]] </div>
+        <div class="btn">
+            <button th:replace="${btn}"></button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

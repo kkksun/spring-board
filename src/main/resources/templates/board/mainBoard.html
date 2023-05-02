@@ -8,24 +8,8 @@
 </head>
 <body>
 <div class="container">
-    <div>
-        <h2 class="title">게시판</h2>
-    </div>
-    <div>
-        <span th:text="${session.loginMember.id}"></span>
-        <span th:text="${session.loginMember.loginId}"></span>
-    </div>
-    <div class="menu">
-        <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
-            <a th:href="@{/manage/member}" > 회원관리</a>
-        </span>
-        <span>
-            <a th:href="@{/member/Info/{memberId}(memberId=${session.loginMember.id})}" > 마이페이지</a>
-        </span>
-        <span>
-            <a th:href="@{/logout}"> 로그아웃</a>
-        </span>
-    </div><br>
+    <div th:replace="~{fragment/topFrag :: topTitle ('게시판')}"></div>
+    <div th:replace="~{fragment/topFrag :: menu ('MAIN')}"></div><br>
     <table class="board" >
         <tr class="top">
             <td class="id">번호</td>
