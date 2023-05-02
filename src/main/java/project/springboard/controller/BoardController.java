@@ -17,9 +17,9 @@ import project.springboard.domain.member.SessionConst;
 import project.springboard.domain.board.dto.BoardDTO;
 import project.springboard.domain.board.form.AddBoardForm;
 import project.springboard.domain.member.dto.LoginSessionDTO;
+import project.springboard.paging.PagingParam;
 import project.springboard.service.BoardService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -41,9 +41,11 @@ public class BoardController {
     @GetMapping("/board")
     public String boardHome(Model model) {
 
-        List<BoardDTO> boardList = boardService.allBoard();
+        List<BoardDTO> boardList = boardPaging(1);
+//        List<BoardDTO> boardList = boardService.allBoard();
 
         model.addAttribute("boardList", boardList);
+
 
         return "board/mainBoard";
     }
@@ -148,4 +150,10 @@ public class BoardController {
         return "notice/deleteBoardComplete";
     }
 
+    public List<BoardDTO> boardPaging(int page) {
+
+        PagingParam pagingParam = boardService.boardPaging(page);
+        return  boardService.pageBoardList(pagingParam.getOffset(), PagingParam.limitPerPage);
+
+    }
 }

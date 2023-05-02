@@ -39,7 +39,6 @@ public class MemberController {
     public String memberManage(Model model) {
 
         List<MemberDTO> memberList = memberService.allMember();
-//        List<MemberListForm> memberListForms = memberList.stream().map(MemberListForm :: new).collect(Collectors.toList());
 
         model.addAttribute("memberList", memberList);
         return "member/manageMember";

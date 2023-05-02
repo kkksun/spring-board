@@ -14,6 +14,7 @@ import project.springboard.domain.board.entity.AttachFile;
 import project.springboard.domain.board.entity.Board;
 import project.springboard.domain.board.entity.Check;
 import project.springboard.domain.member.entity.Member;
+import project.springboard.paging.PagingParam;
 import project.springboard.repository.BoardRepository;
 import project.springboard.repository.MemberRepository;
 
@@ -27,6 +28,9 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static project.springboard.paging.PagingParam.limitPerPage;
+import static project.springboard.paging.PagingParam.pageLimit;
 
 
 @Slf4j
@@ -50,10 +54,43 @@ public class BoardServiceImpl implements BoardService{
 //        List<Board> boards = boardRepository.boardList();
 
         return boardRepository.boardList().stream()
-                                          .filter(b -> b.getDelCheck() == Check.N)
                                           .map(BoardDTO ::new)
                                           .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
                                           .collect(Collectors.toList());
+    }
+
+    /**
+     * 게시글 페이징
+     */
+    @Override
+    public PagingParam boardPaging(int currentPage) {
+
+        Long totalBoardCount = boardRepository.allBoardCount();
+
+
+        int totalPageCount = (int) Math.ceil((double)totalBoardCount/ limitPerPage);
+        int offset = (limitPerPage * (currentPage-1)) + 1 ;
+        int startPage = ((currentPage -1) / pageLimit) * pageLimit + 1;
+        int endPage =startPage + pageLimit - 1;
+
+        if(currentPage > totalPageCount) {
+            currentPage = totalPageCount;
+        }
+
+        // 마지막 페이지가 전체 페이지 수보다 큰 경우, 마지막 페이지 번호에 전체 페이지수 저장
+        if(endPage > totalPageCount) {
+            endPage = totalPageCount;
+        }
+
+        return PagingParam.builder().currentPage(currentPage).offset(offset).startPage(startPage).endPage(endPage).build();
+    }
+
+    @Override
+    public List<BoardDTO> pageBoardList(int offset, int limit) {
+       return boardRepository.findBoardPaging(offset, limit).stream().map(BoardDTO ::new)
+                .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
+                .collect(Collectors.toList());
+
     }
 
     /**
