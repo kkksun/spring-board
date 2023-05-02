@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{layout/layoutComplete :: notiLayout(~{::script}, '삭제가 완료되었습니다.', ~{::button})}" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link th:href="@{/css/boardStyle.css}"
-          href="../css/boardStyle.css" rel="stylesheet">
     <script th:inline="javascript">
         history.pushState(null, null, location.href);
         window.onpopstate = function () {
@@ -12,20 +9,6 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <div>
-        <h2 class="title"> </h2>
-    </div>
-    <div class="menu">
-    </div><br>
-    <div class="complete">
-
-        <div for="complete"> 삭제가 완료되었습니다.</div>
-
-        <div class="btn">
-            <button id = "complete" class="btn_o" th:onclick="|location.href='@{/board}'|" type="button">확인</button>
-        </div>
-    </div>
-</div>
+    <button id = "complete" class="btn_o" th:onclick="|location.href='@{/board}'|" type="button">확인</button>
 </body>
 </html>
