@@ -39,13 +39,19 @@ public class BoardController {
      * 메인 페이지 - 게시판
      */
     @GetMapping("/board")
-    public String boardHome(Model model) {
+    public String boardHome(@RequestParam("page") String page, Model model) {
+        int currentPage ;
+        if (page == null || page.equals("")) {
+             currentPage = 1;
+        } else {
+            currentPage = Integer.parseInt(page);
+        }
+        PagingParam pagingParam = boardService.boardPaging(currentPage);
+        List<BoardDTO> boardList = boardService.pageBoardList(pagingParam.getOffset(), PagingParam.pageSize);
 
-        List<BoardDTO> boardList = boardPaging(1);
-//        List<BoardDTO> boardList = boardService.allBoard();
 
         model.addAttribute("boardList", boardList);
-
+        model.addAttribute("pagingParam",pagingParam);
 
         return "board/mainBoard";
     }
@@ -76,7 +82,7 @@ public class BoardController {
 
         boardService.addBoard(addBoard);
 
-        return "notice/addComplete";
+        return "notice/addBoardComplete";
     }
 
     /**
@@ -144,16 +150,10 @@ public class BoardController {
     /**
      * 게시글 삭제
      */
-    @GetMapping("board/delete/{memberId}/{boardId}")
+    @DeleteMapping("board/delete/{memberId}/{boardId}")
     public String deleteBoard(@PathVariable("boardId")Long boardId, @PathVariable("memberId") Long memberId) {
         boardService.deleteBoard(boardId);
         return "notice/deleteBoardComplete";
     }
 
-    public List<BoardDTO> boardPaging(int page) {
-
-        PagingParam pagingParam = boardService.boardPaging(page);
-        return  boardService.pageBoardList(pagingParam.getOffset(), PagingParam.limitPerPage);
-
-    }
 }

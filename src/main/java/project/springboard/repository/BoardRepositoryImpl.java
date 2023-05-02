@@ -59,7 +59,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     public List<Board> findBoardPaging(int offset, int limit) {
         return em.createQuery("select b from Board b join fetch b.member m where b.delCheck = :delCheck order by b.createDt desc", Board.class)
                  .setParameter("delCheck", Check.N)
-                 .setFirstResult(offset)
+                 .setFirstResult(offset-1)
                  .setMaxResults(limit)
                  .getResultList();
     }

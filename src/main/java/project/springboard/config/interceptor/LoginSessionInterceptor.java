@@ -20,6 +20,9 @@ public class LoginSessionInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession(false);
 
+        if(requestURI.equals("/board")) {
+            requestURI = requestURI + "?page=";
+        }
 
         if(session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
             response.sendRedirect("/login?redirectURL=" + requestURI);

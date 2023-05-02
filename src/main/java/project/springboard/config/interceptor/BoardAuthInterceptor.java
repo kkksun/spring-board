@@ -22,11 +22,11 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         LoginSessionDTO loginMember = (LoginSessionDTO) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        Map<String, String> attribute = (Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long memberId = Long.parseLong(attribute.get("memberId"));
+        Map<String, Long> attribute = (Map<String, Long>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+//        Long memberId = Long.parseLong(attribute.get("memberId"));
         log.info("attribute = {}", attribute);
 
-        if(loginMember.getId() != memberId && loginMember.getType() == MemberType.USER ) {
+        if(loginMember.getId() != attribute.get("memberId") && loginMember.getType() == MemberType.USER ) {
             response.sendRedirect("/board/view/"+attribute.get("boardId"));
             return false;
         }

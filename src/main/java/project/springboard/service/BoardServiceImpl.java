@@ -29,8 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static project.springboard.paging.PagingParam.limitPerPage;
-import static project.springboard.paging.PagingParam.pageLimit;
+import static project.springboard.paging.PagingParam.*;
 
 
 @Slf4j
@@ -68,21 +67,37 @@ public class BoardServiceImpl implements BoardService{
         Long totalBoardCount = boardRepository.allBoardCount();
 
 
-        int totalPageCount = (int) Math.ceil((double)totalBoardCount/ limitPerPage);
-        int offset = (limitPerPage * (currentPage-1)) + 1 ;
-        int startPage = ((currentPage -1) / pageLimit) * pageLimit + 1;
-        int endPage =startPage + pageLimit - 1;
+        int totalPageCount = (int) Math.ceil((double)totalBoardCount/ pageSize);
+        int offset = (pageSize * (currentPage-1)) +1 ;
+        int startPage = ((currentPage -1) / blockSize) * blockSize + 1;
+        int endPage = startPage + blockSize - 1;
+        int prevPage = currentPage - 1 ;
+        int nextPage = currentPage + 1;
 
         if(currentPage > totalPageCount) {
             currentPage = totalPageCount;
         }
 
-        // 마지막 페이지가 전체 페이지 수보다 큰 경우, 마지막 페이지 번호에 전체 페이지수 저장
         if(endPage > totalPageCount) {
             endPage = totalPageCount;
         }
 
-        return PagingParam.builder().currentPage(currentPage).offset(offset).startPage(startPage).endPage(endPage).build();
+        if(currentPage == 1) {
+            prevPage = currentPage;
+        }
+        if(nextPage > totalPageCount) {
+            nextPage = totalPageCount;
+        }
+
+        return PagingParam.builder()
+                .currentPage(currentPage)
+                .offset(offset)
+                .startPage(startPage)
+                .endPage(endPage)
+                .totalPage(totalPageCount)
+                .prevPage(prevPage)
+                .nextPage(nextPage)
+                .build();
     }
 
     @Override

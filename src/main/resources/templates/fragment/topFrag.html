@@ -9,7 +9,7 @@
     <div class="menu" th:fragment="menu (type)">
         <th:block th:if="${type} != 'MAIN'">
             <span>
-            <a  th:href="@{/board}">게시판</a>
+            <a  th:href="@{/board?page={page}(page='1')}">게시판</a>
             </span>
         </th:block>
         <th:block th:if="${type} != 'MANAGE'">

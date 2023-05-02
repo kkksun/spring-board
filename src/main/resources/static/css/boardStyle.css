@@ -398,3 +398,48 @@ table .top {
     justify-content: center;
 }
 
+.pageNavi {
+    text-align:center;
+    margin-top : 20px;
+    /*font-size:0;*/
+}
+
+.paging {
+    list-style: none;
+    padding-left: 0px;
+    display: inline-block;
+}
+
+.paging > li {
+    display: inline-block;
+    margin: 0px;
+    float: left;
+
+}
+
+.paging a {
+    display:block;
+    float:left;
+    border:1px solid #e6e6e6;
+    width:28px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    background-color:#fff;
+    font-size:13px;
+    color:#999999;
+    text-decoration:none;
+}
+
+.paging .prev, .paging .next {
+    border:1px solid #ccc;
+    background:#f8f8f8 ;
+    margin-left:0;
+}
+
+
+.paging a.active {
+    background-color:#80CBC4;
+    color:#fff;
+    border:1px solid #80CBC4;
+}

@@ -56,7 +56,7 @@ public class MemberController {
 
     }
 
-    @PostMapping("/manage/memberInfo/{memberId}")
+    @PatchMapping("/manage/memberInfo/{memberId}")
     public String manageMemberEdit(@PathVariable Long memberId,
                                    @Validated @ModelAttribute("memberInfo") EditManageMemberForm member,
                                    BindingResult bindingResult,
@@ -88,13 +88,13 @@ public class MemberController {
     /**
      * 회원 관리 - 회원 삭제
      */
-    @GetMapping("/manage/member/delete/{memberId}")
+    @DeleteMapping("/manage/member/delete/{memberId}")
     public String manageMemberDelete(@PathVariable("memberId") Long memberId, Model model)  {
 
         memberService.deleteMember(memberId);
         model.addAttribute("type", "MANAGE");
 
-        return "notice/deleteComplete";
+        return "notice/deleteMemberComplete";
     }
 
     /**
@@ -150,7 +150,7 @@ public class MemberController {
     /**
      * 회원 탈퇴
      */
-    @GetMapping("/member/delete/{memberId}")
+    @DeleteMapping("/member/delete/{memberId}")
     public String memberDelete(@PathVariable("memberId") Long memberId,HttpServletRequest request, Model model)  {
 
         memberService.deleteMember(memberId);
@@ -159,7 +159,7 @@ public class MemberController {
             session.invalidate();
         }
         model.addAttribute("type", "USER");
-        return "notice/deleteComplete";
+        return "notice/deleteMemberComplete";
     }
 
 

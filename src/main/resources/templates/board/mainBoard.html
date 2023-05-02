@@ -24,6 +24,20 @@
             <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd hh:mm')}">2022-01-01</td>
         </tr>
     </table>
+    <div class="pageNavi">
+        <ui class="paging">
+        <li><a href="" onclick="" class ="prev" th:href="@{board?page=1}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        <li><a href="" onclick="" class = "prev" th:href="@{board?page={prevPage}(prevPage=${pagingParam.prevPage})}" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+        <th:block th:with="start = ${pagingParam.startPage}, end = ${pagingParam.endPage}">
+            <li th:with="start = ${pagingParam.startPage}, end = ${pagingParam.endPage}"
+                th:each="pageButton : ${#numbers.sequence(start, end)}">
+                <a th:href="@{/board?page={page} (page = ${pageButton})}" th:classappend="${pagingParam.currentPage==pageButton}?'active' :''" th:text=${pageButton}></a>
+            </li>
+        </th:block>
+        <li><a href="" onclick="" class ="next" th:href="@{board?page={nextPage}(nextPage=${pagingParam.nextPage})}" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+        <li><a href="" onclick="" class ="next" th:href="@{board?page={lastPage}(lastPage=${pagingParam.totalPage})}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        </ui>
+    </div>
     <div class="btn">
         <button class="btn_a" type="button" th:onclick="|location.href='@{/board/add}'|">등록</button>
     </div>

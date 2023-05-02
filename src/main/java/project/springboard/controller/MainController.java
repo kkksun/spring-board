@@ -50,7 +50,7 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam(defaultValue = "/board") String redirectURL,
+    public String login(@RequestParam(defaultValue = "/board?page=1") String redirectURL,
                         @Validated @ModelAttribute("loginMember") LoginForm form,
                         BindingResult bindingResult,
                         HttpServletRequest request) {

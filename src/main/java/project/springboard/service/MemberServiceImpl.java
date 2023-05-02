@@ -124,13 +124,12 @@ public class MemberServiceImpl implements MemberService{
     /**
      * 회원 관리 - 회원 정보 수정
      */
-    // 관리자와 회원이 수정하는 범위가 다름, 구분자 파라미터를 추가하여 하나로 통합할 지 따로 할 지 생각해보기
     @Override
     public void editManageMember(Long memberId, MemberDTO editMEmber) {
         Member member = memberRepository.findByMember(memberId);
 
         if(editMEmber.getPassword() != null) {
-            member.setPassword(editMEmber.getPassword());
+            member.setPassword(passwordEncoder.encode(editMEmber.getPassword()));
         }
         member.setEmail(editMEmber.getEmail());
         member.setUserName(editMEmber.getUserName());
@@ -146,7 +145,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findByMember(memberId);
 
         if(editMEmber.getPassword() != null) {
-            member.setPassword(editMEmber.getPassword());
+            member.setPassword(passwordEncoder.encode(editMEmber.getPassword()));
         }
         member.setEmail(editMEmber.getEmail());
         member.setUserName(editMEmber.getUserName());
