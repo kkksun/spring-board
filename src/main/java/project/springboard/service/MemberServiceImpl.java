@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.springboard.domain.board.entity.Check;
 import project.springboard.domain.member.entity.Member;
 import project.springboard.domain.member.entity.MemberStatus;
 import project.springboard.domain.member.dto.MemberDTO;
@@ -17,7 +18,7 @@ import static java.util.stream.Collectors.*;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
@@ -28,6 +29,7 @@ public class MemberServiceImpl implements MemberService{
 
     /**admin 계정 생성 */
     @Override
+    @Transactional
     public void adminSave() {
 
         Optional<Member> admin = memberRepository.findByMember("admin");
@@ -64,6 +66,7 @@ public class MemberServiceImpl implements MemberService{
      * 로그인 - loginId와 password로 회원 조회
      */
     @Override
+    @Transactional
     public MemberDTO findMember(MemberDTO member) {
         Optional<Member> findMember = memberRepository.findByMember(member.getLoginId());
 
@@ -82,7 +85,7 @@ public class MemberServiceImpl implements MemberService{
     /**
      * 회원 등록
      * */
-    // 결과에 대한 return이 있는게 더 나은지
+    @Transactional
     public void saveMember(MemberDTO saveMember) {
         Member memberEntity = Member.toMemberEntity(saveMember);
         String passwordEncode  = passwordEncoder.encode(memberEntity.getPassword());
@@ -125,6 +128,7 @@ public class MemberServiceImpl implements MemberService{
      * 회원 관리 - 회원 정보 수정
      */
     @Override
+    @Transactional
     public void editManageMember(Long memberId, MemberDTO editMEmber) {
         Member member = memberRepository.findByMember(memberId);
 
@@ -141,6 +145,7 @@ public class MemberServiceImpl implements MemberService{
      * 마이 페이지 - 회원 수정
      */
     @Override
+    @Transactional
     public void editMember(Long memberId, MemberDTO editMEmber) {
         Member member = memberRepository.findByMember(memberId);
 
@@ -156,7 +161,16 @@ public class MemberServiceImpl implements MemberService{
      * 마이 페이지 - 회원 삭제
      */
     @Override
+    @Transactional
     public void deleteMember(Long memberId) {
-        memberRepository.deleteMember(memberId);
+        Member member = memberRepository.deleteMember(memberId);
+
+        String loginId = member.getLoginId();
+        member.setLoginId(loginId.charAt(0) + "***"+ loginId.charAt(loginId.length()-1));
+        member.setUserName("*****");
+        member.setEmail("*****");
+        member.setDelCheck(Check.Y);
+        member.setStatus(MemberStatus.DELETE);
+
     }
 }

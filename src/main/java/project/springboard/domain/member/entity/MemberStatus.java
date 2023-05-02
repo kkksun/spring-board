@@ -1,5 +1,5 @@
 package project.springboard.domain.member.entity;
 
 public enum MemberStatus {
-    ACTIVE, DEACTIVATE , STANDBY
+    ACTIVE, DEACTIVATE , STANDBY , DELETE
 }

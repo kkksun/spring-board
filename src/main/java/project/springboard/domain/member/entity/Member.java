@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import project.springboard.domain.board.entity.Check;
 import project.springboard.domain.member.dto.MemberDTO;
 
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEL_YN")
+    private Check delCheck;
 
     @CreatedDate
     @Column(name = "CREATE_DT", updatable = false)

@@ -14,6 +14,8 @@ import project.springboard.domain.board.entity.AttachFile;
 import project.springboard.domain.board.entity.Board;
 import project.springboard.domain.board.entity.Check;
 import project.springboard.domain.member.entity.Member;
+import project.springboard.exception.CustomException;
+import project.springboard.exception.ErrorCode;
 import project.springboard.paging.PagingParam;
 import project.springboard.repository.BoardRepository;
 import project.springboard.repository.MemberRepository;
@@ -67,12 +69,13 @@ public class BoardServiceImpl implements BoardService{
         Long totalBoardCount = boardRepository.allBoardCount();
 
 
-        int totalPageCount = (int) Math.ceil((double)totalBoardCount/ pageSize);
+        int totalPageCount = totalBoardCount == 0 ? 1 : (int) Math.ceil((double)totalBoardCount/ pageSize);
+        log.info("totalPageCount = {}" , totalPageCount);
         int offset = (pageSize * (currentPage-1)) +1 ;
         int startPage = ((currentPage -1) / blockSize) * blockSize + 1;
-        int endPage = startPage + blockSize - 1;
-        int prevPage = currentPage - 1 ;
-        int nextPage = currentPage + 1;
+        int endPage = totalPageCount == 1? 1 : startPage + blockSize - 1;
+        int prevPage = currentPage == 1? currentPage : currentPage - 1 ;
+        int nextPage = currentPage == 1? currentPage : currentPage + 1;
 
         if(currentPage > totalPageCount) {
             currentPage = totalPageCount;
@@ -82,9 +85,6 @@ public class BoardServiceImpl implements BoardService{
             endPage = totalPageCount;
         }
 
-        if(currentPage == 1) {
-            prevPage = currentPage;
-        }
         if(nextPage > totalPageCount) {
             nextPage = totalPageCount;
         }
@@ -142,6 +142,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardDTO findBoard(Long boardId) {
         Board board = boardRepository.findBoard(boardId);
+
+        if(board == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);};
         return BoardDTO.toBoardDTO(board);
     }
 

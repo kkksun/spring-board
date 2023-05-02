@@ -40,18 +40,15 @@ public class BoardController {
      */
     @GetMapping("/board")
     public String boardHome(@RequestParam("page") String page, Model model) {
-        int currentPage ;
-        if (page == null || page.equals("")) {
-             currentPage = 1;
-        } else {
-            currentPage = Integer.parseInt(page);
-        }
+        int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
+
         PagingParam pagingParam = boardService.boardPaging(currentPage);
         List<BoardDTO> boardList = boardService.pageBoardList(pagingParam.getOffset(), PagingParam.pageSize);
 
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pagingParam",pagingParam);
+        log.info("start - end = {} ~ {}", pagingParam.getStartPage(), pagingParam.getEndPage());
 
         return "board/mainBoard";
     }
@@ -150,7 +147,7 @@ public class BoardController {
     /**
      * 게시글 삭제
      */
-    @DeleteMapping("board/delete/{memberId}/{boardId}")
+    @PostMapping("board/delete/{memberId}/{boardId}")
     public String deleteBoard(@PathVariable("boardId")Long boardId, @PathVariable("memberId") Long memberId) {
         boardService.deleteBoard(boardId);
         return "notice/deleteBoardComplete";

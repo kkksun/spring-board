@@ -14,7 +14,7 @@ public interface MemberRepository {
 
     List<Member> allMember();
 
-    void deleteMember(Long memberId);
+    Member deleteMember(Long memberId);
 
 
 

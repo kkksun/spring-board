@@ -26,6 +26,12 @@
                 $(".userName").prop("readonly", true).css("border", "0px");
                 $(".email").prop("readonly", true).css("border", "0px");
                 alert("admin 계정 정보 수정이 불가합니다.")
+            } else if([[${memberInfo.status}]] == "DELETE") {
+                $(".pwChangeBtn").prop("disabled", true).css("border", "0px");
+                $(".selectType").prop("disabled", true);
+                $(".userName").prop("readonly", true).css("border", "0px");
+                $(".email").prop("readonly", true).css("border", "0px");
+
             }
 
             $(".type").each(function(){

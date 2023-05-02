@@ -8,6 +8,7 @@ import project.springboard.domain.board.entity.Check;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,9 +38,10 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Board findBoard(Long boardId) {
-        return em.createQuery("select b from Board  b join fetch b.member where b.id = :boardId", Board.class)
-                .setParameter("boardId", boardId)
-                .getSingleResult();
+       return em.createQuery("select b from Board  b join fetch b.member where b.delCheck=:delCheck and b.id = :boardId", Board.class)
+                       .setParameter("delCheck", Check.N)
+               .setParameter("boardId", boardId)
+               .getSingleResult();
     }
 
     @Override

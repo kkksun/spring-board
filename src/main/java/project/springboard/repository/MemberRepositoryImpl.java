@@ -50,8 +50,7 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 
     @Override
-    public void deleteMember(Long memberId) {
-        Member deleteMember = em.find(Member.class, memberId);
-        em.remove(deleteMember);
+    public Member deleteMember(Long memberId) {
+        return em.find(Member.class, memberId);
     }
 }
