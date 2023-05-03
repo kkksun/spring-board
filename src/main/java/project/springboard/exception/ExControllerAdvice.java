@@ -29,15 +29,15 @@ public class ExControllerAdvice{
     }
 
 
-    @ExceptionHandler(Exception.class)
-    protected ModelAndView handleException(final Exception e) {
-        log.error("[handleException] {}", e.getMessage());
-        return new ModelAndView("error");
-    }
-
     @ExceptionHandler(ModelAndViewDefiningException.class)
     public ModelAndView ex(ModelAndViewDefiningException e) {
         log.info("[ModelAndViewDefiningException] {}", e.getMessage());
+        return new ModelAndView("error");
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected ModelAndView handleException(final Exception e) {
+        log.error("[handleException] {}", e.getMessage());
         return new ModelAndView("error");
     }
 

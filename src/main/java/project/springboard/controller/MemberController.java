@@ -62,7 +62,6 @@ public class MemberController {
                                    BindingResult bindingResult,
                                    Model model) {
 
-        log.info("memberInfo ={}", member);
         if(bindingResult.hasErrors()) {
             model.addAttribute("memberId", memberId);
             return "member/manageMemberEdit";

@@ -23,7 +23,6 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         LoginSessionDTO loginMember = (LoginSessionDTO) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
         Map<String, Long> attribute = (Map<String, Long>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-//        Long memberId = Long.parseLong(attribute.get("memberId"));
         log.info("attribute = {}", attribute);
 
         if(loginMember.getId() != attribute.get("memberId") && loginMember.getType() == MemberType.USER ) {

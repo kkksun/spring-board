@@ -70,7 +70,6 @@ public class BoardServiceImpl implements BoardService{
 
 
         int totalPageCount = totalBoardCount == 0 ? 1 : (int) Math.ceil((double)totalBoardCount/ pageSize);
-        log.info("totalPageCount = {}" , totalPageCount);
         int offset = (pageSize * (currentPage-1)) +1 ;
         int startPage = ((currentPage -1) / blockSize) * blockSize + 1;
         int endPage = totalPageCount == 1? 1 : startPage + blockSize - 1;
@@ -157,7 +156,7 @@ public class BoardServiceImpl implements BoardService{
         board.setTitle(editBoard.getTitle());
         board.setContent(editBoard.getContent());
 
-        if(!board.getAttachFileList().isEmpty() ) { // 여기 삭제와 파일 삭제 에 대해서 한번에 할 수 있는 방법이 없는지 생각해 보기
+        if(!board.getAttachFileList().isEmpty() ) {
            if(preFileIdList != null) {
                board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).forEach(f -> f.setDelCheck(Check.Y));
                List<AttachFile> deleteFileList = board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).collect(Collectors.toList());

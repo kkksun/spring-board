@@ -9,6 +9,8 @@ import project.springboard.domain.member.entity.Member;
 import project.springboard.domain.member.entity.MemberStatus;
 import project.springboard.domain.member.dto.MemberDTO;
 import project.springboard.domain.member.entity.MemberType;
+import project.springboard.exception.CustomException;
+import project.springboard.exception.ErrorCode;
 import project.springboard.repository.MemberRepository;
 
 import java.util.List;
@@ -71,7 +73,7 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> findMember = memberRepository.findByMember(member.getLoginId());
 
         if(findMember.isPresent() && passwordEncoder.matches(member.getPassword(),findMember.get().getPassword())) {
-            MemberDTO loginMember = new MemberDTO().toMemberDTO(findMember);
+            MemberDTO loginMember =   new MemberDTO().toMemberDTO(findMember);
             if(loginMember.getStatus() != MemberStatus.ACTIVE) {
                 loginMember.addMsg();
             }
@@ -121,6 +123,8 @@ public class MemberServiceImpl implements MemberService{
      * 아이디로 회원 조회*/
     @Override
     public MemberDTO findMember(Long memberId) {
+        Member member = memberRepository.findByMember(memberId);
+        if(member == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);};
         return MemberDTO.toMemberDTO(memberRepository.findByMember(memberId));
     }
 

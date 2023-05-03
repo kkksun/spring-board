@@ -48,7 +48,6 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pagingParam",pagingParam);
-        log.info("start - end = {} ~ {}", pagingParam.getStartPage(), pagingParam.getEndPage());
 
         return "board/mainBoard";
     }
@@ -147,7 +146,7 @@ public class BoardController {
     /**
      * 게시글 삭제
      */
-    @PostMapping("board/delete/{memberId}/{boardId}")
+    @GetMapping("board/delete/{memberId}/{boardId}")
     public String deleteBoard(@PathVariable("boardId")Long boardId, @PathVariable("memberId") Long memberId) {
         boardService.deleteBoard(boardId);
         return "notice/deleteBoardComplete";

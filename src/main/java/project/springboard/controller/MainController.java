@@ -98,7 +98,6 @@ public class MainController {
 
     @PostMapping("/join")
     public String memberJoin(@Validated @ModelAttribute("joinMember") JoinForm form, BindingResult bindingResult) {
-        log.info("joinMember ={}", form);
 
         if(bindingResult.hasErrors()){
             log.info("errors = {}", bindingResult);
