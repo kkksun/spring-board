@@ -14,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepository {
 
-    //    @PersistenceContext
     private final EntityManager em;
 
     @Override
@@ -31,7 +30,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 
     public List<AttachFile> findFileList(Long boardId) {
-        return em.createQuery("select f from AttachFile f where f.board.id = :boardId", AttachFile.class)
+        return em.createQuery("select f from AttachFile f where f.delCheck = :delCheck and f.board.id = :boardId", AttachFile.class)
+                .setParameter("delCheck", Check.N)
                 .setParameter("boardId", boardId)
                 .getResultList();
     }
