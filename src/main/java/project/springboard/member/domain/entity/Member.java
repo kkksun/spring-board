@@ -33,6 +33,7 @@ public class Member {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "MEMBER_TYPE")
     private MemberType type;
 
     @Enumerated(EnumType.STRING)

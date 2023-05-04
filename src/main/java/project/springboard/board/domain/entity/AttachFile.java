@@ -33,9 +33,11 @@ public class AttachFile {
     @Column(name = "SERVER_FILE_NAME")
     private String serverFileName;
 
+    @Column(name ="FILE_PATH")
     private String path;
 
     @Enumerated(EnumType.STRING)
+    @Column(name ="DEL_YN")
     private Check delCheck;
 
     @CreatedDate
