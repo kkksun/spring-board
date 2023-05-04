@@ -1,4 +1,4 @@
-package project.springboard.exception;
+package project.springboard.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

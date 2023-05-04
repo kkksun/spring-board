@@ -17,7 +17,7 @@ import project.springboard.member.domain.SessionConst;
 import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.board.domain.form.AddBoardForm;
 import project.springboard.member.domain.dto.LoginSessionDTO;
-import project.springboard.paging.PagingParam;
+import project.springboard.global.paging.PagingParam;
 import project.springboard.board.service.BoardService;
 
 import javax.servlet.http.HttpServletRequest;

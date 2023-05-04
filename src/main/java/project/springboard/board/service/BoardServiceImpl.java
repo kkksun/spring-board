@@ -13,9 +13,9 @@ import project.springboard.board.domain.entity.AttachFile;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Check;
 import project.springboard.member.domain.entity.Member;
-import project.springboard.exception.CustomException;
-import project.springboard.exception.ErrorCode;
-import project.springboard.paging.PagingParam;
+import project.springboard.global.exception.CustomException;
+import project.springboard.global.exception.ErrorCode;
+import project.springboard.global.paging.PagingParam;
 import project.springboard.board.repository.BoardRepository;
 import project.springboard.member.repository.MemberRepository;
 
@@ -29,7 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static project.springboard.paging.PagingParam.*;
+import static project.springboard.global.paging.PagingParam.*;
 
 
 @Slf4j
@@ -137,7 +137,7 @@ public class BoardServiceImpl implements BoardService{
     public BoardDTO findBoard(Long boardId) {
 
         Board board = boardRepository.findBoard(boardId);
-        if(board == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);};
+        if(board == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);}
         return BoardDTO.toBoardDTO(board);
     }
 

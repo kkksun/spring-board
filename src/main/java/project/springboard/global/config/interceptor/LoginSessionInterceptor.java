@@ -1,4 +1,4 @@
-package project.springboard.config.interceptor;
+package project.springboard.global.config.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -1,4 +1,4 @@
-package project.springboard.config.interceptor;
+package project.springboard.global.config.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,7 +25,7 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         Map<String, Long> attribute = (Map<String, Long>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         log.info("attribute = {}", attribute);
 
-        if(loginMember.getId() != attribute.get("memberId") && loginMember.getType() == MemberType.USER ) {
+        if(loginMember.getId().equals(attribute.get("memberId")) && loginMember.getType() == MemberType.USER ) {
             response.sendRedirect("/board/view/"+attribute.get("boardId"));
             return false;
         }

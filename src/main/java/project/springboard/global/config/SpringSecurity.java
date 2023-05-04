@@ -1,4 +1,4 @@
-package project.springboard.config;
+package project.springboard.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,12 +1,12 @@
-package project.springboard.config;
+package project.springboard.global.config;
 
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import project.springboard.config.interceptor.BoardAuthInterceptor;
-import project.springboard.config.interceptor.LoginSessionInterceptor;
-import project.springboard.config.interceptor.ManageAuthInterceptor;
+import project.springboard.global.config.interceptor.BoardAuthInterceptor;
+import project.springboard.global.config.interceptor.LoginSessionInterceptor;
+import project.springboard.global.config.interceptor.ManageAuthInterceptor;
 
 
 @Configuration

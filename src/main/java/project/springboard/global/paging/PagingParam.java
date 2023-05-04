@@ -1,4 +1,4 @@
-package project.springboard.paging;
+package project.springboard.global.paging;
 
 
 import lombok.*;

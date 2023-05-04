@@ -3,7 +3,7 @@ package project.springboard.board.service;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import project.springboard.board.domain.dto.BoardDTO;
-import project.springboard.paging.PagingParam;
+import project.springboard.global.paging.PagingParam;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

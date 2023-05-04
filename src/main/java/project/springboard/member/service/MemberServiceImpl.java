@@ -9,8 +9,8 @@ import project.springboard.member.domain.entity.Member;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberType;
-import project.springboard.exception.CustomException;
-import project.springboard.exception.ErrorCode;
+import project.springboard.global.exception.CustomException;
+import project.springboard.global.exception.ErrorCode;
 import project.springboard.member.repository.MemberRepository;
 
 import java.util.List;
@@ -124,7 +124,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public MemberDTO findMember(Long memberId) {
         Member member = memberRepository.findByMember(memberId);
-        if(member == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);};
+        if(member == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);}
         return MemberDTO.toMemberDTO(memberRepository.findByMember(memberId));
     }
 
