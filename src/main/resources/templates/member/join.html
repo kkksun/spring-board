@@ -20,7 +20,6 @@
             const submitBtn = document.querySelector('#submit');
 
             if(loginId.trim().length == 0 || loginId == null) {
-                checkResult.style.color="red";
                 checkResult.innerHTML ="아이디를 입력해주세요.";
                 $("#joinBtn").prop("disabled", true);
             } else {
@@ -92,8 +91,8 @@
             </div>
             <div>
                 <label for="passwordConfirm" >비밀번호 확인</label><br>
-                <input type="password" id="passwordConfirm" th:field="*{password}" th:onkeyup="confirmPassword()" th:errorclass="field-error">
-                <div class="field-error"  th:errors="*{password}"></div>
+                <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" th:onkeyup="confirmPassword()" th:errorclass="field-error">
+                <div class="field-error"  th:errors="*{passwordConfirm}"></div>
                 <span id="passwordCheck" class="check"></span>
             </div>
             <div>
