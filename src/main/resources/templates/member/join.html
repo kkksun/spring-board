@@ -11,9 +11,13 @@
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
         let loginIdResult;
+        let loginIdOk = true;
+        let passwordOk = true;
+
         const loginIdCheck = () => {
             let loginId = $('#loginId').val();
             let checkResult = $('#idDuplicateCheck')[0];
+            const submitBtn = document.querySelector('#submit');
 
             if(loginId.trim().length == 0 || loginId == null) {
                 checkResult.style.color="red";
@@ -28,14 +32,13 @@
                     },
                     success: function (result) {
                         if (result) {
-                            checkResult.style.color="red";
-                            checkResult.innerHTML = "사용가능한 아이디입니다.";
-                            $("#joinBtn").prop("disabled", false);
-                            console.log(loginId.trim().length);
+                            checkResult.innerText = "사용가능한 아이디입니다.";
+                            loginIdOk = true;
+                            submitBtn.disabled = btnDisabledCheck();
                         } else {
-                            checkResult.style.color="red";
-                            checkResult.innerHTML = "이미존재하는 아이디입니다.";
-                            $("#joinBtn").prop("disabled", true);
+                            checkResult.innerText = "이미존재하는 아이디입니다.";
+                            loginIdOk = false;
+                            submitBtn.disabled = btnDisabledCheck();
                         }
                         $("#idDuplicateCheck").val(result);
                     },
@@ -44,6 +47,27 @@
                     }
                 });
             }
+        }
+
+        const confirmPassword = () => {
+            const password = document.querySelector('#password').value;
+            const passwordConfirm = document.querySelector('#passwordConfirm').value;
+            const submitBtn = document.querySelector('#submit');
+            let message = document.querySelector('#passwordCheck');
+
+            if(password === passwordConfirm) {
+                message.innerText = "비밀번호가 일치합니다."
+                passwordOk = true;
+                submitBtn.disabled = btnDisabledCheck();
+            } else {
+                message.innerText = "비밀번호가 일치하지 않습니다.";
+                passwordOk = false;
+                submitBtn.disabled = btnDisabledCheck();
+            }
+        }
+
+        const btnDisabledCheck = () => {
+            return loginIdOk && passwordOk ? false : true;
         }
     </script>
 </head>
@@ -59,12 +83,18 @@
                 <label for="loginId">아이디</label><br>
                 <input type="text" id="loginId" th:field="*{loginId}" th:errorclass="field-error" th:onblur="loginIdCheck()">
                 <div class="field-error"  th:errors="*{loginId}"></div>
-                <span id="idDuplicateCheck"></span>
+                <span id="idDuplicateCheck" class="check"></span>
             </div>
             <div>
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" th:field="*{password}" th:errorclass="field-error">
                 <div class="field-error"  th:errors="*{password}"></div>
+            </div>
+            <div>
+                <label for="passwordConfirm" >비밀번호 확인</label><br>
+                <input type="password" id="passwordConfirm" th:field="*{password}" th:onkeyup="confirmPassword()" th:errorclass="field-error">
+                <div class="field-error"  th:errors="*{password}"></div>
+                <span id="passwordCheck" class="check"></span>
             </div>
             <div>
                 <label for="userName">이름</label>

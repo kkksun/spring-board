@@ -448,3 +448,7 @@ table .top {
     margin: auto;
     display: block;
 }
+
+.check {
+    color : red;
+}

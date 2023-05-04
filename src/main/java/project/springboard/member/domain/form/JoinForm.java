@@ -19,6 +19,11 @@ public class JoinForm {
     private String password;
 
     @NotBlank
+    @Length(min=8, max=100)
+    @Pattern(regexp = "^[A-Za-z\\d!@#$%^&*,.\\/?]*$")
+    private String passwordConfirm;
+
+    @NotBlank
     @Pattern(regexp = "^[a-zA-Z가-힣]*$")
     private String userName;
 
