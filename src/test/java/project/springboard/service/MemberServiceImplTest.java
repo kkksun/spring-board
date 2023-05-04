@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import project.springboard.domain.member.entity.Member;
-import project.springboard.domain.member.entity.MemberStatus;
-import project.springboard.domain.member.dto.MemberDTO;
-import project.springboard.domain.member.entity.MemberType;
-
-import java.util.HashMap;
-import java.util.Map;
+import project.springboard.member.domain.entity.MemberStatus;
+import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.entity.MemberType;
+import project.springboard.member.service.MemberService;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceImplTest {
 
     @Autowired
-    private MemberServiceImpl memberServiceImpl;
+    private MemberService memberServiceImpl;
 
 
     @Autowired

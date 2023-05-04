@@ -3,9 +3,9 @@ package project.springboard.config.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
-import project.springboard.domain.member.SessionConst;
-import project.springboard.domain.member.dto.LoginSessionDTO;
-import project.springboard.domain.member.entity.MemberType;
+import project.springboard.member.domain.SessionConst;
+import project.springboard.member.domain.dto.LoginSessionDTO;
+import project.springboard.member.domain.entity.MemberType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

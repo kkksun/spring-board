@@ -1,26 +1,26 @@
 package project.springboard.repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import project.springboard.domain.board.dto.BoardDTO;
-import project.springboard.domain.board.entity.AttachFile;
-import project.springboard.domain.board.entity.Board;
-import project.springboard.domain.board.entity.Check;
-import project.springboard.domain.member.entity.Member;
-import project.springboard.domain.member.entity.MemberStatus;
-import project.springboard.domain.member.entity.MemberType;
+import project.springboard.board.repository.BoardRepositoryImpl;
+import project.springboard.board.domain.dto.BoardDTO;
+import project.springboard.board.domain.entity.AttachFile;
+import project.springboard.board.domain.entity.Board;
+import project.springboard.board.domain.entity.Check;
+import project.springboard.member.domain.entity.Member;
+import project.springboard.member.domain.entity.MemberStatus;
+import project.springboard.member.domain.entity.MemberType;
+import project.springboard.member.repository.MemberRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest

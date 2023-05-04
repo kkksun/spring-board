@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
 #        show_sql: true
@@ -26,8 +26,8 @@ spring:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-#  messages:
-#    basename: error
+  messages:
+    basename: error
 
 
 

@@ -1,29 +1,19 @@
 package project.springboard.repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import project.springboard.domain.member.entity.Member;
-import project.springboard.domain.member.entity.MemberStatus;
-import project.springboard.domain.member.entity.MemberType;
+import project.springboard.member.domain.entity.Member;
+import project.springboard.member.domain.entity.MemberStatus;
+import project.springboard.member.domain.entity.MemberType;
+import project.springboard.member.repository.MemberRepositoryImpl;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,7 +93,7 @@ class MemberRepositoryImplTest {
         memberRepositoryImpl.saveMember(member1);
         memberRepositoryImpl.saveMember(member2);
 
-        List<Member> memberList = memberRepositoryImpl.allMember();
+        List<Member> memberList = memberRepositoryImpl.allMemberList();
         assertThat(memberList.size()).isSameAs(4);
     }
 
