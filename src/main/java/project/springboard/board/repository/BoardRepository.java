@@ -1,21 +1,14 @@
 package project.springboard.board.repository;
 
-import project.springboard.board.domain.entity.AttachFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import project.springboard.board.domain.entity.Board;
+import project.springboard.board.domain.entity.Check;
 
-import java.util.List;
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
-public interface BoardRepository {
+    Page<Board> findByDelCheck(Check delCheck, Pageable pageable);
 
-    public Long allBoardCount();
 
-    public List<Board> boardList ();
-
-    public void addBoard(Board addBoard);
-
-    public Board findBoard(Long boardId);
-
-    AttachFile fileDownload(Long fileId);
-
-    List<Board> findBoardPaging(int offset, int limit);
 }

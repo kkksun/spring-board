@@ -75,8 +75,7 @@ public class MainController {
 
                 return "redirect:" + redirectURL;
             } else {
-                String keyName = member.getMsg().keySet().toArray()[0].toString();
-                bindingResult.reject(keyName, member.getMsg().get(keyName));
+                bindingResult.reject("NoActive", member.getMsg());
 
                 return "member/login";
             }
@@ -125,9 +124,7 @@ public class MainController {
     @ResponseBody
     public boolean loginIdDuplicateCheck(@RequestParam("loginId") String loginId) {
 
-        boolean checkResult = memberService.loginIdDuplicateCheck(loginId);
-
-        return checkResult;
+        return memberService.loginIdDuplicateCheck(loginId);
     }
 
 

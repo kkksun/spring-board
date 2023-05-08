@@ -22,7 +22,5 @@ public interface BoardService {
 
     void deleteBoard(Long boardId);
 
-    PagingParam boardPaging(int offset);
-
-    List<BoardDTO> pageBoardList(int offset, int limit);
+    PagingParam pageBoardList(int page);
 }

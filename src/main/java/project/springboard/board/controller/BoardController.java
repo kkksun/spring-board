@@ -42,9 +42,8 @@ public class BoardController {
     public String boardHome(@RequestParam("page") String page, Model model) {
 
         int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
-        PagingParam pagingParam = boardService.boardPaging(currentPage);
-        List<BoardDTO> boardList = boardService.pageBoardList(pagingParam.getOffset(), PagingParam.pageSize);
-        model.addAttribute("boardList", boardList);
+        PagingParam pagingParam = boardService.pageBoardList(currentPage);
+        model.addAttribute("boardList", pagingParam.getBoardList());
         model.addAttribute("pagingParam",pagingParam);
 
         return "board/mainBoard";

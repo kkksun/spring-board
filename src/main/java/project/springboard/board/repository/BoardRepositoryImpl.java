@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardRepositoryImpl implements BoardRepository {
+public class BoardRepositoryImpl implements BoardJpaRepository {
 
     private final EntityManager em;
 

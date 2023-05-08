@@ -1,6 +1,7 @@
 package project.springboard.member.service;
 
 import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.entity.MemberType;
 
 import java.util.List;
 
@@ -18,8 +19,7 @@ public interface MemberService {
 
      void saveAdmin();
 
-     void editManageMember(Long memberId, MemberDTO editMEmber);
-     void editMember(Long memberId, MemberDTO editMEmber);
+     void editMember(Long memberId, MemberDTO editMEmber, MemberType memberType);
 
      void deleteMember(Long memberId);
 }

@@ -1,20 +1,14 @@
 package project.springboard.member.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import project.springboard.member.domain.entity.Member;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    void saveMember(Member memberEntity);
-    Member findByMember(Long id);
-    Optional<Member> findByMember(String loginId);
+    Optional<Member> findByLoginId(String loginId);
 
-    List<Member> allMemberList();
-
-    Member deleteMember(Long memberId);
-
-
+    boolean existsByLoginId(String loginId);
 
 }

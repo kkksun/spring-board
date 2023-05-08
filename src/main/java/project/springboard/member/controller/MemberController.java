@@ -80,7 +80,7 @@ public class MemberController {
             editMember.setPassword(member.getPassword());
         }
 
-        memberService.editManageMember(memberId, editMember);
+        memberService.editMember(memberId, editMember, MemberType.MANAGER);
 
         return "redirect:/manage/member";
 
@@ -143,7 +143,7 @@ public class MemberController {
             editMember.setPassword(member.getPassword());
         }
 
-        memberService.editMember(memberId, editMember);
+        memberService.editMember(memberId, editMember, MemberType.USER);
 
         return "redirect:/member/Info/{memberId}";
     }

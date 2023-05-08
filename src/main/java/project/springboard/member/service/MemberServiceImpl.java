@@ -11,6 +11,7 @@ import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberType;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
+import project.springboard.member.repository.MemberJpaRepository;
 import project.springboard.member.repository.MemberRepository;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class MemberServiceImpl implements MemberService{
 
 
     private final MemberRepository memberRepository;
+//    private final MemberJpaRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -34,7 +36,7 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public void saveAdmin() {
 
-        Optional<Member> admin = memberRepository.findByMember("admin");
+        Optional<Member> admin = memberRepository.findByLoginId("admin");
 
         if(admin.isEmpty()) {
             Member adminMember = Member.builder()
@@ -44,9 +46,10 @@ public class MemberServiceImpl implements MemberService{
                                        .email("admin@gmail.com")
                                        .type(MemberType.ADMIN)
                                        .status(MemberStatus.ACTIVE)
+                                       .delCheck(Check.N)
                                        .build();
 
-            memberRepository.saveMember(adminMember);
+            memberRepository.save(adminMember);
 
             Member testMember = Member.builder()
                     .loginId("test")
@@ -55,9 +58,10 @@ public class MemberServiceImpl implements MemberService{
                     .email("test@gmail.com")
                     .type(MemberType.USER)
                     .status(MemberStatus.STANDBY)
+                    .delCheck(Check.N)
                     .build();
 
-            memberRepository.saveMember(testMember);
+            memberRepository.save(testMember);
 
 
         }
@@ -70,10 +74,10 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public MemberDTO findMember(MemberDTO member) {
-        Optional<Member> findMember = memberRepository.findByMember(member.getLoginId());
+        Optional<Member> findMember = memberRepository.findByLoginId(member.getLoginId());
 
         if(findMember.isPresent() && passwordEncoder.matches(member.getPassword(),findMember.get().getPassword())) {
-            MemberDTO loginMember =   new MemberDTO().toMemberDTO(findMember);
+            MemberDTO loginMember =  MemberDTO.toMemberDTO(findMember.get());
             if(loginMember.getStatus() != MemberStatus.ACTIVE) {
                 loginMember.addMsg();
             }
@@ -88,11 +92,11 @@ public class MemberServiceImpl implements MemberService{
      * 회원 등록
      * */
     @Transactional
-    public void saveMember(MemberDTO saveMember) {
-        Member memberEntity = Member.toMemberEntity(saveMember);
-        String passwordEncode  = passwordEncoder.encode(memberEntity.getPassword());
-        memberEntity.setPassword(passwordEncode);
-        memberRepository.saveMember(memberEntity);
+    public void saveMember(MemberDTO member) {
+        Member saveMember = Member.toMemberEntity(member);
+        String passwordEncode  = passwordEncoder.encode(saveMember.getPassword());
+        saveMember.setPassword(passwordEncode);
+        memberRepository.save(saveMember);
 
     }
 
@@ -100,11 +104,11 @@ public class MemberServiceImpl implements MemberService{
 /**
  * 중복아이디 체크 */
     public boolean loginIdDuplicateCheck(String loginId) {
-        Optional<Member> member = memberRepository.findByMember(loginId);
-        return member.isEmpty()? true : false;
+
+        boolean result = memberRepository.existsByLoginId(loginId);
+        System.out.println("result = " + result);
+        return result;
     }
-
-
 
 
     /**
@@ -112,53 +116,33 @@ public class MemberServiceImpl implements MemberService{
      */
     @Override
     public List<MemberDTO> allMemberList() {
-        List<Member> allMember = memberRepository.allMemberList();
-        return allMember.stream()
+        List<Member> allMemberList = memberRepository.findAll();
+        return allMemberList.stream()
                         .map(MemberDTO::toMemberDTO)
                         .collect(toList());
 
     }
 
+
     /**
      * 아이디로 회원 조회*/
     @Override
     public MemberDTO findMember(Long memberId) {
-        Member member = memberRepository.findByMember(memberId);
-        if(member == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);}
-        return MemberDTO.toMemberDTO(memberRepository.findByMember(memberId));
+        return MemberDTO.toMemberDTO(memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND)));
     }
 
+
     /**
-     * 회원 관리 - 회원 정보 수정
+     * 회원 수정
      */
     @Override
     @Transactional
-    public void editManageMember(Long memberId, MemberDTO editMEmber) {
-        Member member = memberRepository.findByMember(memberId);
+    public void editMember(Long memberId, MemberDTO editMember, MemberType memberType) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        if(editMEmber.getPassword() != null) {
-            member.setPassword(passwordEncoder.encode(editMEmber.getPassword()));
-        }
-        member.setEmail(editMEmber.getEmail());
-        member.setUserName(editMEmber.getUserName());
-        member.setType(editMEmber.getType());
-        member.setStatus(editMEmber.getStatus());
-    }
+        if(editMember.getPassword() != null) {editMember.setPassword(passwordEncoder.encode(editMember.getPassword())); }
+        member.updateMember(editMember, memberType);
 
-    /**
-     * 마이 페이지 - 회원 수정
-     */
-    @Override
-    @Transactional
-    public void editMember(Long memberId, MemberDTO editMEmber) {
-        Member member = memberRepository.findByMember(memberId);
-
-        if(editMEmber.getPassword() != null) {
-            member.setPassword(passwordEncoder.encode(editMEmber.getPassword()));
-        }
-        member.setEmail(editMEmber.getEmail());
-        member.setUserName(editMEmber.getUserName());
-        member.setModifyDt(editMEmber.getModifyDt());
     }
 
     /**
@@ -167,14 +151,8 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.deleteMember(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));;
 
-        String loginId = member.getLoginId();
-        member.setLoginId(loginId.charAt(0) + "***"+ loginId.charAt(loginId.length()-1));
-        member.setUserName("*****");
-        member.setEmail("*****");
-        member.setDelCheck(Check.Y);
-        member.setStatus(MemberStatus.DELETE);
-
+        member.deleteMember();
     }
 }

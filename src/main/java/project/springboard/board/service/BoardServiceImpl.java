@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +15,14 @@ import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.board.domain.entity.AttachFile;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Check;
+import project.springboard.board.repository.AttachFileRepository;
+import project.springboard.board.repository.BoardRepository;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
 import project.springboard.global.paging.PagingParam;
-import project.springboard.board.repository.BoardRepository;
+import project.springboard.board.repository.BoardJpaRepository;
+import project.springboard.member.repository.MemberJpaRepository;
 import project.springboard.member.repository.MemberRepository;
 
 import java.io.File;
@@ -40,6 +46,8 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final AttachFileRepository attachFileRepository;
+
 
     @Value("${file.dir}")
     private String fileDir;
@@ -50,57 +58,19 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     @Override
     public List<BoardDTO> allBoard() {
-
-        return boardRepository.boardList().stream()
-                                          .map(BoardDTO ::new)
-                                          .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
-                                          .collect(Collectors.toList());
-    }
-
-    /**
-     * 게시글 페이징
-     */
-    @Override
-    public PagingParam boardPaging(int currentPage) {
-
-        Long totalBoardCount = boardRepository.allBoardCount();
-
-        int totalPageCount = totalBoardCount == 0 ? 1 : (int) Math.ceil((double)totalBoardCount/ pageSize);
-        int offset = (pageSize * (currentPage-1)) +1 ;
-        int startPage = ((currentPage -1) / blockSize) * blockSize + 1;
-        int endPage = totalPageCount == 1? 1 : startPage + blockSize - 1;
-        int prevPage = currentPage == 1? currentPage : currentPage - 1 ;
-        int nextPage = currentPage == 1? currentPage : currentPage + 1;
-
-        if(currentPage > totalPageCount) {
-            currentPage = totalPageCount;
-        }
-
-        if(endPage > totalPageCount) {
-            endPage = totalPageCount;
-        }
-
-        if(nextPage > totalPageCount) {
-            nextPage = totalPageCount;
-        }
-
-        return PagingParam.builder()
-                .currentPage(currentPage)
-                .offset(offset)
-                .startPage(startPage)
-                .endPage(endPage)
-                .totalPage(totalPageCount)
-                .prevPage(prevPage)
-                .nextPage(nextPage)
-                .build();
+        return boardRepository.findAll().stream()
+                              .filter(b -> b.getDelCheck() != Check.N)
+                              .map(BoardDTO :: new)
+                              .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
+                              .collect(Collectors.toList());
     }
 
     @Override
-    public List<BoardDTO> pageBoardList(int offset, int limit) {
+    public PagingParam pageBoardList(int page) {
+        PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createDt"));
+        Page<Board> pageBoardList = boardRepository.findByDelCheck(Check.N, pageRequest);
 
-       return boardRepository.findBoardPaging(offset, limit).stream().map(BoardDTO ::new)
-                .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
-                .collect(Collectors.toList());
+        return new PagingParam(pageBoardList);
 
     }
 
@@ -111,7 +81,7 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     public void addBoard(BoardDTO addBoard) throws IOException {
 
-        Member member = memberRepository.findByMember(addBoard.getMember().getId());
+        Member member = memberRepository.findById(addBoard.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         List<AttachFile> attachFiles = null;
         if(!addBoard.getAttachFileList().isEmpty()) {
@@ -119,7 +89,7 @@ public class BoardServiceImpl implements BoardService{
                             .collect(Collectors.toList());
         }
         Board board = Board.createBoard(addBoard, member, attachFiles);
-       boardRepository.addBoard(board);
+       boardRepository.save(board);
 
        if(!board.getAttachFileList().isEmpty()) {
            for (AttachFile attachFile : board.getAttachFileList()) {
@@ -135,10 +105,7 @@ public class BoardServiceImpl implements BoardService{
      */
     @Override
     public BoardDTO findBoard(Long boardId) {
-
-        Board board = boardRepository.findBoard(boardId);
-        if(board == null) {new CustomException(ErrorCode.BOARD_NOT_FOUND);}
-        return BoardDTO.toBoardDTO(board);
+        return BoardDTO.toBoardDTO(boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND)));
     }
 
     /**
@@ -147,7 +114,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void editBoard(Long boardId, BoardDTO editBoard, List<Long> preFileIdList) throws IOException {
-        Board board = boardRepository.findBoard(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         board.setTitle(editBoard.getTitle());
         board.setContent(editBoard.getContent());
 
@@ -183,7 +150,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void deleteBoard(Long boardId) {
-        Board board = boardRepository.findBoard(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         board.setDelCheck(Check.Y);
 
         board.getAttachFileList().stream().forEach(file -> file.setDelCheck(Check.Y));
@@ -209,7 +176,7 @@ public class BoardServiceImpl implements BoardService{
      */
 
     public UrlResource fileDownload(Long fileId, HttpHeaders headers) throws MalformedURLException {
-        AttachFile attachFile = boardRepository.fileDownload(fileId);
+        AttachFile attachFile = attachFileRepository.findById(fileId).orElseThrow(()-> new CustomException(ErrorCode.FILE_NOT_FOUND));
         String originalFileName = attachFile.getOriginalFileName();
         String serverFileName = attachFile.getServerFileName();
 

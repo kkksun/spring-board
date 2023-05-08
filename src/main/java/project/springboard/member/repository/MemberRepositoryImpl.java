@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepository {
+public class MemberRepositoryImpl implements MemberJpaRepository {
 
 
     private final EntityManager em;
