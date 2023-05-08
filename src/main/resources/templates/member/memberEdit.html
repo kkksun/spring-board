@@ -4,39 +4,40 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
+
     <script th:inline="javascript">
-        let pwChange = [[${memberInfo.pwChange}]]
-        $(document).ready(function(){
+
+        document.addEventListener("DOMContentLoaded", function (){
+            const pwChange = [[${memberInfo.pwChange}]]
+
             if (pwChange) {
-                $(".password").css("display", "inline-block");
-                $(".pwChange").prop("checked",true);
-                $(".pwChangeBtn").prop("innerText", "취소");
+                document.getElementById("password").style.display = "inline-block";
+                document.getElementById("pwChange").checked = true;
+                document.getElementById("pwChangeBtn").innerText = "취소";
             }
+
         });
         const passwordChange = () => {
 
-            if($(".password").css("display") == 'none') {
-                $(".password").css("display", "inline-block");
-                $(".pwChange").prop("checked",true);
-                $(".pwChangeBtn").prop("innerText", "취소");
+            if(document.getElementById("password").style.display === "none") {
+                document.getElementById("password").style.display = "inline-block";
+                document.getElementById("pwChange").checked = true;
+                document.getElementById("pwChangeBtn").innerText = "취소";
 
             } else {
-                $(".password").css("display", "none");
-                $(".pwChange").prop("checked",false);
-                $(".pwChangeBtn").prop("innerText", "변경");
+                document.getElementById("password").style.display = "none";
+                document.getElementById("pwChange").checked = false;
+                document.getElementById("pwChangeBtn").innerText = "변경";
             }
         }
 
         const attrChange = () => {
-            $(".pwChange").css("display", "inline-block");
-            if(!$(".pwChange").prop("checked")) {
-                $(".password").val([[${memberInfo.password}]]);
+            document.getElementById("password").style.display = "hidden";
+            if(!document.getElementById("pwChange").checked) {
+                document.getElementById("password").value = [[${memberInfo.password}]];
             }
         }
+
     </script>
 </head>
 <body>
@@ -51,9 +52,9 @@
             </div>
             <div>
                 <label class="col">비밀번호</label>
-                <input class="password" type="password" th:field="*{password}" style="display: none">
-                <button class="pwChangeBtn"  th:type="button" th:onclick="passwordChange()">변경</button>
-                <input type="checkbox" class="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
+                <input type="password" class="password" id="password" th:field="*{password}" style="display: none">
+                <button class="pwChangeBtn"  id="pwChangeBtn" th:type="button" th:onclick="passwordChange()">변경</button>
+                <input type="checkbox" class="pwChange" id="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
                 <div class="field-error"  th:errors="*{password}"></div>
             </div>
             <div>

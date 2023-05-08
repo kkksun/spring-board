@@ -24,8 +24,8 @@
         }
     });
 
-    const boardDelete = () => {
-        let url =  $(location).attr('origin') + [[@{/board/delete/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
+    const deleteBoard = () => {
+        let url = window.location.origin + [[@{/board/delete/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
         if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
             if(confirm('삭제하시겠습니까?')) {
                 location.href = url;
@@ -34,8 +34,8 @@
 
     }
 
-    const boardModify = () => {
-        let url =  $(location).attr('origin') + [[@{/board/edit/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
+    const editBoard = () => {
+        let url =  window.location.origin + [[@{/board/edit/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
         if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
             location.href = url;
         }
@@ -73,8 +73,8 @@
             </div>
             <div class="row">
                 <div class="btn">
-                    <a class="btn_e" th:onclick="boardModify()" type="button">수정</a>
-                    <a class="btn_c" th:onclick="boardDelete()" type="button">삭제</a>
+                    <a class="btn_e" th:onclick="editBoard()" type="button">수정</a>
+                    <a class="btn_c" th:onclick="deleteBoard()" type="button">삭제</a>
                 </div>
             </div>
         </div>

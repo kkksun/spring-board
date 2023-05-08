@@ -10,18 +10,17 @@
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
-        let loginIdResult;
         let loginIdOk = true;
-        let passwordOk = true;
+        let passwordOk = false;
 
         const loginIdCheck = () => {
-            let loginId = $('#loginId').val();
-            let checkResult = $('#idDuplicateCheck')[0];
+            let loginId = document.getElementById("loginId").value;
+            let checkResult = document.getElementById("idDuplicateCheck");// $('#idDuplicateCheck')[0];
             const submitBtn = document.querySelector('#submit');
 
             if(loginId.trim().length == 0 || loginId == null) {
-                checkResult.innerHTML ="아이디를 입력해주세요.";
-                $("#joinBtn").prop("disabled", true);
+                checkResult.innerText ="아이디를 입력해주세요.";
+                document.getElementById("joinBtn").disabled = true;
             } else {
                 $.ajax({
                     type: "post",
@@ -31,15 +30,15 @@
                     },
                     success: function (result) {
                         if (result) {
-                            checkResult.innerText = "사용가능한 아이디입니다.";
-                            loginIdOk = true;
-                            submitBtn.disabled = btnDisabledCheck();
-                        } else {
                             checkResult.innerText = "이미존재하는 아이디입니다.";
                             loginIdOk = false;
                             submitBtn.disabled = btnDisabledCheck();
+                        } else {
+                            checkResult.innerText = "사용가능한 아이디입니다.";
+                            loginIdOk = true;
+                            submitBtn.disabled = btnDisabledCheck();
                         }
-                        $("#idDuplicateCheck").val(result);
+                        // checkResult.value = result; // $("#idDuplicateCheck").val(result);
                     },
                     error: function () {
                         alert("Error");

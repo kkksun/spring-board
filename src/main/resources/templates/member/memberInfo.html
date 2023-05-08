@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
     <script th:inline="javascript">
         const deleteMember = () => {
             let loginId = [[${memberInfo.loginId}]];
-            let url =  $(location).attr('origin') + [[@{/member/delete/{memberId}(memberId=${memberInfo.id})}]];
+            let url =  window.location.origin + [[@{/member/delete/{memberId}(memberId=${memberInfo.id})}]];
 
                 if (loginId ==  "admin") {
                     alert("admin 계정은 탈퇴 불가합니다.");
