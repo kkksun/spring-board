@@ -28,6 +28,7 @@ dependencies {
     testImplementation 'org.projectlombok:lombok:1.18.22'
     compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
+	runtimeOnly 'com.h2database:h2-mvstore:2.1.210'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -35,3 +36,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
