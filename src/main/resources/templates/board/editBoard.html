@@ -11,12 +11,31 @@
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
 
-        $(document).ready(function(){
+        document.addEventListener("DOMContentLoaded", function (){
             // 내용 길이 Handler
-            let height = Number($(".content").css("height").replace('px', ''));
-            let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+            const content =  document.getElementsByClassName("content")[0];
+            let height = Number(getComputedStyle(content).height.replace("px", ''));
+            let padding = Number(getComputedStyle(content).paddingTop.replace("px", '')) +Number(getComputedStyle(content).paddingBottom.replace("px", ''));
 
             const DEFAULT_HEIGHT = height + padding;
+
+            content.addEventListener('property-change', () => { scrollCalculation(); })
+            content.addEventListener('change', () => { scrollCalculation(); })
+            content.addEventListener('keyup', () => { scrollCalculation(); })
+            content.addEventListener('paste', () => { scrollCalculation(); })
+            content.addEventListener('input', () => { scrollCalculation(); })
+
+            function scrollCalculation () {
+                let currentScrollHeight = content.scrollHeight;
+                if(currentScrollHeight > DEFAULT_HEIGHT) {
+                    const position = currentScrollHeight - DEFAULT_HEIGHT;
+                    console.log(position)
+                    content.style.height = position + "px";
+                    content.style.height = (currentScrollHeight + 12) + "px";
+                    console.log(currentScrollHeight);
+                }
+            }
+/*
 
             $("textarea.content").on('property-change change keyup paste input',  () => {
                 let currentScrollHeight = $(this).prop('scrollHeight');
@@ -25,6 +44,7 @@
                     $(this).height(position).height($(this).prop('scrollHeight')+12 );
                 }
             });
+*/
 
 
             // 첨부 파일 Handler

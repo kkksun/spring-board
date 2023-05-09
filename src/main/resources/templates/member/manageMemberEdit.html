@@ -5,81 +5,73 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
-
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
     <script th:inline="javascript">
         <!-- 변경될 시 같이 변경해줘야 하는 번거로움이 있음 -->
         const admin = "ADMIN";
         const manager = "MANAGER";
         const adminLoginId = "admin";
-        let checkedVal = "";
+        let currentCheckedVal = "";
 
         let loginId = [[${memberInfo.loginId}]];
         document.addEventListener("DOMContentLoaded", function (){
             if (loginId ==  adminLoginId && [[${session.loginMember.loginId}]] == loginId) {
                 alert("admin 계정은 유형, 상태 정보 변경 및 삭제는 불가합니다. ");
             } else if(loginId == adminLoginId && [[${session.loginMember.loginId}]] != loginId) {
-                $(".pwChangeBtn").prop("disabled", true).css("border", "0px");
-                $(".userName").prop("readonly", true).css("border", "0px");
-                $(".email").prop("readonly", true).css("border", "0px");
+                changeProperties();
                 alert("admin 계정 정보 수정이 불가합니다.")
             } else if([[${memberInfo.status}]] == "DELETE") {
-                $(".pwChangeBtn").prop("disabled", true).css("border", "0px");
-                $(".selectType").prop("disabled", true);
-                $(".userName").prop("readonly", true).css("border", "0px");
-                $(".email").prop("readonly", true).css("border", "0px");
-
+                changeProperties();
+                document.querySelectorAll(".type").forEach((box) => { box.disabled=true;});
             }
 
-            $(".type").each(function(){
-                if($(this).prop("checked")) {
-                    checkedVal = $(this)
+            function changeProperties() {
+                document.getElementById("pwChangeBtn").disabled = true;
+                document.getElementById("userName").readOnly = true;
+                document.getElementById("email").readOnly = true;
+                document.getElementById("pwChangeBtn").style.border = "0px";
+                document.getElementById("userName").style.border = "0px";
+                document.getElementById("email").style.border = "0px";
+            }
+
+            document.querySelectorAll(".type").forEach((box) => {
+                if(box.checked) {
+                    currentCheckedVal = box
                 }
-            });
+            })
 
-            console.log("첫번째 checkedVal = " + checkedVal);
-
-            $(".type").change(function () {
-                if($(".type").is(":checked")) {
-                    console.log("체크박스 변경");
-                    let changeVal = $(this).val();
-                    console.log("changeVal = " + changeVal);
-                    if([[${session.loginMember.type}]] == manager && changeVal == admin) {
-                        console.log("manager => admin 권한 변경");
+            document.querySelectorAll(".type").forEach((box) => {
+                box.addEventListener('change', () => {
+                    let changeVal = box.value;
+                    if([[${session.loginMember.type}]] === manager && changeVal === admin) {
                         alert("Manager 권한으로 Admin 권한 부여가 불가합니다.");
                         checkChange();
-                    } else if([[${session.loginMember.type}]] == manager && [[${memberInfo.type}]] == admin) {
+                    } else if([[${session.loginMember.type}]] === manager && [[${memberInfo.type}]] === admin) {
                         alert("Manager 권한으로 Admin 계정의 권한 변경이 불가합니다.");
                         checkChange();
                     }
-
-                }
+                })
             });
         });
 
         function checkChange() {
-            $(this).prop("checked", false);
-            checkedVal.prop("checked", true);
+            this.checked =false;
+            currentCheckedVal.checked = true;
         }
         const passwordChange = () => {
 
-            if($(".password").css("display") == 'none') {
-                $(".password").css("display", "inline-block");
-                $(".pwChange").prop("checked",true);
-                $(".pwChangeBtn").prop("innerText", "취소");
+            if(document.getElementById("password").style.display === "none") {
+                document.getElementById("password").style.display = "inline-block";
+                document.getElementById("pwChange").checked = true;
+                document.getElementById("pwChangeBtn").innerText = "취소";
 
             } else {
-                $(".password").css("display", "none");
-                $(".pwChange").prop("checked",false);
-                $(".pwChangeBtn").prop("innerText", "변경");
+                document.getElementById("password").style.display = "none";
+                document.getElementById("pwChange").checked = false;
+                document.getElementById("pwChangeBtn").innerText = "변경";
             }
-
         }
         const deleteMember = () => {
-            let url =  $(location).attr('origin') + [[@{/manage/member/delete/{memberId}(memberId=${memberId})}]];
+            let url =  window.location.origin + [[@{/manage/member/delete/{memberId}(memberId=${memberId})}]];
             if (loginId ==  adminLoginId) {
                 alert("admin 계정은 삭제 불가합니다.");
                 // $(".btn_d").prop("disabled", true);
@@ -98,11 +90,12 @@
                 return false;
             } else {
                 if(loginId) {
-                    $(".selectType").prop("disabled", false);
+                    document.querySelectorAll(".type").forEach((box) => { box.disabled=false;});
                 }
-                $(".pwChange").css("display", "inline-block");
-                if(!$(".pwChange").prop("checked")) {
-                    $(".password").val([[${memberInfo.password}]]);
+
+                document.getElementById("pwChange").style.display = "hidden";
+                if(!document.getElementById("pwChange").checked) {
+                    document.getElementById("password").value = [[${memberInfo.password}]];
                 }
                 return true;
             }
@@ -123,9 +116,9 @@
                 </div>
                 <div>
                     <label class="col">비밀번호</label>
-                    <input class="password" type="password" th:field="*{password}" style="display: none">
-                    <button class="pwChangeBtn"  th:type="button" th:onclick="passwordChange()">변경</button>
-                    <input type="checkbox" class="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
+                    <input type="password" class="password" id="password" th:field="*{password}" style="display: none"  autocomplete="on">
+                    <button type="button" class="pwChangeBtn" id="pwChangeBtn"  th:onclick="passwordChange()">변경</button>
+                    <input type="checkbox" class="pwChange" id="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
                     <div class="field-error"  th:errors="*{password}"></div>
                 </div>
                 <div>
@@ -142,7 +135,7 @@
                     <label class="col">유형</label>
                     <div class="radio_btn">
                         <th:block th:each="memberType : ${memberTypes}" >
-                            <input type="radio" class="selectType type"  th:field="*{type}" th:value="${memberType.name()}"  th:disabled="*{loginId.equals('admin')} ? 'disabled'" th:errorclass="field-error">
+                            <input type="radio" class="selectType type"  th:field="*{type}" th:value="${memberType.name()}"  th:disabled="*{loginId.equals('admin')|| status.equals('DELETE')} ? 'disabled' " th:errorclass="field-error">
                             <span th:for="${#ids.prev('type')}" th:text="${memberType.name()}"></span>
                         </th:block>
                     </div>
@@ -152,7 +145,7 @@
                     <label class="col">상태</label>
                     <div class="radio_btn">
                         <th:block th:each="memberStatus : ${memberStatuses}" >
-                            <input type="radio" class="selectType status"  th:field="*{status}" th:value="${memberStatus.name()}" th:disabled="*{loginId.equals('admin')} ? 'disabled'"  th:errorclass="field-error">
+                            <input type="radio" class="selectType status"  th:field="*{status}" th:value="${memberStatus.name()}" th:disabled="*{loginId.equals('admin')|| status.equals('DELETE')} ? 'disabled'"  th:errorclass="field-error">
                             <span th:for="${#ids.prev('status')}" th:text="${memberStatus.name()}"></span>
                         </th:block>
                     </div>

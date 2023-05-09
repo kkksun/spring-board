@@ -18,6 +18,10 @@
             let checkResult = document.getElementById("idDuplicateCheck");// $('#idDuplicateCheck')[0];
             const submitBtn = document.querySelector('#submit');
 
+            const param = {
+                "loginId": loginId
+            }
+
             if(loginId.trim().length == 0 || loginId == null) {
                 checkResult.innerText ="아이디를 입력해주세요.";
                 document.getElementById("joinBtn").disabled = true;
@@ -85,12 +89,12 @@
             </div>
             <div>
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" th:field="*{password}" th:errorclass="field-error">
+                <input type="password" id="password" th:field="*{password}" th:errorclass="field-error"  autocomplete="on">
                 <div class="field-error"  th:errors="*{password}"></div>
             </div>
             <div>
                 <label for="passwordConfirm" >비밀번호 확인</label><br>
-                <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" th:onkeyup="confirmPassword()" th:errorclass="field-error">
+                <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" th:onkeyup="confirmPassword()" th:errorclass="field-error" autocomplete="on">
                 <div class="field-error"  th:errors="*{passwordConfirm}"></div>
                 <span id="passwordCheck" class="check"></span>
             </div>

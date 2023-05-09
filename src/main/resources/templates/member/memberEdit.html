@@ -52,7 +52,7 @@
             </div>
             <div>
                 <label class="col">비밀번호</label>
-                <input type="password" class="password" id="password" th:field="*{password}" style="display: none">
+                <input type="password" class="password" id="password" th:field="*{password}" style="display: none"  autocomplete="on">
                 <button class="pwChangeBtn"  id="pwChangeBtn" th:type="button" th:onclick="passwordChange()">변경</button>
                 <input type="checkbox" class="pwChange" id="pwChange" th:field="*{pwChange}" th:value="*{pwChange.booleanValue()}"  style="display: none" >
                 <div class="field-error"  th:errors="*{password}"></div>

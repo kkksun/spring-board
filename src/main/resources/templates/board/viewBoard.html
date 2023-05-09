@@ -5,22 +5,18 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
 </head>
 <script th:inline="javascript">
-    $(document).ready(function(){
-        let height = Number($(".content").css("height").replace('px', ''));
-        let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+    document.addEventListener("DOMContentLoaded", function (){
+        const content =  document.getElementsByClassName("content")[0];
+        let height = Number(getComputedStyle(content).height.replace("px", ''));
+        let padding = Number(getComputedStyle(content).paddingTop.replace("px", '')) +Number(getComputedStyle(content).paddingBottom.replace("px", ''));
 
         const DEFAULT_HEIGHT = height + padding;
-        let scrollHeight = $(".content").prop("scrollHeight");
+        let scrollHeight =content.scrollHeight;
 
         if(scrollHeight > DEFAULT_HEIGHT) {
-            $(".content").height(scrollHeight + "px");
-
+            content.style.height = scrollHeight + "px";
         }
     });
 
@@ -31,7 +27,6 @@
                 location.href = url;
             }
         }
-
     }
 
     const editBoard = () => {

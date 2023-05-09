@@ -5,26 +5,38 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
     <script th:inline="javascript">
 
-    $(document).ready(function(){
+        document.addEventListener("DOMContentLoaded", function (){
         // 내용 길이 Handler
-        let height = Number($(".content").css("height").replace('px', ''));
-        let padding = Number($(".content").css("padding-top").replace('px', '')) +Number($(".content").css("padding-bottom").replace('px', ''));
+        const content =  document.getElementsByClassName("content")[0];
+        let height = Number(getComputedStyle(content).height.replace("px", ''));
+        let padding = Number(getComputedStyle(content).paddingTop.replace("px", '')) +Number(getComputedStyle(content).paddingBottom.replace("px", ''));
 
         const DEFAULT_HEIGHT = height + padding;
 
-        $("textarea.content").on('property-change change keyup paste input',  () => {
-            let currentScrollHeight = $(this).prop('scrollHeight');
-            if(currentScrollHeight > DEFAULT_HEIGHT) {
-                let position = currentScrollHeight - DEFAULT_HEIGHT;
-                $(this).height(position).height($(this).prop('scrollHeight')+12 );
+
+            // content.addEventListener('property-change', () => { scrollCalculation(); })
+            content.addEventListener('change', () => { scrollCalculation(); })
+            // content.addEventListener('keyup', () => { scrollCalculation(); })
+            // content.addEventListener('paste', () => { scrollCalculation(); })
+            // content.addEventListener('input', () => { scrollCalculation(); })
+
+            function scrollCalculation () {
+                let currentScrollHeight = content.scrollHeight; // e.target.scrollHeight;
+                if(currentScrollHeight > DEFAULT_HEIGHT) {
+                    const position = currentScrollHeight - DEFAULT_HEIGHT;
+                    console.log(position)
+                    content.style.height = '0px';
+                    // content.style.height = '0px';
+                    // content.style.height = (currentScrollHeight + 12) + "px";
+                    content.style.height = (DEFAULT_HEIGHT + position + 12) + "px";
+                    console.log("현재 scroll 높이 = " + currentScrollHeight);
+                    console.log("text height = " + content.style.height);
+                }
             }
-        });
+
+
 
         // 첨부 파일 Handler
         const fileInput = document.querySelector('#file');

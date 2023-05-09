@@ -9,7 +9,7 @@
             let loginId = [[${memberInfo.loginId}]];
             let url =  window.location.origin + [[@{/member/delete/{memberId}(memberId=${memberInfo.id})}]];
 
-                if (loginId ==  "admin") {
+                if (loginId ===  "admin") {
                     alert("admin 계정은 탈퇴 불가합니다.");
                     // $(".btn_d").prop("disabled", true);
                 } else {
