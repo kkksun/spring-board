@@ -34,7 +34,9 @@ public class PagingParam {
     private boolean isLast;
 
 
+    @Builder.Default
     private List<BoardDTO> boardList = new ArrayList<>();
+    @Builder.Default
     private List<MemberDTO> MemberList = new ArrayList<>();
 
     public PagingParam(Page<Board> pageBoardList) {

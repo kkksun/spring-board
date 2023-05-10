@@ -38,7 +38,7 @@ public class BoardDTO {
                     this.title = board.getTitle();
                     this.content = board.getContent();
                     this.delCheck = board.getDelCheck();
-                    this.createDt = board.getCreateDt();
+                    this.createDt = board.getCreateDate();
 
             }
 
@@ -57,8 +57,8 @@ public class BoardDTO {
                             .title(board.getTitle())
                             .content(board.getContent())
                             .delCheck(board.getDelCheck())
-                            .createDt(board.getCreateDt())
-                            .modifyDt(board.getModifyDt())
+                            .createDt(board.getCreateDate())
+                            .modifyDt(board.getModifyDate())
                             .attachFileList(board.getAttachFileList().stream()
                                                                      .filter(f -> f.getDelCheck() == Check.N)
                                                                      .map(AttachFileDTO::new)

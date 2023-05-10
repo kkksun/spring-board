@@ -2,14 +2,11 @@ package project.springboard.board.domain.entity;
 
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import project.springboard.board.domain.dto.BoardDTO;
+import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.entity.Member;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Board {
+public class Board extends Auditable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
@@ -32,7 +28,6 @@ public class Board {
     @Column(nullable = false)
     private String title;
 
-
     @Lob
     private String content;
 
@@ -40,16 +35,14 @@ public class Board {
     @Column(name = "DEL_YN")
     private Check delCheck;
 
-    @CreatedDate
-    @Column(name = "CREATE_DT", updatable = false)
-    private LocalDateTime createDt;
-
-    @LastModifiedDate
-    @Column(name = "MODIFY_DT")
-    private LocalDateTime modifyDt;
-
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<AttachFile> attachFileList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
+
 
     public void addAttachFile(AttachFile file) {
         attachFileList.add(file);

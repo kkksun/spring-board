@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.springboard.board.domain.entity.Check;
+import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.dto.MemberDTO;
 
 import javax.persistence.*;
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends Auditable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
@@ -43,15 +43,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     @Column(name = "DEL_YN")
     private Check delCheck;
-
-    @CreatedDate
-    @Column(name = "CREATE_DT", updatable = false)
-    private LocalDateTime createDt;
-
-    @LastModifiedDate
-    @Column(name = "MODIFY_DT")
-    private LocalDateTime modifyDt;
-
 
 
     public static Member toMemberEntity(MemberDTO memberDTO) {

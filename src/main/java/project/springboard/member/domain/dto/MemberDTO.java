@@ -4,6 +4,7 @@ import lombok.*;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
+import project.springboard.member.domain.form.MemberForm;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -29,6 +30,11 @@ public class MemberDTO {
 
 
 
+    public MemberDTO(MemberForm member) {
+        this.loginId = member.getLoginId();
+        this.password = member.getPassword();
+    }
+
     public static MemberDTO toMemberDTO(Member member) {
         MemberDTO memberDTO = MemberDTO.builder()
                                        .id(member.getId())
@@ -38,8 +44,8 @@ public class MemberDTO {
                                        .email(member.getEmail())
                                        .type(member.getType())
                                        .status(member.getStatus())
-                                       .createDt(member.getCreateDt())
-                                       .modifyDt(member.getModifyDt())
+                                       .createDt(member.getCreateDate())
+                                       .modifyDt(member.getModifyDate())
                                        .build();
         return memberDTO;
     }

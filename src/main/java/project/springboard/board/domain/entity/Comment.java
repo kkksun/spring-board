@@ -39,7 +39,8 @@ public class Comment extends Auditable {
 
     private Long level;
 
-    private Long order;
+    @Column(name = "LEVEL_ORDER")
+    private Long levelOrder;
 
     @Column(name = "DEL_YN")
     private Check delCheck;
