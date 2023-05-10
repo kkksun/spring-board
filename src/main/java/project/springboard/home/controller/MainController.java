@@ -49,7 +49,7 @@ public class MainController {
         return "member/login";
     }
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public String login(@RequestParam(defaultValue = "/board?page=1") String redirectURL,
                         @Validated @ModelAttribute("loginMember") LoginForm form,
                         BindingResult bindingResult,
@@ -84,7 +84,7 @@ public class MainController {
 
             return "member/login";
         }
-    }
+    }*/
 
     /**
      * 회원 가입
@@ -117,15 +117,15 @@ public class MainController {
         return "notice/joinComplete";
     }
 
-    /**
-     * 로그인아이디 중복 체크
-     */
-    @PostMapping("/member/loginIdDuplicateCheck")
-    @ResponseBody
-    public boolean loginIdDuplicateCheck(@RequestParam("loginId") String loginId) {
-
-        return memberService.loginIdDuplicateCheck(loginId);
-    }
+//    /**
+//     * 로그인아이디 중복 체크
+//     */
+//    @PostMapping("/member/loginIdDuplicateCheck")
+//    @ResponseBody
+//    public boolean loginIdDuplicateCheck(@RequestParam("loginId") String loginId) {
+//
+//        return memberService.loginIdDuplicateCheck(loginId);
+//    }
 
 
     /**
