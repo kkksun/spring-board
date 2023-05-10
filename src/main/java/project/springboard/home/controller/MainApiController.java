@@ -11,6 +11,8 @@ import project.springboard.home.service.MainApiService;
 import project.springboard.member.domain.SessionConst;
 import project.springboard.member.domain.dto.LoginSessionDTO;
 import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.entity.MemberStatus;
+import project.springboard.member.domain.form.JoinForm;
 import project.springboard.member.domain.form.LoginForm;
 import project.springboard.member.domain.form.MemberForm;
 
@@ -21,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestController
+//@RestController
 @RequiredArgsConstructor
 public class MainApiController {
 
@@ -36,6 +38,9 @@ public class MainApiController {
         return mainApiService.loginIdDuplicateCheck(member.getLoginId());
     }
 
+    /**
+     * 회원 로그인
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(//@RequestParam(defaultValue = "/board?page=1") String redirectURL,
                                                      @RequestBody @Validated MemberForm form, BindingResult bindingResult,
@@ -67,6 +72,31 @@ public class MainApiController {
         } else {
             msg.put("global", "아이디 또는 비밀번호가 일치하지않습니다. 다시 입력해주세요.");
         }
+
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<Map<String,String>> joinMember(@RequestBody JoinForm form, BindingResult bindingResult) {
+
+        Map<String, String> msg = new HashMap<>();
+
+/*        if(bindingResult.hasErrors()){
+            log.info("errors = {}", bindingResult);
+
+            return "member/join";
+        }*/
+
+        MemberDTO joinMember = MemberDTO.builder()
+                .loginId(form.getLoginId())
+                .password(form.getPassword())
+                .userName(form.getUserName())
+                .email(form.getEmail())
+                .type(form.getType())
+                .status(MemberStatus.STANDBY)
+                .build();
+        System.out.println("joinMember = " + joinMember);
+//        mainApiService.saveMember(joinMember);
 
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import project.springboard.board.domain.dto.AttachFileDTO;
 import project.springboard.board.domain.form.EditBoardForm;
 import project.springboard.member.domain.SessionConst;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -39,14 +40,16 @@ public class BoardController {
      * 메인 페이지 - 게시판
      */
     @GetMapping("/board")
-    public String boardHome(@RequestParam("page") String page, Model model) {
+    public ModelAndView boardHome(@RequestParam("page") String page, Model model) {
+        ModelAndView mv = new ModelAndView();
 
         int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
         PagingParam pagingParam = boardService.pageBoardList(currentPage);
-        model.addAttribute("boardList", pagingParam.getBoardList());
-        model.addAttribute("pagingParam",pagingParam);
+        mv.setViewName("board/mainBoard");
+        mv.addObject("boardList", pagingParam.getBoardList());
+        mv.addObject("pagingParam",pagingParam);
 
-        return "board/mainBoard";
+        return mv;
     }
 
 

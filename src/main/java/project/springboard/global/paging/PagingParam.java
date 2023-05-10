@@ -42,7 +42,7 @@ public class PagingParam {
     public PagingParam(Page<Board> pageBoardList) {
         this.boardList = pageBoardList.getContent().stream()
                                        .map(BoardDTO :: new)
-                                       .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
+                                       .sorted(Comparator.comparing(BoardDTO::getCreateDate).reversed())
                                        .collect(Collectors.toList());
         this.totalPage = pageBoardList.getTotalPages();
         this.currentPage = pageBoardList.getNumber()+1;

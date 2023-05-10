@@ -4,119 +4,49 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-    <title>Title</title>
-    <script th:inline="javascript">
-        let loginIdOk = true;
-        let passwordOk = false;
-
-        const loginIdCheck = () => {
-            let loginId = document.getElementById("loginId").value;
-            let checkResult = document.getElementById("idDuplicateCheck");
-            const submitBtn = document.querySelector('#submit');
-
-            const param = {
-                "loginId": loginId
-            }
-
-            if(loginId.trim().length == 0 || loginId == null) {
-                checkResult.innerText ="아이디를 입력해주세요.";
-                submitBtn.disabled = true;
-            } else {
-                fetch("/member/loginIdDuplicateCheck", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(param)
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data) {
-                            checkResult.innerText = "이미존재하는 아이디입니다.";
-                            loginIdOk = false;
-                            submitBtn.disabled = btnDisabledCheck();
-                        } else {
-                            checkResult.innerText = "사용가능한 아이디입니다.";
-                            loginIdOk = true;
-                            submitBtn.disabled = btnDisabledCheck();
-                        }
-                    })
-                    .catch(err => {console.log("Fetch Error", err);})
-            }
-        }
-
-        const confirmPassword = () => {
-            const password = document.querySelector('#password').value;
-            const passwordConfirm = document.querySelector('#passwordConfirm').value;
-            const submitBtn = document.querySelector('#submit');
-            let message = document.querySelector('#passwordCheck');
-
-            if(password === passwordConfirm) {
-                message.innerText = "비밀번호가 일치합니다."
-                passwordOk = true;
-                submitBtn.disabled = btnDisabledCheck();
-            } else {
-                message.innerText = "비밀번호가 일치하지 않습니다.";
-                passwordOk = false;
-                submitBtn.disabled = btnDisabledCheck();
-            }
-        }
-
-        const btnDisabledCheck = () => {
-            return loginIdOk && passwordOk ? false : true;
-        }
-
-    </script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/joinValidation.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/join.js}"></script>
 </head>
 <body>
 <div class="container">
     <div th:replace="~{fragment/topFrag :: topTitle ('회원 가입')}"></div>
     <div class="joinForm">
-        <form  id="form"  >
-<!--            <div th:if="${#fields.hasGlobalErrors()}">-->
-<!--                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>-->
-<!--            </div>-->
+        <form  id="form">
             <div>
                 <label for="loginId">아이디</label><br>
                 <input type="text" id="loginId"  th:onblur="loginIdCheck()">
-<!--                <div class="field-error"  th:errors="*{loginId}"></div>-->
                 <span id="idDuplicateCheck" class="check"></span>
             </div>
             <div>
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" autocomplete="on">
-<!--                <div class="field-error"  th:errors="*{password}"></div>-->
             </div>
             <div>
                 <label for="passwordConfirm" >비밀번호 확인</label><br>
-                <input type="password" id="passwordConfirm" th:onkeyup="confirmPassword()" th:errorclass="field-error" autocomplete="on">
-<!--                <div class="field-error"  th:errors="*{passwordConfirm}"></div>-->
+                <input type="password" id="passwordConfirm" th:onkeyup="confirmPassword()"  autocomplete="on">
                 <span id="passwordCheck" class="check"></span>
             </div>
             <div>
                 <label for="userName">이름</label>
                 <input type="text" id="userName">
-<!--                <div class="field-error"  th:errors="*{userName}"></div>-->
             </div>
             <div>
                 <label for="email">이메일</label>
                 <input type="text" id="email">
-<!--                <div class="field-error"  th:errors="*{email}"></div>-->
             </div>
             <div>
                 <label>유형</label>
                 <div class="radio_btn">
                     <th:block th:each="memberType : ${memberTypes}" >
-                        <input type="radio" class="selectType"   th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" th:errorclass="field-error">
-                        <span th:for="${#ids.prev('type')}" th:text="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}"></span>
+                        <input type="radio" class="selectType"   th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" >
+                        <span  th:text="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}"></span>
                     </th:block>
                 </div>
-<!--                <div class="field-error"  th:errors="*{type}"></div>-->
             </div>
             <div class="line"></div>
             <div class="row">
                 <div class="btn">
-                    <button class="btn_j btn_1" id="submit" type="button" onclick="" >가입 </button>
+                    <button class="btn_j btn_1" id="submit" type="button" onclick="joinMember()" >가입 </button>
                     <button class="btn_j btn_2"  type="button" th:onclick="|location.href='@{/login}'|">취소</button>
                 </div>
             </div>

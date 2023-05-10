@@ -9,7 +9,7 @@ public interface MemberService {
 
      void saveMember(MemberDTO memberDTO);
 
-//     boolean loginIdDuplicateCheck(String loginId);
+     boolean loginIdDuplicateCheck(String loginId);
 
      List<MemberDTO> allMemberList();
 

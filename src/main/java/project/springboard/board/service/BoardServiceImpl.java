@@ -61,13 +61,13 @@ public class BoardServiceImpl implements BoardService{
         return boardRepository.findAll().stream()
                               .filter(b -> b.getDelCheck() != Check.N)
                               .map(BoardDTO :: new)
-                              .sorted(Comparator.comparing(BoardDTO::getCreateDt).reversed())
+                              .sorted(Comparator.comparing(BoardDTO::getCreateDate).reversed())
                               .collect(Collectors.toList());
     }
 
     @Override
     public PagingParam pageBoardList(int page) {
-        PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createDt"));
+        PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         Page<Board> pageBoardList = boardRepository.findByDelCheck(Check.N, pageRequest);
 
         return new PagingParam(pageBoardList);

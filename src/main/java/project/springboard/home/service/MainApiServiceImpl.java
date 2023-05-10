@@ -47,4 +47,17 @@ public class MainApiServiceImpl implements MainApiService{
         }
     }
 
+
+    /**
+     * 회원 등록
+     * */
+    @Transactional
+    public void saveMember(MemberDTO member) {
+        Member saveMember = Member.toMemberEntity(member);
+        String passwordEncode  = passwordEncoder.encode(saveMember.getPassword());
+        saveMember.setPassword(passwordEncode);
+        memberRepository.save(saveMember);
+
+    }
+
 }

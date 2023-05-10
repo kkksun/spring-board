@@ -13,14 +13,14 @@ const login = () => {
     }).then(response => response.json())
         .then(data => {
             if(JSON.stringify(data) === '{}') {
-                location.href = window.location.origin + "/board?page="
+                location.href = window.location.origin + "/board?page=1"
             } else {
                 let errorTag = document.querySelectorAll(".field-error");
                 if(errorTag.length != 0) { errorTag.forEach(tag => tag.remove())}
 
                 Object.keys(data).forEach(key => {
                     if(key === "global") {
-                        const parent = document.createElement("div");
+                        let parent = document.createElement("div");
                         let child = document.createElement("p");
                         child.setAttribute("id", `${key}Error`);
                         child.setAttribute("class", "field-error");

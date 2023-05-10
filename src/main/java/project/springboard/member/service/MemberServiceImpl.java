@@ -101,14 +101,13 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
-///**
-// * 중복아이디 체크 */
-//    public boolean loginIdDuplicateCheck(String loginId) {
-//
-//        boolean result = memberRepository.existsByLoginId(loginId);
-//        System.out.println("result = " + result);
-//        return result;
-//    }
+    /**
+     * 중복아이디 체크 */
+    public boolean loginIdDuplicateCheck(String loginId) {
+
+        boolean result = memberRepository.existsByLoginId(loginId);
+        return result;
+    }
 
 
     /**

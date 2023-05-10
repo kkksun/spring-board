@@ -8,4 +8,5 @@ public interface MainApiService {
 
     MemberDTO findMember(MemberDTO memberDTO);
 
+    void saveMember(MemberDTO memberDTO);
 }

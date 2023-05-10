@@ -2,14 +2,13 @@ package project.springboard.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class ExControllerAdvice{
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -21,9 +20,10 @@ public class ExControllerAdvice{
 
 
     @ExceptionHandler(CustomException.class)
-    protected ModelAndView handleCustomException(final CustomException e) {
+    protected ResponseEntity<ErrorResult> handleCustomException(final CustomException e) {
         log.error("[handleCustomException] {}", e.getErrorCode());
-        return new ModelAndView("error");
+        ErrorResult errorResult = new ErrorResult("CUSTOM-EX", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 
 
