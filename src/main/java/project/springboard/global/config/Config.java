@@ -17,14 +17,14 @@ public class Config implements WebMvcConfigurer {
         registry.addInterceptor(new LoginSessionInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/index.html","/css/**", "/error", "/login", "/join", "/logout", "/member/loginIdDuplicateCheck");
+                .excludePathPatterns("/","/index.html","/js/**","/css/**", "/error", "/login", "/join", "/logout", "/member/loginIdDuplicateCheck");
 
-        registry.addInterceptor(new BoardAuthInterceptor())
+/*        registry.addInterceptor(new BoardAuthInterceptor())
                 .order(2)
-                .addPathPatterns("/board/edit/{memberId}/{boardId}**", "/board/delete/{memberId}/{boardId}**");
+                .addPathPatterns("/board/edit/{memberId}/{boardId}**", "/board/delete/{memberId}/{boardId}**");*/
 
         registry.addInterceptor(new ManageAuthInterceptor())
-                .order(3)
+                .order(2)
                 .addPathPatterns("/manage/**");
 
     }
