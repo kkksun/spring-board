@@ -5,17 +5,13 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
     <script th:inline="javascript">
         let loginIdOk = true;
         let passwordOk = false;
 
         const loginIdCheck = () => {
             let loginId = document.getElementById("loginId").value;
-            let checkResult = document.getElementById("idDuplicateCheck");// $('#idDuplicateCheck')[0];
+            let checkResult = document.getElementById("idDuplicateCheck");
             const submitBtn = document.querySelector('#submit');
 
             const param = {
@@ -24,16 +20,18 @@
 
             if(loginId.trim().length == 0 || loginId == null) {
                 checkResult.innerText ="아이디를 입력해주세요.";
-                document.getElementById("joinBtn").disabled = true;
+                submitBtn.disabled = true;
             } else {
-                $.ajax({
-                    type: "post",
-                    url: "/member/loginIdDuplicateCheck",
-                    data: {
-                        "loginId": loginId
+                fetch("/member/loginIdDuplicateCheck", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                    success: function (result) {
-                        if (result) {
+                    body: JSON.stringify(param)
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data) {
                             checkResult.innerText = "이미존재하는 아이디입니다.";
                             loginIdOk = false;
                             submitBtn.disabled = btnDisabledCheck();
@@ -42,12 +40,8 @@
                             loginIdOk = true;
                             submitBtn.disabled = btnDisabledCheck();
                         }
-                        // checkResult.value = result; // $("#idDuplicateCheck").val(result);
-                    },
-                    error: function () {
-                        alert("Error");
-                    }
-                });
+                    })
+                    .catch(err => {console.log("Fetch Error", err);})
             }
         }
 
@@ -71,57 +65,58 @@
         const btnDisabledCheck = () => {
             return loginIdOk && passwordOk ? false : true;
         }
+
     </script>
 </head>
 <body>
 <div class="container">
     <div th:replace="~{fragment/topFrag :: topTitle ('회원 가입')}"></div>
     <div class="joinForm">
-        <form action="/join" th:action th:object="${joinMember}" method="post">
-            <div th:if="${#fields.hasGlobalErrors()}">
-                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
-            </div>
+        <form  id="form"  >
+<!--            <div th:if="${#fields.hasGlobalErrors()}">-->
+<!--                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>-->
+<!--            </div>-->
             <div>
                 <label for="loginId">아이디</label><br>
-                <input type="text" id="loginId" th:field="*{loginId}" th:errorclass="field-error" th:onblur="loginIdCheck()">
-                <div class="field-error"  th:errors="*{loginId}"></div>
+                <input type="text" id="loginId"  th:onblur="loginIdCheck()">
+<!--                <div class="field-error"  th:errors="*{loginId}"></div>-->
                 <span id="idDuplicateCheck" class="check"></span>
             </div>
             <div>
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" th:field="*{password}" th:errorclass="field-error"  autocomplete="on">
-                <div class="field-error"  th:errors="*{password}"></div>
+                <input type="password" id="password" autocomplete="on">
+<!--                <div class="field-error"  th:errors="*{password}"></div>-->
             </div>
             <div>
                 <label for="passwordConfirm" >비밀번호 확인</label><br>
-                <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" th:onkeyup="confirmPassword()" th:errorclass="field-error" autocomplete="on">
-                <div class="field-error"  th:errors="*{passwordConfirm}"></div>
+                <input type="password" id="passwordConfirm" th:onkeyup="confirmPassword()" th:errorclass="field-error" autocomplete="on">
+<!--                <div class="field-error"  th:errors="*{passwordConfirm}"></div>-->
                 <span id="passwordCheck" class="check"></span>
             </div>
             <div>
                 <label for="userName">이름</label>
-                <input type="text" id="userName" th:field="*{userName}" th:errorclass="field-error">
-                <div class="field-error"  th:errors="*{userName}"></div>
+                <input type="text" id="userName">
+<!--                <div class="field-error"  th:errors="*{userName}"></div>-->
             </div>
             <div>
                 <label for="email">이메일</label>
-                <input type="text" id="email" th:field="*{email}" th:errorclass="field-error">
-                <div class="field-error"  th:errors="*{email}"></div>
+                <input type="text" id="email">
+<!--                <div class="field-error"  th:errors="*{email}"></div>-->
             </div>
             <div>
                 <label>유형</label>
                 <div class="radio_btn">
                     <th:block th:each="memberType : ${memberTypes}" >
-                        <input type="radio" class="selectType"  th:field="*{type}" th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" th:errorclass="field-error">
+                        <input type="radio" class="selectType"   th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" th:errorclass="field-error">
                         <span th:for="${#ids.prev('type')}" th:text="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}"></span>
                     </th:block>
                 </div>
-                <div class="field-error"  th:errors="*{type}"></div>
+<!--                <div class="field-error"  th:errors="*{type}"></div>-->
             </div>
             <div class="line"></div>
             <div class="row">
                 <div class="btn">
-                    <button class="btn_j btn_1" id="submit" type="submit" >가입 </button>
+                    <button class="btn_j btn_1" id="submit" type="button" onclick="" >가입 </button>
                     <button class="btn_j btn_2"  type="button" th:onclick="|location.href='@{/login}'|">취소</button>
                 </div>
             </div>
