@@ -4,10 +4,7 @@ package project.springboard.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
@@ -17,6 +14,7 @@ import project.springboard.member.service.MemberService;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MemberPageController {
 
