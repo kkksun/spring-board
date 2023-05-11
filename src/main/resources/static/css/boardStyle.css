@@ -211,7 +211,7 @@ table .top {
     /*background-color: darkviolet;*/
 }
 
-.memberInfo input, .editMember input, .editMember .loginId, .editMember .type, .editManageMember input:not(.selectType, .selectStatus), .pwChange{
+.memberInfo input, .editMember input:not(.selectType), .pwChange{
     text-align: left;
     width: 50%;
     height: 40px;
@@ -230,7 +230,7 @@ table .top {
     border-radius: 6px;
 }
 
-.editMember input, .editManageMember input:not(.loginId){
+ .editMember input:not(.loginId, .readonlyType){
     border:  2px solid lightgray;
     border-radius: 6px;
 }
@@ -298,7 +298,7 @@ table .top {
     /*background-color: #146c43;*/
 }
 
-.editManageMember .radio_btn {
+.editMember .radio_btn {
     display: inline;
     width: 50%;
     height: 40px;
@@ -310,7 +310,7 @@ table .top {
     text-align: left;
 }
 
-.editManageMember .typeCheck, .editManageMember .statusCheck { margin-top: 30px}
+.editMember .typeCheck, .editMember .statusCheck { margin-top: 30px}
 
 .editManageMember .btn_d {
     background-color: #C62828 ;
