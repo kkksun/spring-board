@@ -19,25 +19,6 @@ public class LoginForm {
     private String loginId;
 
     @NotBlank
-    @Length(min=8, max=100)
     @Pattern(regexp = "^[A-Za-z\\d!@#$%^&*,.\\/?]*$")
     private String password;
-
-    @NotBlank
-    @Length(min=8, max=100)
-    @Pattern(regexp = "^[A-Za-z\\d!@#$%^&*,.\\/?]*$")
-    private String passwordConfirm;
-
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z가-힣]*$")
-    private String userName;
-
-    @NotBlank
-    @Email
-    @Pattern(regexp = "^[A-Za-z\\d@.]*$")
-    private String email;
-
-    @NotNull
-    private MemberType type;
-
 }

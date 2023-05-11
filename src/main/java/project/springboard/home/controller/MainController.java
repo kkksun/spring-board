@@ -4,17 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import project.springboard.member.domain.SessionConst;
 import project.springboard.member.domain.dto.LoginSessionDTO;
 import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberStatus;
-import project.springboard.member.domain.entity.MemberType;
-import project.springboard.member.domain.form.JoinForm;
 import project.springboard.member.domain.form.LoginForm;
 import project.springboard.member.domain.form.MemberForm;
 import project.springboard.member.service.MemberService;
@@ -32,12 +28,6 @@ public class MainController {
 
     private final MemberService memberService;
 
-    @ModelAttribute("memberTypes")
-    public MemberType[] memberTypes() { return  MemberType.values(); }
-
-    @ModelAttribute("memberStatuses")
-    public MemberStatus[] memberStatus() { return  MemberStatus.values(); }
-
     /**
      * admin 계정 생성
      */
@@ -47,22 +37,11 @@ public class MainController {
     }
 
     /**
-     * 로그인
-     */
-    @GetMapping("/login")
-    public ModelAndView mainLogin( @ModelAttribute("loginMember") LoginForm form) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("member/login");
-
-        return mv;
-    }
-
-    /**
      * 회원 로그인
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(//@RequestParam(defaultValue = "/board?page=1") String redirectURL,
-                                                     @RequestBody @Validated MemberForm form, BindingResult bindingResult,
+                                                     @RequestBody @Validated LoginForm form, BindingResult bindingResult,
                                                      HttpServletRequest request) {
         Map<String, String> msg = new HashMap<>();
 
@@ -95,21 +74,9 @@ public class MainController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    /**
-     * 회원 가입
-     */
-    @GetMapping("/join")
-    public ModelAndView joinForm( @ModelAttribute("joinMember") JoinForm join) {
-
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("member/join");
-        mv.addObject("memberType", memberTypes());
-
-        return mv;
-    }
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String,String>> joinMember(@RequestBody @Validated JoinForm form, BindingResult bindingResult) {
+    public ResponseEntity<Map<String,String>> joinMember(@RequestBody @Validated MemberForm form, BindingResult bindingResult) {
 
         Map<String, String> msg = new HashMap<>();
 

@@ -2,6 +2,7 @@ package project.springboard.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -32,30 +33,18 @@ public class MemberController {
     public MemberStatus[] memberStatus() { return  MemberStatus.values(); }
 
 
-    /**
-     * 회원 관리 - 전체 회원
-     */
-    @GetMapping("/manage/member")
-    public String allMemberList(Model model) {
+//    /**
+//     * 회원 관리 - 전체 회원
+//     */
+//    @GetMapping("/manage/member")
+//    public String allMemberList(Model model) {
+//
+//        List<MemberDTO> memberList = memberService.allMemberList();
+//        model.addAttribute("memberList", memberList);
+//
+//        return "member/manageMember";
+//    }
 
-        List<MemberDTO> memberList = memberService.allMemberList();
-        model.addAttribute("memberList", memberList);
-
-        return "member/manageMember";
-    }
-
-    /**
-     * 회원 관리 - 회원 정보 수정
-     */
-    @GetMapping("/manage/memberInfo/{memberId}")
-    public String manageMemberInfo(@PathVariable Long memberId, Model model) {
-
-        EditManageMemberForm memberInfo = EditManageMemberForm.toEditForm(memberService.findMember(memberId));
-         model.addAttribute("memberInfo", memberInfo);
-
-        return "member/manageMemberEdit";
-
-    }
 
     @PostMapping("/manage/memberInfo/{memberId}")
     public String editManageMember(@PathVariable Long memberId,
@@ -99,20 +88,17 @@ public class MemberController {
     }
 
     /**
-     * 마이페이지 - 회원 정보 조회
+     * 회원 정보 조회
      */
-    @GetMapping("/member/Info/{memberId}")
-    public String memberInfo(@PathVariable Long memberId, Model model) {
-
-        MemberDTO memberInfo = memberService.findMember(memberId);
-        model.addAttribute("memberInfo", memberInfo);
-
-        return "member/memberInfo";
+    @GetMapping("/memberInfo/{memberId}")
+    public MemberDTO memberInfo(@PathVariable Long memberId) {
+        MemberDTO findMember = memberService.findMember(memberId);
+        return findMember;
     }
 
-    /**
+/*    *//**
      * 마이페이지 - 회원 정보 수정
-     */
+     *//*
     @GetMapping("/member/edit/{memberId}")
     public String editMemberForm(@PathVariable Long memberId, @RequestParam("pwChange") boolean pwChange, Model model) {
         EditMemberForm memberInfo = EditMemberForm.toEditForm(memberService.findMember(memberId));
@@ -120,7 +106,7 @@ public class MemberController {
         model.addAttribute("memberInfo", memberInfo);
 
         return "member/memberEdit";
-    }
+    }*/
 
 
     @PostMapping("/member/edit/{memberId}")
@@ -151,17 +137,17 @@ public class MemberController {
     /**
      * 회원 탈퇴
      */
-    @GetMapping("/member/delete/{memberId}")
-    public String deleteMember(@PathVariable("memberId") Long memberId,HttpServletRequest request, Model model)  {
+    @DeleteMapping("/member/delete/{memberId}")
+    public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request, Model model)  {
 
         memberService.deleteMember(memberId);
-        HttpSession session = request.getSession(false);
-        if(session != null) {
-            session.invalidate();
+        if(isMember) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
         }
-        model.addAttribute("type", "USER");
-
-        return "notice/deleteMemberComplete";
+        return "ok";
     }
 
 

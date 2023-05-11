@@ -20,7 +20,7 @@
             <td class="createDt">가입날짜</td>
         </tr>
         <tr th:each="member : ${memberList}">
-            <td class="loginId" name="loginId"><a th:href="@{/manage/memberInfo/{memberId}(memberId=${member.id})}"  th:text="${member.loginId}"></a></td>
+            <td class="loginId" name="loginId"><a th:href="@{/manage/info/{memberId}(memberId=${member.id})}"  th:text="${member.loginId}"></a></td>
             <td class="userName" name="userName" th:text="${member.userName}">test</td>
             <td class="email" name="email" th:text="${member.email}">test</td>
             <td class="type" name="type" th:text="${member.type}">test</td>

@@ -38,7 +38,7 @@
                 <label>유형</label>
                 <div class="radio_btn">
                     <th:block th:each="memberType : ${memberTypes}" >
-                        <input type="radio" class="selectType"   th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" >
+                        <input type="radio" class="selectType"  name ="type"  th:value="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}" >
                         <span  th:text="${memberType.name()}" th:if="!${memberType.name().equals('ADMIN')}"></span>
                     </th:block>
                 </div>

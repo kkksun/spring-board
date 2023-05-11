@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+
+    <script th:inline="javascript">
+        let requestedPage = [[${requestedPage}]];
+        let memberId = [[${memberId}]];
+        const pwChange = [[${pwChange}]]
+        let memberPassword;
+
+        let password;
+        let isPwChange;
+        let pwChangeBtn;
+
+        document.addEventListener("DOMContentLoaded", function (){
+            password = document.getElementById("password");
+            pwChangeBtn = document.getElementById("pwChangeBtn");
+
+            if (pwChange) {
+                console.log(password);
+                password.style.display = "inline-block";
+                isPwChange = true;
+                pwChangeBtn.innerText = "취소";
+            }
+            findMember("edit");
+        });
+
+        const findMember = (page) => {
+            fetch("/memberInfo/"+memberId)
+                .then(response=> {
+                    if (!response.ok) {
+                        throw new Error('회원 정보가 존재하지 않습니다.');
+                    }
+                    return response.json();})
+                .then(data => {
+                    Object.keys(data).forEach(key => {
+                        if (document.getElementById(key) != undefined) {
+                            document.getElementById(key).value = data[key]
+                        }
+
+                        if(page === "edit" && requestedPage === "MANAGE" && (key === "type" || key === "status")) {
+                            document.querySelectorAll(`.${key}`).forEach((box) => {
+                                if(data["loginId"] === "admin") {
+                                    box.disabled = true;
+                                }
+                                if(box.value === data[key]) {
+                                    box.checked = true;
+                                }
+                            })
+                        }
+                     })
+
+                   if (page === "info"){
+                        loginIdOfMember = data["loginId"];
+                        statusOfMemeber = data["status"];
+                    }
+                   if(page === "edit") {
+                       password.value = null;
+                       memberPassword = data["password"];
+                   }
+                })
+                .catch(err => alert(err))
+        }
+
+        const passwordChange = () => {
+
+            if(password.style.display === "none") {
+                password.style.display = "inline-block";
+                isPwChange = true;
+                pwChangeBtn.innerText = "취소";
+
+            } else {
+                password.style.display = "none";
+                isPwChange = false;
+                pwChangeBtn.innerText = "변경";
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div th:replace="~{fragment/topFrag :: topTitle ('회원 수정')}"></div>
+        <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div><br>
+    <div class="editMemberForm">
+        <form class="editMember" id="form">
+            <div>
+                <label class="col">아이디</label>
+                <input class="loginId" id="loginId" readonly>
+            </div>
+            <div>
+                <label class="col">비밀번호</label>
+                <input type="password" class="password" id="password"  style="display: none"  autocomplete="on">
+                <button class="pwChangeBtn"  id="pwChangeBtn" th:type="button" th:onclick="passwordChange()">변경</button>
+            </div>
+            <div>
+                <label class="col">이름</label>
+                <input class="userName" id="userName">
+            </div>
+            <div>
+                <label class="col">이메일</label>
+                <input class="email" id="email">
+            </div>
+            <div class = "typeCheck">
+                <label class="col">유형</label>
+                <input class="readonlyType" id="type" th:if="${requestedPage.equals('MEMBER')}" readonly>
+                <div class="radio_btn" th:if="${requestedPage.equals('MANAGE')}">
+                    <th:block th:each="memberType : ${memberTypes}" >
+                        <input type="radio" class="selectType type" name="type" th:value="${memberType.name()}" >
+                        <span th:text="${memberType.name()}"></span>
+                    </th:block>
+                </div>
+            </div>
+            <div class = "statusCheck" th:if="${requestedPage.equals('MANAGE')}">
+                <label class="col">상태</label>
+                <div class="radio_btn">
+                    <th:block th:each="memberStatus : ${memberStatuses}" >
+                        <input type="radio" class="selectType status" name="status" th:value="${memberStatus.name()}" th:if="!${memberStatus.name().equals('DELETE')}">
+                        <span  th:text="${memberStatus.name()}" th:if="!${memberStatus.name().equals('DELETE')}"></span>
+                    </th:block>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="row">
+                <div class="btn">
+                    <button class="btn_e" id="submit" type="button" th:onclick="editMember()" >수정</button>
+                    <button class="btn_d" th:onclick="|location.href='@{/member/Info/{memberId}(memberId=${session.loginMember.id})}'|" type="button">취소</button>
+                </div>
+            </div>
+        </form>
+  </div>
+
+
+</div>
+</body>
+</html>

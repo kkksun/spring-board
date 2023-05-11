@@ -3,6 +3,7 @@ package project.springboard.member.domain.form;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
 
 import javax.validation.constraints.Email;
@@ -36,6 +37,7 @@ public class EditMemberForm {
 
     private MemberType type;
 
+    private MemberStatus status;
 
 
     public static EditMemberForm toEditForm(MemberDTO member) {
