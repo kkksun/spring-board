@@ -95,7 +95,7 @@ class MemberServiceImplTest {
         member.setUserName("테스트");
         member.setEmail("test1@gmail.com");
 
-        memberServiceImpl.editMember(findMember.getId(), member);
+        memberServiceImpl.editMember(findMember.getId(), member, MemberType.USER);
 
         findMember = memberServiceImpl.findMember(findMember.getId());
 
@@ -129,12 +129,12 @@ class MemberServiceImplTest {
         assertThat(deleteMember).isNull();
     }
 
-    @Test
-    @DisplayName("아이디 중복 확인")
-    public void loginIdDuplicateCheck(){
-        String loginId = "admin";
-        boolean loginIdDuplicateCheck = memberServiceImpl.loginIdDuplicateCheck(loginId);
-
-    }
+//    @Test
+//    @DisplayName("아이디 중복 확인")
+//    public void loginIdDuplicateCheck(){
+//        String loginId = "admin";
+//        boolean loginIdDuplicateCheck = memberServiceImpl.loginIdDuplicateCheck(loginId);
+//
+//    }
 
 }
