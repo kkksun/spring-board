@@ -3,6 +3,7 @@ package project.springboard.member.domain.form;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.entity.Member;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
 
@@ -14,9 +15,6 @@ import javax.validation.constraints.Pattern;
 
 @Data
 public class EditMemberForm {
-
-    @NotBlank
-    private String loginId;
 
     @NotBlank
     @Length(min=8, max=100)
@@ -39,17 +37,20 @@ public class EditMemberForm {
 
     private MemberStatus status;
 
+    private String requestedPage;
 
+/*
     public static EditMemberForm toEditForm(MemberDTO member) {
          EditMemberForm editMember = new EditMemberForm();
          editMember.setLoginId(member.getLoginId());
          editMember.setPassword(member.getPassword());
          editMember.setEmail(member.getEmail());
          editMember.setUserName(member.getUserName());
-         editMember.setType(member.getType());
+//         editMember.setType(member.getType());
          editMember.setPwChange(false);
         return editMember;
     }
+*/
 
 
 }

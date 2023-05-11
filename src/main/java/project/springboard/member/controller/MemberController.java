@@ -90,54 +90,46 @@ public class MemberController {
     /**
      * 회원 정보 조회
      */
-    @GetMapping("/memberInfo/{memberId}")
+    @GetMapping("/member/{memberId}")
     public MemberDTO memberInfo(@PathVariable Long memberId) {
         MemberDTO findMember = memberService.findMember(memberId);
         return findMember;
     }
 
-/*    *//**
+    /**
      * 마이페이지 - 회원 정보 수정
-     *//*
-    @GetMapping("/member/edit/{memberId}")
-    public String editMemberForm(@PathVariable Long memberId, @RequestParam("pwChange") boolean pwChange, Model model) {
-        EditMemberForm memberInfo = EditMemberForm.toEditForm(memberService.findMember(memberId));
-        memberInfo.setPwChange(pwChange);
-        model.addAttribute("memberInfo", memberInfo);
+     */
 
-        return "member/memberEdit";
-    }*/
-
-
-    @PostMapping("/member/edit/{memberId}")
+    @PatchMapping("/member/{memberId}")
     public String editMember(@PathVariable Long memberId,
-                             @Validated @ModelAttribute("memberInfo") EditMemberForm member,
+                             @RequestBody EditMemberForm member,
                              BindingResult bindingResult,
                              Model model){
+//
+//        if(bindingResult.hasErrors()) {
+//            model.addAttribute("memberId", memberId);
+//            return "member/memberEdit";
+//        }
+//
+//        MemberDTO editMember = MemberDTO.builder()
+//                .loginId(member.getLoginId())
+//                .userName(member.getUserName())
+//                .email(member.getEmail())
+//                .build();
+//        if(member.getPwChange()) {
+//            editMember.setPassword(member.getPassword());
+//        }
+//
+//        memberService.editMember(memberId, editMember, MemberType.USER);
 
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("memberId", memberId);
-            return "member/memberEdit";
-        }
-
-        MemberDTO editMember = MemberDTO.builder()
-                .loginId(member.getLoginId())
-                .userName(member.getUserName())
-                .email(member.getEmail())
-                .build();
-        if(member.getPwChange()) {
-            editMember.setPassword(member.getPassword());
-        }
-
-        memberService.editMember(memberId, editMember, MemberType.USER);
-
-        return "redirect:/member/Info/{memberId}";
+        log.info("editMember = {}", member);
+        return "ok";
     }
 
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/member/delete/{memberId}")
+    @DeleteMapping("/member/{memberId}")
     public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request, Model model)  {
 
         memberService.deleteMember(memberId);
