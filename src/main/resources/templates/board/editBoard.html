@@ -5,10 +5,6 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
-    <script
-            src="https://code.jquery.com/jquery-3.6.4.min.js"
-            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
-            crossorigin="anonymous"></script>
     <script th:inline="javascript">
 
         document.addEventListener("DOMContentLoaded", function (){
@@ -35,17 +31,6 @@
                     console.log(currentScrollHeight);
                 }
             }
-/*
-
-            $("textarea.content").on('property-change change keyup paste input',  () => {
-                let currentScrollHeight = $(this).prop('scrollHeight');
-                if(currentScrollHeight > DEFAULT_HEIGHT) {
-                    let position = currentScrollHeight - DEFAULT_HEIGHT;
-                    $(this).height(position).height($(this).prop('scrollHeight')+12 );
-                }
-            });
-*/
-
 
             // 첨부 파일 Handler
             // 이전에 업로드한 파일과 새로 업로드한 파일의 count 확인하기 위함
