@@ -1,24 +1,16 @@
 package project.springboard.member.controller;
 
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
-import project.springboard.member.domain.form.EditMemberForm;
-import project.springboard.member.service.MemberService;
+import project.springboard.member.domain.form.RequestedPage;
 
-import java.util.List;
 
 @Controller
-@RequestMapping("/api")
-@RequiredArgsConstructor
 public class MemberPageController {
-
-    private final MemberService memberService;
 
     @ModelAttribute("memberTypes")
     public MemberType[] memberTypes() { return  MemberType.values(); }
@@ -29,13 +21,9 @@ public class MemberPageController {
     /**
      * 회원 관리 - 전체 회원
      */
-    @GetMapping("/manage/member")
+    @GetMapping("/manage/members")
     public String allMemberList(Model model) {
-
-        List<MemberDTO> memberList = memberService.allMemberList();
-        model.addAttribute("memberList", memberList);
-
-        return "member/manageMember";
+        return "member/manageMembers";
     }
 
     /**
@@ -43,12 +31,10 @@ public class MemberPageController {
      */
     @GetMapping("/manage/info/{memberId}")
     public String manageMemberInfo(@PathVariable Long memberId, Model model) {
-
         model.addAttribute("memberId", memberId);
-        model.addAttribute("requestedPage", "MANAGE");
+        model.addAttribute("requestedPage", RequestedPage.MANAGE);
 
         return "member/memberInfo";
-
     }
 
     /**
@@ -56,9 +42,8 @@ public class MemberPageController {
      */
     @GetMapping("/member/info/{memberId}")
     public String memberInfo(@PathVariable Long memberId, Model model) {
-
         model.addAttribute("memberId", memberId);
-        model.addAttribute("requestedPage", "MEMBER");
+        model.addAttribute("requestedPage", RequestedPage.MEMBER);
 
         return "member/memberInfo";
     }
@@ -70,7 +55,8 @@ public class MemberPageController {
     public String edit(@PathVariable Long memberId, @RequestParam("pwChange") boolean pwChange, Model model) {
         model.addAttribute("pwChange", pwChange);
         model.addAttribute("memberId", memberId);
-        model.addAttribute("requestedPage", "MANAGE");
+        model.addAttribute("requestedPage", RequestedPage.MANAGE);
+
         return "member/editMember";
     }
 
@@ -79,10 +65,10 @@ public class MemberPageController {
      */
     @GetMapping("/member/edit/{memberId}")
     public String editMemberForm(@PathVariable Long memberId, @RequestParam("pwChange") boolean pwChange, Model model) {
-//        EditMemberForm memberInfo = EditMemberForm.toEditForm(memberService.findMember(memberId));
         model.addAttribute("pwChange", pwChange);
         model.addAttribute("memberId", memberId);
-        model.addAttribute("requestedPage", "MEMBER");
+        model.addAttribute("requestedPage", RequestedPage.MEMBER);
+
         return "member/editMember";
     }
 }

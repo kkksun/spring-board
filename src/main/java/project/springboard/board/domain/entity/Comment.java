@@ -31,8 +31,8 @@ public class Comment extends Auditable {
 
     private String comment;
 
-    @Column(name = "PARENTS_NUM")
-    private Long parentsNum;
+    @Column(name = "PARENT_ID")
+    private Long parentNum;
 
     @Column(name = "GROUP_NUM")
     private Long groupNum;

@@ -1,10 +1,9 @@
 let loginIdOk = false;
 let passwordOk = false;
 
-const loginIdCheck = () => {
+const loginIdDuplicateCheck = () => {
     let loginId = document.getElementById("loginId").value;
     let checkResult = document.getElementById("idDuplicateCheck");
-    const submitBtn = document.querySelector('#submit');
 
     const param = {
         "loginId": loginId
@@ -13,7 +12,7 @@ const loginIdCheck = () => {
     if(loginId.trim().length == 0 || loginId == null) {
         checkResult.innerText ="아이디를 입력해주세요.";
     } else {
-        fetch("/member/loginIdDuplicateCheck", {
+        fetch("/api/member/loginIdDuplicateCheck", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

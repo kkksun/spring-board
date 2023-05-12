@@ -5,85 +5,20 @@
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <script th:inline="javascript">
-
-        let requestedPage = [[${requestedPage}]];
-        let memberId = [[${memberId}]];
+        const requestedPage = [[${requestedPage}]];
+        const memberId = [[${memberId}]];
+        const pwChange = [[${pwChange}]];
+        const typeOfLoginMember = [[${session.loginMember.type}]];
         let loginIdOfMember;
         let statusOfMember;
-
-        document.addEventListener("DOMContentLoaded", function (){
-            findMember("info");
-        });
-
-        const findMember = (page) => {
-
-            fetch("/memberInfo/"+memberId)
-                .then(response=> {
-                    if (!response.ok) {
-                        throw new Error('회원 정보가 존재하지 않습니다.');
-                    }
-                    return response.json();})
-                .then(data => {
-                    console.log(data)
-                    Object.keys(data).forEach(key => {
-                        if (document.getElementById(key) != undefined) {
-                            document.getElementById(key).value = data[key]
-                        }
-
-                        if(page === "edit" && requestedPage === "MANAGE" && (key === "type" || key === "status")) {
-                            document.querySelectorAll(`.${key}`).forEach((box) => {
-                                if(box.value === data[key]) {
-                                    box.checked = true;
-                                }
-                            })
-                        }
-                    })
-
-                    if (page === "info"){
-                        loginIdOfMember = data["loginId"];
-                        statusOfMember = data["status"];
-                    }
-
-                })
-                .catch(err => alert(err))
-        }
-
-       function changeInfo(pwChange) {
-           let url = window.location.origin  + (requestedPage === "MEMBER"? "/member/" : "/manage/") + "edit/" + memberId + "?pwChange=" + pwChange;
-
-            if(requestedPage === "MANAGE" && [[${session.loginMember.type}]] === "MANAGER" ) {
-               alert("Manager는 회원 조회만 가능합니다.")
-            } else if (statusOfMember === "DELETE") {
-                alert("탈퇴한 계정은 수정 불가합니다.");
-           } else {
-                location.href = url;
-            }
-       }
-
-        function deleteMember() {
-            let reqUrl ="/member/delete/" + memberId + "?isMember=" + (requestedPage === "MEMBER"?  true : false);
-            let url = window.location.origin;
-
-            if(requestedPage === "MANAGE" && [[${session.loginMember.type}]] === "MANAGER" ) {
-                alert("Manager는 회원 조회만 가능합니다.")
-            } else if (loginIdOfMember === "admin") {
-                alert("admin 계정은 탈퇴 불가합니다.");
-            } else {
-                if(confirm('탈퇴하시겠습니까?')) {
-                    fetch(reqUrl, {
-                        method : "DELETE"
-                    }).then(response => {
-                        if (response.ok) {
-                            alert("탈퇴가 완료되었습니다.")
-                            location.href = url + (requestedPage === "MEMBER"?  "" : "/manage/member")
-                        } else {
-                            throw new Error('회원 정보가 존재하지 않습니다.');
-                        }
-                    })
-                }
-            }
-        }
+        let memberPassword;
+    document.addEventListener("DOMContentLoaded", function (){
+    findMember("info");
+    });
     </script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/findMember.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/reqEditMember.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/deleteMember.js}"></script>
 </head>
 <body>
 <div class="container">
@@ -97,7 +32,7 @@
         <div>
             <label class="col">비밀번호</label>
             <div class="btn_p">
-                <button class="pwChangeBtn"  type="button" th:onclick="changeInfo(true)">변경하기</button>
+                <button class="pwChangeBtn"  type="button" th:onclick="reqEditMember(true)">변경하기</button>
             </div>
         </div>
         <div>
@@ -119,7 +54,7 @@
         <div class="line"></div>
         <div class="row">
             <div class="btn">
-                <button class="btn_e" th:onclick="changeInfo(false)" type="button">수정</button>
+                <button class="btn_e" th:onclick="reqEditMember(false)" type="button">수정</button>
                 <button class="btn_d" th:onclick="deleteMember()"  type="button">탈퇴</button>
             </div>
         </div>

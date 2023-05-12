@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@RequestMapping(value = "/api")
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -39,17 +40,12 @@ public class BoardController {
     /**
      * 메인 페이지 - 게시판
      */
-    @GetMapping("/board")
-    public ModelAndView boardHome(@RequestParam("page") String page, Model model) {
-        ModelAndView mv = new ModelAndView();
-
+    @GetMapping("/list/board")
+    public PagingParam boardHome(@RequestParam("page") String page) {
         int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
         PagingParam pagingParam = boardService.pageBoardList(currentPage);
-        mv.setViewName("board/mainBoard");
-        mv.addObject("boardList", pagingParam.getBoardList());
-        mv.addObject("pagingParam",pagingParam);
-
-        return mv;
+        System.out.println("pagingParam = " + pagingParam);
+        return pagingParam;
     }
 
 

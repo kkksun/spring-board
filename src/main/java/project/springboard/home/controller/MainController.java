@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import project.springboard.member.domain.SessionConst;
 import project.springboard.member.domain.dto.LoginSessionDTO;
 import project.springboard.member.domain.dto.MemberDTO;
-import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.form.LoginForm;
-import project.springboard.member.domain.form.MemberForm;
+import project.springboard.member.domain.form.JoinMemberForm;
 import project.springboard.member.service.MemberService;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MainController {
 
@@ -40,9 +40,8 @@ public class MainController {
      * 회원 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(//@RequestParam(defaultValue = "/board?page=1") String redirectURL,
-                                                     @RequestBody @Validated LoginForm form, BindingResult bindingResult,
-                                                     HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Validated LoginForm member, BindingResult bindingResult, HttpServletRequest request) {
+
         Map<String, String> msg = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
@@ -52,50 +51,39 @@ public class MainController {
             return new ResponseEntity<>(msg, HttpStatus.OK);
         }
 
-        MemberDTO loginMember = MemberDTO.builder()
-                .loginId(form.getLoginId())
-                .password(form.getPassword())
-                .build();
+        MemberDTO loginMember = new MemberDTO(member);
+        MemberDTO findMember = memberService.findMember(loginMember);
 
-        MemberDTO member = memberService.findMember(loginMember);
-
-        if (member != null) {
-            if (member.getMsg() == null) {
+        if (findMember != null) {
+            if (findMember.getMsg() == null) {
                 HttpSession session = request.getSession();
                 //세션에는 필요한 정보만 담기 위해 DTO를 따로 생성
-                session.setAttribute(SessionConst.LOGIN_MEMBER, new LoginSessionDTO(member));
+                session.setAttribute(SessionConst.LOGIN_MEMBER, new LoginSessionDTO(findMember));
             } else {
-                msg.put("global", member.getMsg());
+                msg.put("global", findMember.getMsg());
             }
         } else {
             msg.put("global", "아이디 또는 비밀번호가 일치하지않습니다. 다시 입력해주세요.");
         }
-
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
+    /**
+     * 회원 가입
+     */
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String,String>> joinMember(@RequestBody @Validated MemberForm form, BindingResult bindingResult) {
+    public ResponseEntity<Map<String,String>> joinMember(@RequestBody @Validated JoinMemberForm member, BindingResult bindingResult) {
 
         Map<String, String> msg = new HashMap<>();
 
         if(bindingResult.hasErrors()){
             bindingResult.getFieldErrors().forEach(error -> msg.put(error.getField(), error.getDefaultMessage()));
             log.info("errors = {}", bindingResult);
-
             return new ResponseEntity<>(msg, HttpStatus.OK);
         }
 
-        MemberDTO joinMember = MemberDTO.builder()
-                .loginId(form.getLoginId())
-                .password(form.getPassword())
-                .userName(form.getUserName())
-                .email(form.getEmail())
-                .type(form.getType())
-                .status(MemberStatus.STANDBY)
-                .build();
-        System.out.println("joinMember = " + joinMember);
+        MemberDTO joinMember = new MemberDTO(member);
         memberService.saveMember(joinMember);
 
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -105,24 +93,9 @@ public class MainController {
      * 로그인아이디 중복 체크
      */
     @PostMapping("/member/loginIdDuplicateCheck")
-    public boolean loginIdDuplicateCheck(@RequestBody MemberForm member) {
+    public boolean loginIdDuplicateCheck(@RequestBody JoinMemberForm member) {
 
         return memberService.loginIdDuplicateCheck(member.getLoginId());
-    }
-
-
-    /**
-     * 로그아웃
-     */
-    @GetMapping("/logout")
-    public String logoutMember(HttpServletRequest request) {
-
-        HttpSession session = request.getSession(false);
-        if(session != null) {
-            session.invalidate();
-        }
-
-        return"redirect:/login";
     }
 
 }

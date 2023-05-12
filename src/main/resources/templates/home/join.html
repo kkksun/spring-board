@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/joinValidation.js}"></script>
-    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/join.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/joinValidation.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/join.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/createErrorMsgHtml.js}"></script>
 </head>
 <body>
 <div class="container">
@@ -14,7 +15,7 @@
         <form  id="form">
             <div>
                 <label for="loginId">아이디</label><br>
-                <input type="text" id="loginId"  th:onblur="loginIdCheck()">
+                <input type="text" id="loginId"  th:onblur="loginIdDuplicateCheck()">
                 <span id="idDuplicateCheck" class="check"></span>
             </div>
             <div>

@@ -26,7 +26,7 @@ h2.title {
     text-align: left;
 }
 
-.editManageMember .field-error:not(input), .editMember .field-error:not(input) {
+.editMember .field-error:not(input) {
     padding-left: 40px;
 }
 
@@ -69,16 +69,16 @@ a {
     text-align: right;
 }
 
-.memberInfo, .editMemberForm, .boardForm, .viewBoardForm, .editBoardForm, .editManageMemberForm  {
+.memberInfo, .editMemberForm, .boardForm, .viewBoardForm, .editBoardForm {
     border-top: 3px solid #009688;
     width: 100%;
     text-align: center;
     margin-top: 10px;
 }
-.editManageMemberForm, .editMemberForm {
+.editMemberForm {
     text-align: left;
 }
-.loginForm label, .joinForm label, .memberInfo label, .editMember label, .editManageMember label{
+.loginForm label, .joinForm label, .memberInfo label, .editMember label{
     font-weight: bold;
     font-size: 20px;
     text-align: left
@@ -92,11 +92,11 @@ a {
     border:  2px solid lightgray;
 }
 
-.loginForm .line, .joinForm .line, table .top, .memberInfo .line, .editMember .line, .viewBoardForm .line, .editManageMember .line {
+.loginForm .line, .joinForm .line, table .top, .memberInfo .line, .editMember .line, .viewBoardForm .line {
     margin : 20px 0px 20px 0px;
     border-bottom:  2px solid #E0E0E0;
 }
-.loginForm .row, .joinForm .row, .editManageMember .row {
+.loginForm .row, .joinForm .row{
     width: 100%;
     height: 40px;
 }
@@ -149,10 +149,10 @@ table .top {
     padding-bottom: 15px;
     margin-bottom: 10px;
 }
-.board tr td.id { width:10%; }
-.board tr td.title {width:60%; }
-.board tr td.loginId {width:10%;}
-.board tr td.createDt {width:20%;}
+.boardList tr td.id { width:10%; }
+.boardList tr td.title {width:60%; }
+.boardList tr td.loginId {width:10%;}
+.boardList tr td.createDt {width:20%;}
 
 .btn {
     margin-top: 30px;
@@ -195,12 +195,12 @@ table .top {
 .memberList tr td.createDt {width: 15%}
 
 
-.memberInfo div, .editMember div, .editManageMember div {
+.memberInfo div, .editMember div {
     margin :0% 15% 0% 15%;
     /*width: 50%;*/
     /*background-color: blanchedalmond;*/
 }
-.memberInfo .col, .editMember .col, .editManageMember .col {
+.memberInfo .col, .editMember .col{
     display: inline-block;
     text-align: right;
     width: 15%;
@@ -220,7 +220,7 @@ table .top {
     font-size: 14px;
 }
 
- .editManageMember .pwChangeBtn, .editMember .pwChangeBtn {
+ .editMember .pwChangeBtn {
     text-align: left;
      /*width: 10px;*/
     height: 40px;
@@ -305,16 +305,7 @@ table .top {
     margin : 30px 0px 5px 15px;
 }
 
-.editManageMember .btn {
-    margin-left: 15px;
-    text-align: left;
-}
-
 .editMember .typeCheck, .editMember .statusCheck { margin-top: 30px}
-
-.editManageMember .btn_d {
-    background-color: #C62828 ;
-}
 
 .complete {
     font-weight: bold;

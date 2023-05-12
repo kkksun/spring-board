@@ -17,8 +17,7 @@ public class Config implements WebMvcConfigurer {
         registry.addInterceptor(new LoginSessionInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/index.html","/js/**","/css/**", "/error", "/login", "/join", "/logout", "/member/loginIdDuplicateCheck");
-
+                .excludePathPatterns("/","/index.html","/js/**","/css/**", "/error", "/login", "/join", "/logout", "/api/**");
 /*        registry.addInterceptor(new BoardAuthInterceptor())
                 .order(2)
                 .addPathPatterns("/board/edit/{memberId}/{boardId}**", "/board/delete/{memberId}/{boardId}**");*/

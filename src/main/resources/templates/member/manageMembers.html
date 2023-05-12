@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function (){
+            memberList();
+        });
+    </script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/memberList.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/crateMemberListHtml.js}"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{fragment/topFrag :: topTitle ('회원 관리')}"></div>
+    <div th:replace="~{fragment/topFrag :: menu ('MANAGE')}"></div><br>
+    <table class="memberList">
+        <tr class="top">
+            <td class="loginId">아이디</td>
+            <td class="userName">이름</td>
+            <td class="email">이메일</td>
+            <td class="type">유형</td>
+            <td class="status">상태</td>
+            <td class="createDt">가입날짜</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

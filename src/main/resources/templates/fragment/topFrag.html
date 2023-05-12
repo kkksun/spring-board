@@ -14,7 +14,7 @@
         </th:block>
         <th:block th:if="${type} != 'MANAGE'">
             <span th:style="${session.loginMember.type.toString().equals('USER')}? 'display: none'">
-                <a th:href="@{/manage/member}" > 회원관리</a>
+                <a th:href="@{/manage/members}" > 회원관리</a>
             </span>
         </th:block>
         <span>

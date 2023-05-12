@@ -4,12 +4,12 @@ import lombok.*;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.entity.MemberType;
-import project.springboard.member.domain.form.MemberForm;
+import project.springboard.member.domain.form.EditMemberForm;
+import project.springboard.member.domain.form.LoginForm;
+import project.springboard.member.domain.form.JoinMemberForm;
+import project.springboard.member.domain.form.RequestedPage;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -30,9 +30,30 @@ public class MemberDTO {
 
 
 
-    public MemberDTO(MemberForm member) {
+    public MemberDTO(LoginForm member) {
         this.loginId = member.getLoginId();
         this.password = member.getPassword();
+    }
+
+    public MemberDTO(EditMemberForm member) {
+        this.userName = member.getUserName();
+        if(member.getPwChange()) {
+            this.password = member.getPassword();
+        }
+        this.email = member.getEmail();
+        if(member.getRequestedPage() == RequestedPage.MANAGE){
+            this.type = member.getType();
+            this.status = member.getStatus();
+        }
+    }
+
+    public MemberDTO(JoinMemberForm member) {
+        this.loginId = member.getLoginId();
+        this.password = member.getPassword();
+        this.userName = member.getUserName();
+        this.email = member.getEmail();
+        this.type = member.getType();
+        this.status = MemberStatus.STANDBY;
     }
 
     public static MemberDTO toMemberDTO(Member member) {

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import project.springboard.board.domain.entity.Check;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.dto.MemberDTO;
+import project.springboard.member.domain.form.RequestedPage;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -60,13 +61,13 @@ public class Member extends Auditable {
         return member;
     }
 
-    public void updateMember(MemberDTO editMember, MemberType memberType) {
+    public void updateMember(MemberDTO editMember, RequestedPage requestedPage) {
         this.email = editMember.getEmail();
         this.userName = editMember.getUserName();
         if(editMember.getPassword() != null) {
             this.password = editMember.getPassword();
         }
-        if(memberType != MemberType.USER) {
+        if(requestedPage == RequestedPage.MANAGE) {
             this.type = editMember.getType();
             this.status = editMember.getStatus();
         }

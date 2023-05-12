@@ -4,117 +4,23 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-
-    <script th:inline="javascript">
-        let requestedPage = [[${requestedPage}]];
-        let memberId = [[${memberId}]];
+    <script type="text/javascript" th:inline="javascript">
+        const requestedPage = [[${requestedPage}]];
+        const memberId = [[${memberId}]];
         const pwChange = [[${pwChange}]]
+        let loginIdOfMember;
+        let statusOfMember;
         let memberPassword;
-
-        let password;
-        let isPwChange = false;
-        let pwChangeBtn;
-
-        document.addEventListener("DOMContentLoaded", function (){
-            password = document.getElementById("password");
-            pwChangeBtn = document.getElementById("pwChangeBtn");
-
-            if (pwChange) {
-                console.log(password);
-                password.style.display = "inline-block";
-                isPwChange = true;
-                pwChangeBtn.innerText = "취소";
-            }
-            findMember("edit");
-        });
-
-        const findMember = (page) => {
-            fetch("/memberInfo/"+memberId)
-                .then(response=> {
-                    if (!response.ok) {
-                        throw new Error('회원 정보가 존재하지 않습니다.');
-                    }
-                    return response.json();})
-                .then(data => {
-                    Object.keys(data).forEach(key => {
-                        if (document.getElementById(key) != undefined) {
-                            document.getElementById(key).value = data[key]
-                        }
-
-                        if(page === "edit" && requestedPage === "MANAGE" && (key === "type" || key === "status")) {
-                            document.querySelectorAll(`.${key}`).forEach((box) => {
-                                if(data["loginId"] === "admin") {
-                                    box.disabled = true;
-                                }
-                                if(box.value === data[key]) {
-                                    box.checked = true;
-                                }
-                            })
-                        }
-                     })
-
-                   if (page === "info"){
-                        loginIdOfMember = data["loginId"];
-                        statusOfMemeber = data["status"];
-                    }
-                   if(page === "edit") {
-                       password.value = null;
-                       memberPassword = data["password"];
-                   }
-                })
-                .catch(err => alert(err))
-        }
-
-        const passwordChange = () => {
-
-            if(password.style.display === "none") {
-                password.style.display = "inline-block";
-                isPwChange = true;
-                pwChangeBtn.innerText = "취소";
-
-            } else {
-                password.style.display = "none";
-                isPwChange = false;
-                pwChangeBtn.innerText = "변경";
-            }
-        }
-
-        const editMember = () => {
-            const form = document.getElementById("form");
-            let selectedType ;
-            let selectedStatus;
-            document.querySelectorAll(".type").forEach((box) => {if(box.checked) { selectedType = box.value}});
-            document.querySelectorAll(".status").forEach((box) => {if(box.checked) { selectedStatus = box.value}});
-            console.log(selectedType);
-            console.log(selectedType);
-            const param = {
-                password: isPwChange ? form.password.value : memberPassword,
-                pwChange: isPwChange,
-                userName: form.userName.value,
-                email: form.email.value,
-                type: selectedType,
-                status: selectedStatus,
-                requestedPage: requestedPage
-            }
-            fetch("/editMember/" + memberId, {
-                method: "PATCH",
-                headers: {"Content-Type": "application/json",
-                },
-                body: JSON.stringify(param)
-            }).then(response => {
-                if(!response.ok) {
-                    throw new Error("회원 정보 수정에 실패하였습니다.")
-                }
-                return response.json()
-            }).catch(err => alert(err))
-        }
-
     </script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/passwordEditStatusChange.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/findMember.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/dataform/member/editMember.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/function/createErrorMsgHtml.js}"></script>
 </head>
 <body>
-    <div class="container">
-        <div th:replace="~{fragment/topFrag :: topTitle ('회원 수정')}"></div>
-        <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div><br>
+<div class="container">
+    <div th:replace="~{fragment/topFrag :: topTitle ('회원 수정')}"></div>
+    <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div><br>
     <div class="editMemberForm">
         <form class="editMember" id="form">
             <div>
@@ -136,15 +42,15 @@
             </div>
             <div class = "typeCheck">
                 <label class="col">유형</label>
-                <input class="readonlyType" id="type" th:if="${requestedPage.equals('MEMBER')}" readonly>
-                <div class="radio_btn" th:if="${requestedPage.equals('MANAGE')}">
+                <input class="readonlyType" id="type" th:if="${requestedPage == requestedPage.MEMBER}" readonly>
+                <div class="radio_btn" th:if="${requestedPage == requestedPage.MANAGE}">
                     <th:block th:each="memberType : ${memberTypes}" >
                         <input type="radio" class="selectType type" name="type" th:value="${memberType.name()}" >
                         <span th:text="${memberType.name()}"></span>
                     </th:block>
                 </div>
             </div>
-            <div class = "statusCheck" th:if="${requestedPage.equals('MANAGE')}">
+            <div class = "statusCheck" th:if="${requestedPage == requestedPage.MANAGE}">
                 <label class="col">상태</label>
                 <div class="radio_btn">
                     <th:block th:each="memberStatus : ${memberStatuses}" >
@@ -162,8 +68,6 @@
             </div>
         </form>
   </div>
-
-
 </div>
 </body>
 </html>

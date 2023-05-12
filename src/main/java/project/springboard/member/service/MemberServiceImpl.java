@@ -11,6 +11,7 @@ import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.entity.MemberType;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
+import project.springboard.member.domain.form.RequestedPage;
 import project.springboard.member.repository.MemberJpaRepository;
 import project.springboard.member.repository.MemberRepository;
 
@@ -69,7 +70,7 @@ public class MemberServiceImpl implements MemberService{
 
 
     /**
-     * 로그인 - loginId와 password로 회원 조회
+     * 로그인
      */
     @Override
     @Transactional
@@ -136,16 +137,16 @@ public class MemberServiceImpl implements MemberService{
      */
     @Override
     @Transactional
-    public void editMember(Long memberId, MemberDTO editMember, MemberType memberType) {
+    public void editMember(Long memberId, MemberDTO editMember, RequestedPage requestedPage) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         if(editMember.getPassword() != null) {editMember.setPassword(passwordEncoder.encode(editMember.getPassword())); }
-        member.updateMember(editMember, memberType);
+        member.updateMember(editMember, requestedPage);
 
     }
 
     /**
-     * 마이 페이지 - 회원 삭제
+     * 회원 삭제
      */
     @Override
     @Transactional

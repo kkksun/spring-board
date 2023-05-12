@@ -3,96 +3,45 @@ package project.springboard.member.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.springboard.member.domain.dto.MemberDTO;
-import project.springboard.member.domain.entity.MemberStatus;
-import project.springboard.member.domain.entity.MemberType;
 import project.springboard.member.domain.form.*;
 import project.springboard.member.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Slf4j
 @RestController
+@RequestMapping(value = "/api")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @ModelAttribute("memberTypes")
-    public MemberType[] memberTypes() { return  MemberType.values(); }
-
-    @ModelAttribute("memberStatuses")
-    public MemberStatus[] memberStatus() { return  MemberStatus.values(); }
-
-
-//    /**
-//     * 회원 관리 - 전체 회원
-//     */
-//    @GetMapping("/manage/member")
-//    public String allMemberList(Model model) {
-//
-//        List<MemberDTO> memberList = memberService.allMemberList();
-//        model.addAttribute("memberList", memberList);
-//
-//        return "member/manageMember";
-//    }
-
-
-    @PostMapping("/manage/memberInfo/{memberId}")
-    public String editManageMember(@PathVariable Long memberId,
-                                   @Validated @ModelAttribute("memberInfo") EditManageMemberForm member,
-                                   BindingResult bindingResult,
-                                   Model model) {
-
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("memberId", memberId);
-
-            return "member/manageMemberEdit";
-        }
-
-        MemberDTO editMember = MemberDTO.builder()
-                                        .loginId(member.getLoginId())
-                                        .userName(member.getUserName())
-                                        .email(member.getEmail())
-                                        .type(member.getType())
-                                        .status(member.getStatus())
-                                        .build();
-        if(member.getPwChange()) {
-            editMember.setPassword(member.getPassword());
-        }
-
-        memberService.editMember(memberId, editMember, MemberType.MANAGER);
-
-        return "redirect:/manage/member";
-
-    }
-
     /**
-     * 회원 관리 - 회원 삭제
+     * 전체 회원 리스트
      */
-    @GetMapping("/manage/member/delete/{memberId}")
-    public String deleteManageMember(@PathVariable("memberId") Long memberId, Model model)  {
-
-        memberService.deleteMember(memberId);
-        model.addAttribute("type", "MANAGE");
-
-        return "notice/deleteMemberComplete";
+    @GetMapping("/list/members")
+    public List<MemberForm> allMemberList() {
+        return memberService.allMemberList().stream().map(MemberForm::new).collect(Collectors.toList());
     }
 
     /**
      * 회원 정보 조회
      */
-    @GetMapping("/member/{memberId}")
+    @GetMapping("/find/member/{memberId}")
     public MemberDTO memberInfo(@PathVariable Long memberId) {
         MemberDTO findMember = memberService.findMember(memberId);
+
         return findMember;
     }
 
@@ -100,38 +49,26 @@ public class MemberController {
      * 마이페이지 - 회원 정보 수정
      */
 
-    @PatchMapping("/member/{memberId}")
-    public String editMember(@PathVariable Long memberId,
-                             @RequestBody EditMemberForm member,
-                             BindingResult bindingResult,
-                             Model model){
-//
-//        if(bindingResult.hasErrors()) {
-//            model.addAttribute("memberId", memberId);
-//            return "member/memberEdit";
-//        }
-//
-//        MemberDTO editMember = MemberDTO.builder()
-//                .loginId(member.getLoginId())
-//                .userName(member.getUserName())
-//                .email(member.getEmail())
-//                .build();
-//        if(member.getPwChange()) {
-//            editMember.setPassword(member.getPassword());
-//        }
-//
-//        memberService.editMember(memberId, editMember, MemberType.USER);
+    @PatchMapping("/edit/member/{memberId}")
+    public ResponseEntity<Map<String, String>> editMember(@PathVariable Long memberId, @RequestBody @Validated EditMemberForm member, BindingResult bindingResult){
+        Map<String, String> msg = new HashMap<>();
 
-        log.info("editMember = {}", member);
-        return "ok";
+        if(bindingResult.hasErrors()) {
+            bindingResult.getFieldErrors().forEach(error -> msg.put(error.getField(), error.getDefaultMessage()));
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        }
+
+        MemberDTO editMember = new MemberDTO(member);
+        memberService.editMember(memberId, editMember, member.getRequestedPage());
+
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/member/{memberId}")
-    public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request, Model model)  {
-
+    @DeleteMapping("/delete/member/{memberId}")
+    public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request)  {
         memberService.deleteMember(memberId);
         if(isMember) {
             HttpSession session = request.getSession(false);
@@ -139,9 +76,9 @@ public class MemberController {
                 session.invalidate();
             }
         }
+
         return "ok";
     }
-
 
 }
 

@@ -26,6 +26,7 @@ public class PagingParam {
     private int startPage;
     private int endPage;
     private int totalPage;
+    private long totalCount;
     private int prevPage;
     private int nextPage;
     private boolean hasNext;
@@ -44,12 +45,13 @@ public class PagingParam {
                                        .map(BoardDTO :: new)
                                        .sorted(Comparator.comparing(BoardDTO::getCreateDate).reversed())
                                        .collect(Collectors.toList());
-        this.totalPage = pageBoardList.getTotalPages();
+        this.totalPage = pageBoardList.getTotalPages() == 0 ? 1 : pageBoardList.getTotalPages();
         this.currentPage = pageBoardList.getNumber()+1;
         this.hasNext = pageBoardList.hasNext();
         this.hasPrevious = pageBoardList.hasPrevious();
         this.isFirst = pageBoardList.isFirst();
         this.isLast = pageBoardList.isLast();
+        this.totalCount = pageBoardList.getTotalElements();
         pageCalculation();
     }
 
