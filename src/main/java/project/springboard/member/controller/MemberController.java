@@ -30,7 +30,7 @@ public class MemberController {
     /**
      * 전체 회원 리스트
      */
-    @GetMapping("/list/members")
+    @GetMapping("/member/list")
     public List<MemberForm> allMemberList() {
         return memberService.allMemberList().stream().map(MemberForm::new).collect(Collectors.toList());
     }
@@ -38,7 +38,7 @@ public class MemberController {
     /**
      * 회원 정보 조회
      */
-    @GetMapping("/find/member/{memberId}")
+    @GetMapping("/member/find/{memberId}")
     public MemberDTO memberInfo(@PathVariable Long memberId) {
         MemberDTO findMember = memberService.findMember(memberId);
 
@@ -48,9 +48,10 @@ public class MemberController {
     /**
      * 마이페이지 - 회원 정보 수정
      */
-
-    @PatchMapping("/edit/member/{memberId}")
-    public ResponseEntity<Map<String, String>> editMember(@PathVariable Long memberId, @RequestBody @Validated EditMemberForm member, BindingResult bindingResult){
+    @PatchMapping("/member/edit{memberId}")
+    public ResponseEntity<Map<String, String>> editMember(@PathVariable Long memberId,
+                                                          @RequestBody @Validated EditMemberForm member,
+                                                          BindingResult bindingResult){
         Map<String, String> msg = new HashMap<>();
 
         if(bindingResult.hasErrors()) {
@@ -67,7 +68,7 @@ public class MemberController {
     /**
      * 회원 탈퇴
      */
-    @DeleteMapping("/delete/member/{memberId}")
+    @DeleteMapping("/member/delete/{memberId}")
     public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request)  {
         memberService.deleteMember(memberId);
         if(isMember) {

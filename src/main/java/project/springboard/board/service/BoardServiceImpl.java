@@ -80,7 +80,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void addBoard(BoardDTO addBoard) throws IOException {
-
+        System.out.println("service 진입");
         Member member = memberRepository.findById(addBoard.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         List<AttachFile> attachFiles = null;
@@ -88,6 +88,7 @@ public class BoardServiceImpl implements BoardService{
             attachFiles = addBoard.getAttachFileList().stream().map(AttachFile::createAttachFile)
                             .collect(Collectors.toList());
         }
+        System.out.println("파일 리스트 완료");
         Board board = Board.createBoard(addBoard, member, attachFiles);
        boardRepository.save(board);
 

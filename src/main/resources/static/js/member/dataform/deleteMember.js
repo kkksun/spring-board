@@ -1,5 +1,5 @@
 const deleteMember = () => {
-    let reqUrl ="/api/delete/member/" + memberId + "?isMember=" + (requestedPage === "MEMBER"?  true : false);
+    let reqUrl ="/api/member/delete/" + memberId + "?isMember=" + (requestedPage === "MEMBER"?  true : false);
     let url = window.location.origin;
 
     if(requestedPage === "MANAGE" && typeOfLoginMember === "MANAGER" ) {

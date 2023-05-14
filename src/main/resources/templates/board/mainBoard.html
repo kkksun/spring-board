@@ -4,56 +4,13 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
-    <title>Title</title>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/boardList.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createPagingHtml.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createBoardListHtml.js}"></script>
     <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", function (){
             boardList([[${page}]]);
         });
-
-        const boardList = (page) => {
-            fetch('/api/list/board?page=' + page).then(response => {
-                    if(!response.ok) {
-                        throw new Error("오류가 발생하였습니다.")
-                    }
-                    return response.json();
-            }).then(data => {
-                const pageParam = {
-                    currentPage : data["currentPage"],
-                    startPage: data["startPage"],
-                    endPage: data["endPage"],
-                    totalPage: data["totalPage"],
-                    prevPage: data["prevPage"],
-                    nextPage: data["nextPage"]
-                }
-                if(data["totalCount"] === 0) {
-                }
-                createPagingHtml(pageParam)
-            }).catch(err => alert(err));
-        }
-
-        const createPagingHtml = (pageParam) => {
-            const pagingUi = document.getElementsByClassName("paging")[0];
-            let html;
-
-            html = `
-              <li><a class="prev" href="/board?page=1"><span>&laquo;</span></a></li>
-              <li><a class="prev" href="/board?page=${pageParam.prevPage}"><span>&lsaquo;</span></a></li>
-            `
-
-            for(let i = pageParam.startPage; i <= pageParam.endPage; i++) {
-                // <li><a th:href="@{/board?page={page} (page = ${pageButton})}" th:classappend="${pagingParam.currentPage==pageButton}?'active' :''" th:text=${pageButton}></a></li>
-                html += `<li><a href="/board?page=${i}"`
-                if(i == pageParam.currentPage) { html += " class=active "}
-                html += `>${i}</a></li>`
-            }
-
-            html +
-        }
-
-
-            console.log(pageParam);
-            pagingUi.innerHTML= html;
-        }
     </script>
 </head>
 <body>
@@ -65,27 +22,17 @@
             <td class="id">번호</td>
             <td class="title">제목</td>
             <td class="loginId">작성자</td>
-            <td class="createDt">작성일</td>
+            <td class="createDate">작성일</td>
         </tr>
         <tr th:each="board : ${boardList}">
             <td class="id" th:text="${board.id}">1</a></td>
             <td class="title"><a th:href="@{board/view/{boardId}(boardId=${board.id})}" th:text="${board.title}" >제목</a></td>
             <td class="loginId" th:text="${board.member.loginId}">홍길동</td>
-            <td class="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd hh:mm')}">2022-01-01</td>
+            <td class="createDate" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd hh:mm')}">2022-01-01</td>
         </tr>
     </table>
     <div class="pageNavi">
         <ui class="paging">
-       <!-- <li><a href="" onclick="" class ="prev" th:href="@{board?page=1}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-        <li><a href="" onclick="" class = "prev" th:href="@{board?page={prevPage}(prevPage=${pagingParam.prevPage})}" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-        <th:block th:with="start = ${pagingParam.startPage}, end = ${pagingParam.endPage}">
-            <li th:with="start = ${pagingParam.startPage}, end = ${pagingParam.endPage}"
-                th:each="pageButton : ${#numbers.sequence(start, end)}">
-                <a th:href="@{/board?page={page} (page = ${pageButton})}" th:classappend="${pagingParam.currentPage==pageButton}?'active' :''" th:text=${pageButton}></a>
-            </li>
-        </th:block>
-        <li><a href="" onclick="" class ="next" th:href="@{board?page={nextPage}(nextPage=${pagingParam.nextPage})}" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-        <li><a href="" onclick="" class ="next" th:href="@{board?page={lastPage}(lastPage=${pagingParam.totalPage})}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>-->
         </ui>
     </div>
     <div class="btn">

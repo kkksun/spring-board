@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/boardStyle.css}"
+          href="../css/boardStyle.css" rel="stylesheet">
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/attachFileHandler.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:if="${boardId != null}" th:src="@{/js/board/dataform/findBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:if="${boardId != null}" th:src="@{/js/board/dataform/editBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:if="${boardId == null}" th:src="@{/js/board/dataform/addBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/global/createErrorMsgHtml.js}"></script>
+    <script th:inline="javascript">
+        const memberId = [[${session.loginMember.id}]];
+        const boardId = [[${boardId}]]
+        let preFileList= new Array();
+        document.addEventListener("DOMContentLoaded", function (){
+            if(boardId != null) {findBoard(boardId, true)}
+            scrollHandler();
+            attachFileHandler();
+    });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div th:replace="~{fragment/topFrag :: topTitle ('게시글 쓰기')}"></div>
+        <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div>
+         <br>
+        <div class="boardForm">
+            <form class="addBoard" id="form">
+                <div>
+                    <input type="text" class="title" id="title"  placeholder="제목을 입력하세요.">
+                </div>
+                <div>
+                    <textarea class="content" id="content" name="content" placeholder="내용을 입력하세요"></textarea>
+                </div>
+                <div class="fileAdd">
+                    <label for="attachFileList">파일등록</label>
+                    <input type="file" multiple="multiple" id="attachFileList">
+                    <div class="fileList">
+                        <div id="default">첨부파일</div>
+                        <div id="preFileList"></div>
+                        <div id="newFileList"> </div>
+                    </div>
+                </div>
+                <div class="btn">
+                    <button class="btn_e" type="button" th:onclick="${boardId == null}? 'addBoard()' : 'editBoard()'" th:text="${boardId == null}? '등록' : '수정'" >등록</button>
+                    <button class="btn_d" type="button" th:onclick="|location.href= ${boardId == null}? '@{/board?page=1}' : '@{/board/view/{boardId}(boardId=${boardId})}'|" >취소</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>

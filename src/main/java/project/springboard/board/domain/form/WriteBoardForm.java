@@ -4,23 +4,20 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class AddBoardForm {
+public class WriteBoardForm {
 
-    private Long userId;
+    private Long memberId;
 
     @NotBlank
     private String title;
 
     private String content;
 
-    private LocalDateTime createDt;
+    private List<MultipartFile> attachFileList = new ArrayList<>();
 
-    private LocalDateTime modifyDt;
-
-    private List<MultipartFile> attachFileList;
-
+    private List<Long> preFileIdList;
 }

@@ -13,7 +13,7 @@ const editMember = () => {
         status: selectedStatus,
         requestedPage: requestedPage
     }
-    fetch("/api/edit/member/" + memberId, {
+    fetch("/api/member/edit/" + memberId, {
         method: "PATCH",
         headers: {"Content-Type": "application/json",
         },
