@@ -235,7 +235,7 @@ table .top {
     border-radius: 6px;
 }
 
-.addBoard, .viewBoard, .editBoard {
+.addBoard, .viewBoard, .editBoard, .commentBox {
     margin : 10px 10% 0px 10%;
     /*background-color: beige;*/
 }
@@ -442,4 +442,31 @@ table .top {
 
 .check {
     color : red;
+}
+
+.commentBox, .commentOption, .commentTitle {
+    /*float: left;*/
+    margin-top: 3px;
+    margin-right: 12px;
+    font-size: 17px;
+    border: 3px solid #ccc;
+}
+
+.commentOption {
+    background-color: #009688;
+    border: 3px solid #ccc;
+}
+
+.commentList {
+    background-color: aquamarine;
+    border: 3px solid #ccc;
+}
+
+.commentWriter {
+    width: 100%;
+    background-color: blueviolet;
+    border: 3px solid #ccc;
+    text-align: left;
+    border: 2px solid lightgray;
+    border-radius: 2px;
 }

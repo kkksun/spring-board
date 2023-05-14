@@ -44,6 +44,25 @@ findBoard(boardId, false);
                 <div class="fileList" id="fileList"></div>
                 <div class="line"></div>
             </div>
+            <div class="commentBox">
+                <div class="commentOption">
+                    <h3 class="commentTitle">댓글</h3>
+                </div>
+                <ul class="commentList">
+
+                </ul>
+
+                <div class="commentWriter">
+                    <div class="commentInBox">
+                        <em commentInBox_loginId></em>
+                        <textarea class="commentInboxText" placeholder="댓글을 입력해주세요."></textarea>
+                    </div>
+                    <div class="commentAttach">
+                        <a href="" class="button">취소</a>
+                        <a href="" class="button">등록</a>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="btn">
                     <a class="btn_e" th:onclick="reqEditBoard()" type="button">수정</a>
