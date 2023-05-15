@@ -48,7 +48,7 @@ public class MemberController {
     /**
      * 마이페이지 - 회원 정보 수정
      */
-    @PatchMapping("/member/edit{memberId}")
+    @PatchMapping("/member/edit/{memberId}")
     public ResponseEntity<Map<String, String>> editMember(@PathVariable Long memberId,
                                                           @RequestBody @Validated EditMemberForm member,
                                                           BindingResult bindingResult){

@@ -47,7 +47,7 @@
             <label class="col">유형</label>
             <input type="text" class="type" id="type" readonly>
         </div>
-        <div th:if="${requestedPage} == 'MANAGE'">
+        <div th:if="${requestedPage == requestedPage.MANAGE}">
             <label class="col">상태</label>
             <input type="text" class="status" id="status" readonly>
         </div>
