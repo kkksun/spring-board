@@ -1,17 +1,17 @@
 package project.springboard.board.domain.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.entity.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name ="COMMENTS")
@@ -31,8 +31,9 @@ public class Comment extends Auditable {
 
     private String comment;
 
-    @Column(name = "PARENT_ID")
-    private Long parentNum;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private Comment parent;
 
     @Column(name = "GROUP_NUM")
     private Long groupNum;
@@ -44,6 +45,10 @@ public class Comment extends Auditable {
 
     @Column(name = "DEL_YN")
     private Check delCheck;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Comment> childCommentList = new ArrayList<>();
 
 
 }

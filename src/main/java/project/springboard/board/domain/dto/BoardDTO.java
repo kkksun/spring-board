@@ -2,11 +2,12 @@ package project.springboard.board.domain.dto;
 
 import lombok.*;
 import project.springboard.board.domain.entity.Check;
-import project.springboard.board.domain.form.AddBoardForm;
+import project.springboard.board.domain.form.WriteBoardForm;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.member.domain.dto.MemberDTO;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,19 +17,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BoardDTO {
 
-        private Long id;
+    private Long id;
 
-        private MemberDTO member;
+    private MemberDTO member;
 
-        private String title;
+    private String title;
 
-        private String content;
+    private String content;
 
-        private Check delCheck;
+    private Check delCheck;
 
-        private LocalDateTime createDate;
+    private LocalDateTime createDate;
 
-        private List<AttachFileDTO> attachFileList ;
+    @Builder.Default
+    private List<AttachFileDTO> attachFileList = new ArrayList<>();
 
             public BoardDTO(Board board) {
                     this.id = board.getId();
@@ -40,12 +42,12 @@ public class BoardDTO {
 
             }
 
-            public BoardDTO(AddBoardForm form) {
+            public BoardDTO(WriteBoardForm form) {
                     this.title = form.getTitle();
                     this.content = form.getContent();
                     this.member = new MemberDTO();
-                    this.member.setId(form.getUserId());
-                    attachFileList = form.getAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList());
+                    this.member.setId(form.getMemberId());
+                    this.attachFileList = form.getAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList());
             }
 
             public static BoardDTO toBoardDTO(Board board) {

@@ -21,7 +21,7 @@ const joinMember = () => {
         }
 
         fetch("/api/join", {
-            method: "post",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },

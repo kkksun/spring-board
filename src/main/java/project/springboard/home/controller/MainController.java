@@ -41,7 +41,6 @@ public class MainController {
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody @Validated LoginForm member, BindingResult bindingResult, HttpServletRequest request) {
-
         Map<String, String> msg = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
@@ -71,10 +70,8 @@ public class MainController {
     /**
      * 회원 가입
      */
-
     @PostMapping("/join")
     public ResponseEntity<Map<String,String>> joinMember(@RequestBody @Validated JoinMemberForm member, BindingResult bindingResult) {
-
         Map<String, String> msg = new HashMap<>();
 
         if(bindingResult.hasErrors()){

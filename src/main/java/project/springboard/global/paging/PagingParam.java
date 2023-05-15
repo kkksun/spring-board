@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.domain.Page;
 import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.board.domain.entity.Board;
+import project.springboard.board.domain.form.BoardForm;
 import project.springboard.member.domain.dto.MemberDTO;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class PagingParam {
     private List<BoardDTO> boardList = new ArrayList<>();
     @Builder.Default
     private List<MemberDTO> MemberList = new ArrayList<>();
+    @Builder.Default
+    private List<BoardForm> pagingBoardList = new ArrayList<>();
 
     public PagingParam(Page<Board> pageBoardList) {
         this.boardList = pageBoardList.getContent().stream()
@@ -75,4 +78,10 @@ public class PagingParam {
     }
 
 
+    public void toBoardForm() {
+        pagingBoardList = boardList.stream()
+                .map(BoardForm :: new)
+                .sorted(Comparator.comparing(BoardForm::getCreateDate).reversed())
+                .collect(Collectors.toList());
+    }
 }

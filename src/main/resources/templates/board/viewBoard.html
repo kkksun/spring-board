@@ -6,37 +6,19 @@
           href="../css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
 </head>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditBoard.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteBoard.js}"></script>
 <script th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function (){
-        const content =  document.getElementsByClassName("content")[0];
-        let height = Number(getComputedStyle(content).height.replace("px", ''));
-        let padding = Number(getComputedStyle(content).paddingTop.replace("px", '')) +Number(getComputedStyle(content).paddingBottom.replace("px", ''));
-
-        const DEFAULT_HEIGHT = height + padding;
-        let scrollHeight =content.scrollHeight;
-
-        if(scrollHeight > DEFAULT_HEIGHT) {
-            content.style.height = scrollHeight + "px";
-        }
-    });
-
-    const deleteBoard = () => {
-        let url = window.location.origin + [[@{/board/delete/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
-        if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
-            if(confirm('삭제하시겠습니까?')) {
-                location.href = url;
-            }
-        }
-    }
-
-    const editBoard = () => {
-        let url =  window.location.origin + [[@{/board/edit/{memberId}/{boardId}( memberId=${board.member.id},boardId=${board.id})}]];
-        if([[${board.member.id}]] == [[${session.loginMember.id}]] || [[${session.loginMember.type}]] != "USER"){
-            location.href = url;
-        }
-    }
-
-
+const typeOfLoginMember = [[${session.loginMember.type}]];
+const idOfLoginMember = [[${session.loginMember.id}]];
+let memberIdOfBoard;
+const boardId = [[${boardId}]];
+document.addEventListener("DOMContentLoaded", function (){
+scrollHandler();
+findBoard(boardId, false);
+});
 </script>
 <body>
     <div class="container">
@@ -44,31 +26,46 @@
         <div th:replace="~{fragment/topFrag :: menu ('NONE')}"></div><br>
         <div class="viewBoardForm">
             <div class="viewBoard">
-                <div id="title">
-                    <div class="title" name="title" th:text="${board.title}">게시글 제목 테스트</div>
+                <div class="title">
+                    <div  id="title" ></div>
                 </div>
-                <div id="loginId">
-                    <div class="loginId" name="loginId" th:text="${board.member.loginId}">admin</div>
+                <div class="loginId">
+                    <div  id="loginId"></div>
                 </div>
-                <div id="createDt">
-                    <div class="createDt" name="createDt" th:text="${#temporals.format(board.createDt, 'yyyy-MM-dd HH:mm:ss')}">2023-04-02 12:20</div>
-                </div>
-                <div class="line"></div>
-                <div id="content">
-                    <textarea  class="content" name="content" th:text="${board.content}" readonly></textarea>
+                <div class="createDate">
+                    <div  id="createDate" ></div>
                 </div>
                 <div class="line"></div>
-                <div class="fileList" >
-                    <div th:if="${board.attachFileList.isEmpty()}">첨부 파일</div>
-                    <th:block th:each="file : ${board.attachFileList}">
-                        <div><a  th:href="|/file/${file.id}|" th:text="${file.originalFileName}"></a></div>
-                    </th:block>
+                <div class="content">
+<!--                    <p id="content" style="white-space: pre-wrap"></p>-->
+                    <textarea id="content" readonly></textarea>
                 </div>
                 <div class="line"></div>
+                <div class="fileList" id="fileList"></div>
+                <div class="line"></div>
+            </div>
+            <div class="commentBox">
+                <div class="commentOption">
+                    <h3 class="commentTitle">댓글</h3>
+                </div>
+                <ul class="commentList">
+
+                </ul>
+
+                <div class="commentWriter">
+                    <div class="commentInBox">
+                        <em commentInBox_loginId></em>
+                        <textarea class="commentInboxText" placeholder="댓글을 입력해주세요."></textarea>
+                    </div>
+                    <div class="commentAttach">
+                        <a href="" class="button">취소</a>
+                        <a href="" class="button">등록</a>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="btn">
-                    <a class="btn_e" th:onclick="editBoard()" type="button">수정</a>
+                    <a class="btn_e" th:onclick="reqEditBoard()" type="button">수정</a>
                     <a class="btn_c" th:onclick="deleteBoard()" type="button">삭제</a>
                 </div>
             </div>
