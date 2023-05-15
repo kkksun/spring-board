@@ -1,5 +1,6 @@
 package project.springboard.board.domain.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import project.springboard.board.domain.dto.BoardDTO;
 
@@ -14,6 +15,7 @@ public class ViewBoardForm {
     private String LoginId;
     private String title;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createDate;
     private List<AttachFileForm> attachFileList;
 
