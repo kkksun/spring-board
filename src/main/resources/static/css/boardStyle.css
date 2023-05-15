@@ -69,7 +69,7 @@ a {
     text-align: right;
 }
 
-.memberInfo, .editMemberForm, .boardForm, .viewBoardForm, .editBoardForm {
+.memberInfo, .editMemberForm, .boardForm, .viewBoardForm {
     border-top: 3px solid #009688;
     width: 100%;
     text-align: center;
@@ -235,34 +235,26 @@ table .top {
     border-radius: 6px;
 }
 
-.addBoard, .viewBoard, .editBoard, .commentBox {
+.writeBoard, .viewBoard {
     margin : 10px 10% 0px 10%;
     /*background-color: beige;*/
 }
 
-.addBoard input, .addBoard textarea, .editBoard input, .editBoard textarea, .fileAdd .fileList, .viewBoard .fileList {
+.writeBoard input, .writeBoard textarea, .fileAdd .fileList, .viewBoard .fileList {
     width: 100%;
     text-align: left;
     border:  2px solid lightgray;
     border-radius: 2px;
 }
 
-
-.addBoard .notice, .editBoard .notice {
-    display: inline-block;
-    width: 100%;
-    text-align: left;
-    vertical-align: text-top;
-}
-
-
-.addBoard input.title, .editBoard input.title{
+.writeBoard input.title{
     margin: 30px 0px 0px 0px;
     height: 50px;
 }
-.addBoard textarea.content, .editBoard textarea.content {
+.writeBoard textarea.content{
     margin: 21px 0px 20px 0px;
     min-height: 400px;
+    white-space: pre-line;
 }
 
 .viewBoard .title {
@@ -444,29 +436,113 @@ table .top {
     color : red;
 }
 
-.commentBox, .commentOption, .commentTitle {
+.commentsBox {
+    width: 100%;
+    text-align: left;
     /*float: left;*/
-    margin-top: 3px;
-    margin-right: 12px;
+    height: auto;
+    margin-top: 20px;
     font-size: 17px;
-    border: 3px solid #ccc;
+    /*border: 3px solid #ccc;*/
 }
 
 .commentOption {
-    background-color: #009688;
-    border: 3px solid #ccc;
+    /*background-color: #009688;*/
+    border-top: 1px solid #ccc ;
+    height: 30px;
+}
+
+.commentOption > h3 {
+    margin : 5px 0px 0px 5px;
 }
 
 .commentList {
-    background-color: aquamarine;
-    border: 3px solid #ccc;
+    margin : 5px 0px 5px 0px;
+    /*background-color: aquamarine;*/
+    /*border: 3px solid #ccc;*/
+    list-style:none;
 }
 
 .commentWriter {
     width: 100%;
-    background-color: blueviolet;
+    /*background-color: blueviolet;*/
     border: 3px solid #ccc;
     text-align: left;
     border: 2px solid lightgray;
     border-radius: 2px;
+    height: auto;
+}
+
+.commentInBox_loginId {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.commentInboxText {
+    width: 98%;
+    margin: 3px 0px 0px 3px;
+    padding: 0px;
+    height: auto;
+    border: none;
+
+}
+
+.commentAttach {
+    text-align: right;
+    margin-right: 10px;
+    margin-bottom: 3px;
+
+}
+
+.commentAttach > a{
+    font-weight: bold;
+}
+
+.comment {
+    /*display: inline-block;*/
+    /*margin: 0px;*/
+    /*float: left;*/
+    width: 100%;
+}
+
+.comment {
+    /*float: left;*/
+    margin-bottom: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.subComment {
+    margin-left: 50px;
+}
+
+.commentArea {
+    /*border: 2px solid red;*/
+    min-height: 40px;
+    /*float: left;*/
+    margin-bottom: 5px;
+}
+
+.userIcon {
+    float: left;
+    background-size: 30px;
+    width:36px;
+    height:36px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.commentBox {
+    display: block;
+    padding-left: 50px;
+}
+
+.commentBox_loginId {
+    font-weight: bold;
+}
+.commentBox_comment > p {
+    margin:0px;
+}
+.commentInfoBox > span, .commentInfoBox > a  {
+    font-size: 12px;
+    color: gray;
 }
