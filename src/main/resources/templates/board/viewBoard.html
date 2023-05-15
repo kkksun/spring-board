@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
-          href="../css/boardStyle.css" rel="stylesheet">
+          href="../../static/css/boardStyle.css" rel="stylesheet">
     <title>Title</title>
 </head>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
@@ -19,6 +19,27 @@ document.addEventListener("DOMContentLoaded", function (){
 scrollHandler();
 findBoard(boardId, false);
 });
+
+const addComment = (isFirst) => {
+    console.log(document.getElementsByClassName("commentInBox_loginId")[0].text);
+   const param = {
+       memberId: idOfLoginMember,
+       boardId: boardId,
+       comment: document.getElementsByClassName("commentInboxText")[0].value,
+       parentId: isFirst? null : ""
+    }
+    console.log(param);
+
+   fetch("/api/comment/add", {
+       method: "POST",
+       headers: {
+           "Content-Type": "application/json",
+       },
+       body: JSON.stringify(param)
+   })
+
+}
+
 </script>
 <body>
     <div class="container">
@@ -42,26 +63,60 @@ findBoard(boardId, false);
                 </div>
                 <div class="line"></div>
                 <div class="fileList" id="fileList"></div>
+
+
+                <div class="commentsBox">
+                    <div class="commentOption">
+                        <h3 class="commentTitle">댓글</h3>
+                    </div>
+                    <div class="commentList">
+                        <div class="comment">
+                            <div class="commentArea">
+                                <img class="userIcon"th:src="@{/images/userIcon.png}" src="../../static/images/userIcon.png">
+                                <div class="commentBox">
+                                    <div class="commentBox_loginId">admin</div>
+                                    <div class="commentBox_comment">
+                                        <p><span>testestete</span></p>
+                                    </div>
+                                    <div class="commentInfoBox">
+                                        <span class="commentCreateDate">2023-05-15 11:06</span>
+                                        <a>답글</a>
+                                        <a>수정</a>
+                                        <a>삭제</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment ">
+                            <div class="commentArea subComment">
+                                <img class="userIcon"th:src="@{/images/userIcon.png}" src="../../static/images/userIcon.png">
+                                <div class="commentBox">
+                                    <div class="commentBox_loginId">admin</div>
+                                    <div class="commentBox_comment">
+                                        <p><span>테스트 댓글</span></p>
+                                    </div>
+                                    <div class="commentInfoBox">
+                                        <span class="commentCreateDate">2023-05-15 11:06</span>
+                                        <a>답글</a>
+                                        <a>수정</a>
+                                        <a>삭제</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentWriter">
+                        <div class="commentInBox">
+                            <div><em class="commentInBox_loginId" th:text="${session.loginMember.loginId}">admin</em></div>
+                            <textarea class="commentInboxText" placeholder="댓글을 입력해주세요."></textarea>
+                        </div>
+                        <div class="commentAttach">
+<!--                            <a href="" class="button">취소</a>-->
+                            <a onclick="addComment(true)" class="button">등록</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="line"></div>
-            </div>
-            <div class="commentBox">
-                <div class="commentOption">
-                    <h3 class="commentTitle">댓글</h3>
-                </div>
-                <ul class="commentList">
-
-                </ul>
-
-                <div class="commentWriter">
-                    <div class="commentInBox">
-                        <em commentInBox_loginId></em>
-                        <textarea class="commentInboxText" placeholder="댓글을 입력해주세요."></textarea>
-                    </div>
-                    <div class="commentAttach">
-                        <a href="" class="button">취소</a>
-                        <a href="" class="button">등록</a>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="btn">

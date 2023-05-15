@@ -2,6 +2,7 @@ package project.springboard.board.domain.entity;
 
 
 import lombok.*;
+import project.springboard.board.domain.dto.CommentDTO;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.entity.Member;
 
@@ -51,4 +52,19 @@ public class Comment extends Auditable {
     private List<Comment> childCommentList = new ArrayList<>();
 
 
+    public static Comment createComment(Member member, Board board, CommentDTO addComment) {
+
+        Comment comment = new Comment();
+        comment.setComment(addComment.getComment());
+        comment.setMember(member);
+        comment.setBoard(board);
+        if(comment.getParent() == null) {
+            comment.setGroupNum((addComment.getGroupNum() == null? 0 : addComment.getGroupNum())+ 1);
+            comment.setLevel(Long.valueOf(0) );
+            comment.setLevelOrder((addComment.getLevelOrder() == null? 0: addComment.getLevelOrder()) + 1);
+        }
+        comment.setDelCheck(Check.N);
+
+        return comment ;
+    }
 }
