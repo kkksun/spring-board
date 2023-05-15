@@ -23,18 +23,17 @@ const createBoardListHtml = (data, existBoard) => {
 }
 
 function createTdTagHtml(key, value, url) {
-    console.log()
     let td = document.createElement("td");
     td.setAttribute("id", key);
     td.setAttribute("class", key);
     if (key === "title") {
-        console.log(url);
         let child = document.createElement("a");
         child.setAttribute("href", url);
         child.innerText = value;
         td.appendChild(child);
     } else {
-        td.innerText = key === "createDate" ? value.toString().substring(0, 10) +" " + value.toString().substring(11, 16) : value;
+        // td.innerText = key === "createDate" ? value.toString().substring(0, 10) +" " + value.toString().substring(11, 16) : value;
+        td.innerText = value;
     }
     return td;
 }

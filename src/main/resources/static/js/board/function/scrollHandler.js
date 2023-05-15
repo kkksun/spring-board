@@ -8,7 +8,7 @@ const scrollHandler = () => {
     let currentScrollHeight = content.scrollHeight;
 
     if(currentScrollHeight > DEFAULT_HEIGHT) {
-        content.style.height = scrollHeight + "px";
+        content.style.height = currentScrollHeight + "px";
     }
 
     content.addEventListener('property-change', () => { scrollCalculation(); })
@@ -21,13 +21,10 @@ const scrollHandler = () => {
         currentScrollHeight = content.scrollHeight;// e.target.scrollHeight;
         if(currentScrollHeight > DEFAULT_HEIGHT) {
             const position = currentScrollHeight - DEFAULT_HEIGHT;
-            console.log(position)
             content.style.height = '0px';
             // content.style.height = '0px';
             // content.style.height = (currentScrollHeight + 12) + "px";
             content.style.height = (DEFAULT_HEIGHT + position + 12) + "px";
-            console.log("현재 scroll 높이 = " + currentScrollHeight);
-            console.log("text height = " + content.style.height);
         }
     }
 }

@@ -15,7 +15,7 @@ const createMemberListHtml = (data) => {
                 td.appendChild(child);
                 listTr.appendChild(td);
             } else if (key != "id") {
-                td.innerText = key === "createDate" ? m[key].toString().substring(0, 10) : m[key];
+                td.innerText = m[key];
                 listTr.appendChild(td);
             }
         })

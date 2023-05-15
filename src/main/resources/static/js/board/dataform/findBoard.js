@@ -8,10 +8,7 @@ const findBoard = (boardId, isEdit) => {
             }
             return response.json();
         }).then(data => {
-            console.log(data);
             Object.keys(data).forEach(key => {
-                console.log(key);
-                console.log(document.getElementById(key) != undefined);
                 if(document.getElementById(key) != undefined && key != "attachFileList") {
                     if(isEdit && key === "title") {document.getElementById(key).value = data[key];}
                     else if(key === "content") {
@@ -27,6 +24,7 @@ const findBoard = (boardId, isEdit) => {
                     let div;
                     if(!isEdit) {
                          parent = document.getElementById("fileList");
+                        if(fileList.length == 0) {document.getElementById("fileList").innerText = "첨부 파일";}
                         fileList.forEach(file => {
                             div = document.createElement("div");
                             const a = document.createElement("a");
