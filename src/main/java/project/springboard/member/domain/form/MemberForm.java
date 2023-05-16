@@ -23,7 +23,7 @@ public class MemberForm {
     private MemberStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     public MemberForm(MemberDTO member) {
         this.id = member.getId();
@@ -32,6 +32,6 @@ public class MemberForm {
         this.email = member.getEmail();
         this.type = member.getType();
         this.status = member.getStatus();
-        this.createDate = member.getCreateDt();
+        this.createdDate = member.getCreatedDate();
     }
 }

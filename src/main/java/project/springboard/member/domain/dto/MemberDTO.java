@@ -24,8 +24,8 @@ public class MemberDTO {
     private String email;
     private MemberType type;
     private MemberStatus status;
-    private LocalDateTime createDt;
-    private LocalDateTime modifyDt;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private String msg ;
 
 
@@ -65,8 +65,8 @@ public class MemberDTO {
                                        .email(member.getEmail())
                                        .type(member.getType())
                                        .status(member.getStatus())
-                                       .createDt(member.getCreateDate())
-                                       .modifyDt(member.getModifyDate())
+                                       .createdDate(member.getCreatedDate())
+                                       .modifiedDate(member.getModifiedDate())
                                        .build();
         return memberDTO;
     }

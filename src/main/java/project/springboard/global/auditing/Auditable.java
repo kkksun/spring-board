@@ -28,13 +28,13 @@ public class Auditable {
 
     @CreatedDate
     @Column(nullable = false, updatable = false )
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
 //    @LastModifiedBy
 //    private Member modifiedBy;
 
     @LastModifiedDate
-    private LocalDateTime modifyDate;
+    private LocalDateTime modifiedDate;
 
 
 }

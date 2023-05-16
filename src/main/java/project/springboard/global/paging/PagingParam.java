@@ -46,7 +46,7 @@ public class PagingParam {
     public PagingParam(Page<Board> pageBoardList) {
         this.boardList = pageBoardList.getContent().stream()
                                        .map(BoardDTO :: new)
-                                       .sorted(Comparator.comparing(BoardDTO::getCreateDate).reversed())
+                                       .sorted(Comparator.comparing(BoardDTO::getCreatedDate).reversed())
                                        .collect(Collectors.toList());
         this.totalPage = pageBoardList.getTotalPages() == 0 ? 1 : pageBoardList.getTotalPages();
         this.currentPage = pageBoardList.getNumber()+1;
@@ -81,7 +81,7 @@ public class PagingParam {
     public void toBoardForm() {
         pagingBoardList = boardList.stream()
                 .map(BoardForm :: new)
-                .sorted(Comparator.comparing(BoardForm::getCreateDate).reversed())
+                .sorted(Comparator.comparing(BoardForm::getCreatedDate).reversed())
                 .collect(Collectors.toList());
     }
 }

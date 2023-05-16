@@ -11,10 +11,12 @@
         let loginIdOfMember;
         let statusOfMember;
         let memberPassword;
+
     </script>
     <script type="text/javascript" th:inline="javascript" th:src="@{/js/member/function/passwordEditStatusChange.js}"></script>
     <script type="text/javascript" th:inline="javascript" th:src="@{/js/member/dataform/findMember.js}"></script>
     <script type="text/javascript" th:inline="javascript" th:src="@{/js/member/dataform/editMember.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/member/function/reqEditCancel.js}"></script>
     <script type="text/javascript" th:inline="javascript" th:src="@{/js/global/createErrorMsgHtml.js}"></script>
 </head>
 <body>
@@ -63,7 +65,7 @@
             <div class="row">
                 <div class="btn">
                     <button class="btn_e" id="submit" type="button" th:onclick="editMember()" >수정</button>
-                    <button class="btn_d" th:onclick="|location.href='@{/member/Info/{memberId}(memberId=${session.loginMember.id})}'|" type="button">취소</button>
+                    <button class="btn_d" th:onclick="reqEditCancel()" type="button">취소</button>
                 </div>
             </div>
         </form>

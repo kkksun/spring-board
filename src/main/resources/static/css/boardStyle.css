@@ -43,7 +43,7 @@ a {
     color: black;
 }
 
-.fileList a {
+.fileList a, .commentsBox a {
     cursor : pointer;
 }
 
@@ -473,12 +473,12 @@ table .top {
     height: auto;
 }
 
-.commentInBox_loginId {
+.commentInBoxLoginId {
     margin-left: 5px;
     font-weight: bold;
 }
 
-.commentInboxText {
+.commentInBoxText {
     width: 98%;
     margin: 3px 0px 0px 3px;
     padding: 0px;
@@ -512,7 +512,7 @@ table .top {
 }
 
 .subComment {
-    margin-left: 50px;
+    margin-left: 25px;
 }
 
 .commentArea {

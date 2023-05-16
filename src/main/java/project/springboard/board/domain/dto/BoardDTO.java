@@ -27,7 +27,7 @@ public class BoardDTO {
 
     private Check delCheck;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     @Builder.Default
     private List<AttachFileDTO> attachFileList = new ArrayList<>();
@@ -38,7 +38,7 @@ public class BoardDTO {
                     this.title = board.getTitle();
                     this.content = board.getContent();
                     this.delCheck = board.getDelCheck();
-                    this.createDate = board.getCreateDate();
+                    this.createdDate = board.getCreatedDate();
 
             }
 
@@ -57,7 +57,7 @@ public class BoardDTO {
                             .title(board.getTitle())
                             .content(board.getContent())
                             .delCheck(board.getDelCheck())
-                            .createDate(board.getCreateDate())
+                            .createdDate(board.getCreatedDate())
                             .attachFileList(board.getAttachFileList().stream()
                                                                      .filter(f -> f.getDelCheck() == Check.N)
                                                                      .map(AttachFileDTO::new)

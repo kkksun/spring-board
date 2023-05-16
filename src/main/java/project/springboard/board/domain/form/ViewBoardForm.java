@@ -16,7 +16,7 @@ public class ViewBoardForm {
     private String title;
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private List<AttachFileForm> attachFileList;
 
     public ViewBoardForm(BoardDTO findBoard) {
@@ -25,7 +25,7 @@ public class ViewBoardForm {
         this.LoginId = findBoard.getMember().getLoginId();
         this.title = findBoard.getTitle();
         this.content = findBoard.getContent();
-        this.createDate = findBoard.getCreateDate();
+        this.createdDate = findBoard.getCreatedDate();
         this.attachFileList = findBoard.getAttachFileList().stream().map(AttachFileForm :: new).collect(Collectors.toList());
     }
 }

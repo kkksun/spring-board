@@ -17,12 +17,10 @@ import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Check;
 import project.springboard.board.repository.AttachFileRepository;
 import project.springboard.board.repository.BoardRepository;
-import project.springboard.member.domain.entity.Member;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
 import project.springboard.global.paging.PagingParam;
-import project.springboard.board.repository.BoardJpaRepository;
-import project.springboard.member.repository.MemberJpaRepository;
+import project.springboard.member.domain.entity.Member;
 import project.springboard.member.repository.MemberRepository;
 
 import java.io.File;
@@ -35,7 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static project.springboard.global.paging.PagingParam.*;
+import static project.springboard.global.paging.PagingParam.pageSize;
 
 
 @Slf4j
@@ -61,13 +59,13 @@ public class BoardServiceImpl implements BoardService{
         return boardRepository.findAll().stream()
                               .filter(b -> b.getDelCheck() != Check.N)
                               .map(BoardDTO :: new)
-                              .sorted(Comparator.comparing(BoardDTO::getCreateDate).reversed())
+                              .sorted(Comparator.comparing(BoardDTO::getCreatedDate).reversed())
                               .collect(Collectors.toList());
     }
 
     @Override
     public PagingParam pageBoardList(int page) {
-        PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
+        PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<Board> pageBoardList = boardRepository.findByDelCheck(Check.N, pageRequest);
 
         return new PagingParam(pageBoardList);

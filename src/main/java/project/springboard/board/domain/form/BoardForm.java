@@ -13,13 +13,13 @@ public class BoardForm {
     private String title;
     private String LoginId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     public BoardForm(BoardDTO board) {
         this.id = board.getId();
         this.title = board.getTitle();
         this.LoginId = board.getMember().getLoginId();
-        this.createDate = board.getCreateDate();
+        this.createdDate = board.getCreatedDate();
     }
 
 }
