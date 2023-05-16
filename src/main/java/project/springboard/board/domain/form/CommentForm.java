@@ -24,7 +24,8 @@ public class CommentForm {
     private Long levelOrder;
     @JsonFormat(shape =JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
-
+    @JsonFormat(shape =JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime modifiedDate;
 
     public CommentForm (CommentDTO commentDTO) {
         this.id = commentDTO.getId();
@@ -36,6 +37,7 @@ public class CommentForm {
         this.level = commentDTO.getLevel();
         this.levelOrder = commentDTO.getLevelOrder();
         this.createdDate = commentDTO.getCreatedDate();
+        this.modifiedDate = commentDTO.getModifiedDate();
         if(commentDTO.getParent() != null) {
             this.parentId = commentDTO.getParent().getId();
         }

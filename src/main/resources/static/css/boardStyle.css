@@ -10,6 +10,7 @@ input, textarea {
 
 textarea {
     resize: none;
+    white-space: pre-line;
 }
 
 h2.title {
@@ -488,14 +489,18 @@ table .top {
 }
 
 .commentAttach {
-    text-align: right;
+    text-align: left;
     margin-right: 10px;
     margin-bottom: 3px;
 
 }
 
-.commentAttach > a{
+.commentAttach > button{
+    background-color: transparent;
+    border: none;
+    padding: 0px;
     font-weight: bold;
+    font-size:17px;
 }
 
 .comment {
@@ -509,10 +514,6 @@ table .top {
     /*float: left;*/
     margin-bottom: 10px;
     border-bottom: 1px solid #cccccc;
-}
-
-.subComment {
-    margin-left: 25px;
 }
 
 .commentArea {
@@ -542,7 +543,15 @@ table .top {
 .commentBox_comment > p {
     margin:0px;
 }
-.commentInfoBox > span, .commentInfoBox > a  {
+.commentInfoBox > span, .commentInfoBox > button  {
     font-size: 12px;
     color: gray;
+    background-color: transparent;
+    border: none;
+}
+
+.commentInfoBox > button  {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
 }

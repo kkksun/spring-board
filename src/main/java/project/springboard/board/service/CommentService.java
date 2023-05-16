@@ -9,4 +9,10 @@ public interface CommentService {
 
     CommentDTO addComment(CommentDTO addComment);
 
+    CommentDTO editComment(Long commentId, CommentDTO editComment);
+
+    void deleteComment(Long commentId);
+
+
+
 }

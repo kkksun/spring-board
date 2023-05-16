@@ -21,14 +21,13 @@ scrollHandler();
 findBoard(boardId, false);
 });
 
-const addComment = (isFirst) => {
+const addComment = (isFirst, parentId) => {
    const param = {
        memberId: idOfLoginMember,
        boardId: boardId,
        comment: document.getElementsByClassName("commentInBoxText")[0].value,
-       parentId: isFirst? null : ""
+       parentId: parentId
     }
-    // console.log(param);
 
    fetch("/api/comment/add", {
        method: "POST",
@@ -42,23 +41,19 @@ const addComment = (isFirst) => {
        }
        return response.json();
    }).then(data => {
-       console.log(data);
-       createRegisteredCommentHtml(data, isFirst);
+       createRegisteredCommentHtml(isFirst, data);
    }).catch(err => alert(err));
 }
 
-const createRegisteredCommentHtml = (data, isFirst) => {
-    const margin = 25;
-    const commentList = document.getElementById("commentList");
+const createRegisteredCommentHtml = (isFirst, data) => {
+    const padding = 25;
+    const commentPadding = padding * data["level"];
+    let commentList;
+    const div = document.createElement("div");
+    div.setAttribute("class", "comment");
+    div.setAttribute("id", "comment" + data["id"]);
     let html;
-    if(isFirst) {
-        const div = document.createElement("div");
-        div.setAttribute("class", "comment");
-        div.setAttribute("id", "comment" + data["id"]);
-        div.style.marginLeft = (margin * data["level"]) + "px";
-
-
-        html = `<div class="commentArea">
+    html = `<div class="commentArea" style="padding-left: ${commentPadding}px">
                     <img class="userIcon" src="/images/userIcon.png" >
                     <div class="commentBox">
                         <div class="commentBox_loginId">admin</div>
@@ -67,49 +62,128 @@ const createRegisteredCommentHtml = (data, isFirst) => {
                         </div>
                         <div class="commentInfoBox">
                             <span class="commentCreateDate">${data["createdDate"]}</span>
-                            <a onclick="reqAddComment(this)" data-id="${data["id"]}" data-parentid="${data["parentId"]}">답글</a>
-                            <a onclick="editComment(${data["id"]})">수정</a>
-                            <a onclick="deleteComment(${data["id"]})">삭제</a>
-                        </div>
+                            <button onclick="reqAddComment(this)" data-id="${data["id"]}" data-parentid="${data["parentId"]}" type="button">답글</button>`
+        if(idOfLoginMember === data["id"] || typeOfLoginMember != "USER") {
+            html += `            <button onclick="reqEditComment(${data["id"]})" type="button">수정</button>
+                            <button onclick="deleteComment(${data["id"]})" type="button">삭제</button>`
+        }
+        html += `       </div>
                     </div>
                 </div>`
         div.innerHTML = html;
-        document.getElementsByClassName("commentInBoxText")[0].innerText = "";
+        document.getElementsByClassName("commentInBoxText")[0].value="";
+    if(isFirst) {
+        commentList = document.getElementById("commentList");
         commentList.append(div);
+    } else {
+        div.setAttribute("class", "comment pre" +data["parentId"])
+        const childClass = document.getElementsByClassName("pre" + data["parentId"]);
+        if(childClass.length == 0) { // 대댓글이 처음인 경우
+            commentList = document.getElementById("comment" + data["parentId"])
+        } else { // 처음이 아닌경우 마지막 대댓글 뒤에 등록
+            commentList = childClass[childClass.length-1];
+        }
+        // 댓글 입력 창 삭제
+        document.getElementById("writer" + data["parentId"]).remove()
+        // parent 댓글의 답글 버튼 활성화
+        const commentDiv = document.getElementById("comment" + data["parentId"]);
+        commentDiv.getElementsByTagName("button")[0].disabled = false;
+        commentList.after(div);
     }
 }
 
 const reqAddComment = (e) => {
     const parentId = e.dataset.id
     const parentTag = document.getElementById("comment"+parentId);
+    const div = createWriteBoxHtml(parentId, false)
+    parentTag.after(div);
+
+    e.disabled = true;
+}
+
+const createWriteBoxHtml = (id, isEdit, comment) => {
+    const editComment = isEdit ? comment : "";
     const div = document.createElement("div");
     div.setAttribute("class", "commentWriter");
-    div.setAttribute("id", "writer"+parentId);
-    const html = `<div class="commentInBox">
-                            <div><em class="commentInBoxLoginId">${loginIdOfLoginMember}</em></div>
-                            <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요."></textarea>
-                        </div>
-                        <div class="commentAttach">
-                            <a onclick="reqCancelAddComment(this)" data-parentId=${parentId} = class="button">취소</a>
-                            <a onclick="addComment(false)" class="button">등록</a>
-                  </div>`
+    div.setAttribute("id", "writer"+id);
+    let html = `<div class="commentInBox">
+                       <div><em class="commentInBoxLoginId">${loginIdOfLoginMember}</em></div>
+                       <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요.">${editComment}</textarea>
+                  </div>
+                  <div class="commentAttach">`;
+    if(isEdit) {
+        html += `      <button onclick="editComment(${id})" type="button">등록</button>
+                       <button onclick="reqEditCancel(${id})" type="button">취소</button>`
+    } else {
+        html += `      <button onclick="addComment(false,${id})" type="button">등록</button>
+                      <button onclick="reqAddCancel(this)" data-id="${id}" type="button">취소</button>`
+    }
+        html += "</div>";
 
     div.innerHTML = html;
-    parentTag.append(div);
-
-
+    return div;
 }
 
-const reqCancelAddComment = (e) => {
-    const writerBox = document.getElementById("writer" + e.dataset.parentId);
+const reqAddCancel = (e) => {
+    const writerBox = document.getElementById("writer" + e.dataset.id);
+    const commentDiv = document.getElementById("comment" + e.dataset.id);
+    commentDiv.getElementsByTagName("button")[0].disabled = false;
+
     writerBox.remove();
 }
-const editComment = (e) => {
 
+const reqEditComment = (id) => {
+    const comment = document.getElementById("comment" + id) ;
+    const div = createWriteBoxHtml(id, true, comment.getElementsByTagName("span")[0].innerText);
 
+    comment.before(div);
+    comment.style.display="none";
 }
 
-const deleteComment = () => {
+const reqEditCancel = (id) => {
+    document.getElementById("writer"+id).remove();
+    document.getElementById("comment" + id).style.removeProperty("display");
+}
+
+const editComment = (id) => {
+    const editBox = document.getElementById("writer"+id);
+    const editComment = editBox.getElementsByClassName("commentInBoxText")[0].value;
+    const currentComment = document.getElementById("comment"+id);
+
+    const param = {
+        comment: editComment
+    }
+
+    fetch("/api/comment/edit/"+id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(param)
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error("오류가 발생하였습니다.")
+        }
+        return response.json();
+    }).then(data => {
+        currentComment.getElementsByTagName("span")[0].innerText = data["comment"];
+        editBox.remove();
+        currentComment.style.removeProperty("display")
+    }).catch(err => alert(err));
+}
+const deleteComment = (id) => {
+    if(confirm("댓글을 삭제하시겠습니까?")) {
+        fetch("/api/comment/delete/" + id, {
+            method: "DELETE"
+        }).then(response => {
+            if(!response.ok) {
+                throw new Error("오류가 발생하였습니다.")
+            } else {
+                document.getElementById("comment" + id).remove();
+            }
+        }).catch(err => alert(err));
+
+    }
 
 }
 
@@ -131,52 +205,15 @@ const deleteComment = () => {
                 </div>
                 <div class="line"></div>
                 <div class="content">
-<!--                    <p id="content" style="white-space: pre-wrap"></p>-->
                     <textarea id="content" readonly></textarea>
                 </div>
                 <div class="line"></div>
                 <div class="fileList" id="fileList"></div>
-
-
                 <div class="commentsBox">
                     <div class="commentOption">
                         <h3 class="commentTitle">댓글</h3>
                     </div>
                     <div class="commentList" id="commentList">
-                        <div class="comment" id="comment1">
-                            <div class="commentArea">
-                                <img class="userIcon"th:src="@{/images/userIcon.png}">
-                                <div class="commentBox">
-                                    <div class="commentBox_loginId">admin</div>
-                                    <div class="commentBox_comment">
-                                        <p><span>testestete</span></p>
-                                    </div>
-                                    <div class="commentInfoBox">
-                                        <span class="commentCreateDate">2023-05-15 11:06</span>
-                                        <a onclick="addComment(false)" value="1">답글</a>
-                                        <a onclick="editComment()" value="1">수정</a>
-                                        <a onclick="deleteComment()" value="1">삭제</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment ">
-                            <div class="commentArea subComment">
-                                <img class="userIcon" src="/images/userIcon.png">
-                                <div class="commentBox">
-                                    <div class="commentBox_loginId">admin</div>
-                                    <div class="commentBox_comment">
-                                        <p><span>테스트 댓글</span></p>
-                                    </div>
-                                    <div class="commentInfoBox">
-                                        <span class="commentCreateDate">2023-05-15 11:06</span>
-                                        <a>답글</a>
-                                        <a>수정</a>
-                                        <a>삭제</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="commentWriter">
                         <div class="commentInBox">
@@ -184,8 +221,7 @@ const deleteComment = () => {
                             <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요."></textarea>
                         </div>
                         <div class="commentAttach">
-<!--                            <a href="" class="button">취소</a>-->
-                            <a onclick="addComment(true)" class="button">등록</a>
+                            <button onclick="addComment(true)" type="button">등록</button>
                         </div>
                     </div>
                 </div>

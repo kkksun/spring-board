@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService{
      */
 
     @Override
+    @Transactional
     public CommentDTO addComment(CommentDTO addComment) {
         Member findMember = memberRepository.findById(addComment.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Board findBoard = boardRepository.findById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
@@ -45,8 +46,23 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.save(comment);
 
-        CommentDTO savedComment = CommentDTO.toCommentDto(comment);
+        return CommentDTO.toCommentDto(comment);
+    }
 
-        return savedComment;
+    @Override
+    @Transactional
+    public CommentDTO editComment(Long commentId, CommentDTO editComment) {
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        comment.setComment(editComment.getComment());
+
+        return CommentDTO.toCommentDto(comment);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId) {
+        log.info("commentId = {}", commentId);
+        commentRepository.deleteById(commentId);
     }
 }

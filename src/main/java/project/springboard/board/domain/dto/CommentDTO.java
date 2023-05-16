@@ -22,8 +22,10 @@ public class CommentDTO {
 
     private Long id;
 
+//    @Builder.Default
     private MemberDTO member = new MemberDTO();
 
+//    @Builder.Default
     private BoardDTO board = new BoardDTO();
 
     private String comment;
@@ -42,20 +44,26 @@ public class CommentDTO {
 
     private LocalDateTime modifiedDate;
 
+    @Builder.Default
     private List<CommentDTO> childCommentList = new ArrayList<>();
 
     public CommentDTO (CommentForm comment)  {
+        System.out.println("여기1");
         this.member.setId(comment.getMemberId());
+        System.out.println("여기2");
         this.board.setId(comment.getBoardId());
+        System.out.println("여기3");
         this.comment = comment.getComment();
+        System.out.println("여기4");
         if(comment.getParentId() != null) {
+            System.out.println("여기5");
             this.parent = new CommentDTO();
             parent.setId(comment.getParentId());
         }
+        System.out.println("여기6");
     }
 
     public static CommentDTO toCommentDto(Comment comment) {
-        System.out.println("여기서 Member랑 board를 또 조회해???");
         CommentDTO commentDTO = CommentDTO.builder()
                 .id(comment.getId())
                 .member(MemberDTO.toMemberDTO(comment.getMember()))
@@ -70,7 +78,6 @@ public class CommentDTO {
                 .build();
 
         if(comment.getParent() != null) {
-            System.out.println("여기로 들어와?");
             commentDTO.setParent(CommentDTO.toCommentDto(comment.getParent()));
         }
 
