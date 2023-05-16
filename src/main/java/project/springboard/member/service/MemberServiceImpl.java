@@ -12,7 +12,6 @@ import project.springboard.member.domain.entity.MemberType;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
 import project.springboard.member.domain.form.RequestedPage;
-import project.springboard.member.repository.MemberJpaRepository;
 import project.springboard.member.repository.MemberRepository;
 
 import java.util.List;
@@ -28,7 +27,6 @@ public class MemberServiceImpl implements MemberService{
 
 
     private final MemberRepository memberRepository;
-//    private final MemberJpaRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -142,7 +140,6 @@ public class MemberServiceImpl implements MemberService{
 
         if(editMember.getPassword() != null) {editMember.setPassword(passwordEncoder.encode(editMember.getPassword())); }
         member.updateMember(editMember, requestedPage);
-
     }
 
     /**
