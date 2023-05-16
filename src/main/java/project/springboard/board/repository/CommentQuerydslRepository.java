@@ -1,10 +1,11 @@
 package project.springboard.board.repository;
 
 import project.springboard.board.domain.dto.CommentDTO;
+import project.springboard.board.domain.dto.CommentLevelDTO;
 
 import java.util.List;
 
 public interface CommentQuerydslRepository {
 
-    CommentDTO referGroupIdAndLevelId(Long BoardId, Long parentId);
+    CommentLevelDTO referGroupIdAndLevelId(Long BoardId, Long parentId);
 }

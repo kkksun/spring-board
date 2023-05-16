@@ -7,6 +7,6 @@ import project.springboard.board.domain.dto.CommentDTO;
 
 public interface CommentService {
 
-    void addComment(CommentDTO addComment);
+    CommentDTO addComment(CommentDTO addComment);
 
 }

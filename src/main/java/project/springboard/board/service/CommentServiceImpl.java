@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.springboard.board.domain.dto.CommentDTO;
+import project.springboard.board.domain.dto.CommentLevelDTO;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.repository.BoardRepository;
@@ -32,21 +33,20 @@ public class CommentServiceImpl implements CommentService{
      */
 
     @Override
-    public void addComment(CommentDTO addComment) {
+    public CommentDTO addComment(CommentDTO addComment) {
         Member findMember = memberRepository.findById(addComment.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Board findBoard = boardRepository.findById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Comment parent = addComment.getParent() == null ? null : commentRepository.findById(addComment.getParent().getId()).get();
+
         Long parentId = addComment.getParent() == null ? null : addComment.getParent().getId();
-        CommentDTO commentDTO = commentRepository.referGroupIdAndLevelId(addComment.getBoard().getId(), parentId);
+        Comment parent = parentId == null ? null : commentRepository.findById(parentId).get();
+        CommentLevelDTO commentLevel = commentRepository.referGroupIdAndLevelId(addComment.getBoard().getId(), parentId);
 
-        commentDTO.setComment(addComment.getComment());
-        if(addComment.getParent() != null) {
-            commentDTO.getParent().setId(addComment.getParent().getId());
-        }
-
-        Comment comment = Comment.createComment(findMember, findBoard, commentDTO);
+        Comment comment = Comment.createComment(findMember, findBoard, addComment, commentLevel, parent);
 
         commentRepository.save(comment);
 
+        CommentDTO savedComment = CommentDTO.toCommentDto(comment);
+
+        return savedComment;
     }
 }

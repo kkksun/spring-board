@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.springboard.board.domain.dto.CommentDTO;
+import project.springboard.board.domain.dto.CommentLevelDTO;
 import project.springboard.board.domain.entity.QComment;
 
 import javax.persistence.EntityManager;
@@ -23,14 +24,19 @@ public class CommentRepositoryImpl implements CommentQuerydslRepository{
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public CommentDTO referGroupIdAndLevelId(Long boardId, Long parentId) {
+    public CommentLevelDTO referGroupIdAndLevelId(Long boardId, Long parentId) {
+        QComment childComment = new QComment("childComment");
 
-        CommentDTO result = queryFactory
-                .select(Projections.fields(CommentDTO.class,
-                        comment1.groupNum.max().as("groupNum"),
-                        comment1.level.max().as("level"),
-                        comment1.levelOrder.max().as("levelOrder"))
+        CommentLevelDTO result = queryFactory
+                .select(Projections.fields(CommentLevelDTO.class,
+                        comment1.groupId.max().as("parentGroupId"),
+                        comment1.level.max().as("parentLevel"),
+                        comment1.levelOrder.max().as("parentLevelOrder"),
+                        childComment.groupId.max().as("childGroupId"),
+                        childComment.level.max().as("childLevel"),
+                        childComment.levelOrder.max().as("childLevelOrder"))
                 ).from(comment1)
+                .leftJoin(childComment).on(comment1.id.eq(childComment.parent.id))
                 .where(boardIdEq(boardId), parentIdEqOrNull(parentId))
                 .fetchOne();
         return result;
@@ -41,6 +47,6 @@ public class CommentRepositoryImpl implements CommentQuerydslRepository{
     }
 
     private BooleanExpression parentIdEqOrNull(Long parentId) {
-        return parentId != null ? comment1.parent.id.eq(parentId) : comment1.parent.id.isNull();
+        return parentId != null ? comment1.id.eq(parentId) : comment1.parent.id.isNull();
     } 
 }

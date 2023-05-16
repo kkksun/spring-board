@@ -24,13 +24,13 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping("/comment/add")
-    public void addComment(@RequestBody CommentForm comment) {
-
-        log.info("comment = {}", comment);
+    public CommentForm addComment(@RequestBody CommentForm comment) {
 
         CommentDTO addComment = new CommentDTO(comment);
-        log.info("addComment = {}", addComment);
-        commentService.addComment(addComment);
+        CommentDTO commentDTO = commentService.addComment(addComment);
+
+        CommentForm savedComment = new CommentForm(commentDTO);
+        return savedComment;
 
     }
 }
