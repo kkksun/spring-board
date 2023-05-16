@@ -489,7 +489,7 @@ table .top {
 }
 
 .commentAttach {
-    text-align: left;
+    text-align: right;
     margin-right: 10px;
     margin-bottom: 3px;
 
@@ -501,6 +501,8 @@ table .top {
     padding: 0px;
     font-weight: bold;
     font-size:17px;
+    margin-right: 10px;
+    margin-bottom: 5px;
 }
 
 .comment {
