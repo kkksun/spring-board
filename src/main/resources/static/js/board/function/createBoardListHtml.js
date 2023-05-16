@@ -15,7 +15,7 @@ const createBoardListHtml = (data, existBoard) => {
             listTr.appendChild(createTdTagHtml("id", m["id"], null));
             listTr.appendChild(createTdTagHtml("title", m["title"], url));
             listTr.appendChild(createTdTagHtml("loginId", m["loginId"], null));
-            listTr.appendChild(createTdTagHtml("createDate", m["createDate"], null));
+            listTr.appendChild(createTdTagHtml("createdDate", m["createdDate"], null));
             table.append(listTr);
             listTr = null;
         })
