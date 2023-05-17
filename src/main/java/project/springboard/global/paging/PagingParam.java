@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class PagingParam {
 
-    public static final int pageSize = 3;
+    public static final int pageSize = 20;
     public static final int blockSize = 5;
 
     private int currentPage;
