@@ -78,7 +78,8 @@ public class CommentDTO {
 
     }
 
-    public static List<Comment> toCommentDtoList(List<Comment> comments) {
-
+    public static List<CommentDTO> toCommentDtoList(List<Comment> comments) {
+        List<CommentDTO> commentList = new ArrayList<>();
+        return commentList;
     }
 }
