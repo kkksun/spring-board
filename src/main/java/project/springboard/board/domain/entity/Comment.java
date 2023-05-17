@@ -73,6 +73,15 @@ public class Comment extends Auditable {
             comment.setLevel(commentLevel.getChildLevel() != null ? commentLevel.getChildLevel() : (commentLevel.getParentLevel() + 1));
             comment.setLevelOrder(commentLevel.getChildLevelOrder() != null ? (commentLevel.getChildLevelOrder()+1) : Long.valueOf(1));
         }
+
+        addChildComment(comment);
+
         return comment ;
     }
+
+    private static void addChildComment(Comment comment) {
+
+    }
+
+
 }

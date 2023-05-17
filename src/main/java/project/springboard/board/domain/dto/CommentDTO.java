@@ -11,7 +11,9 @@ import project.springboard.member.domain.dto.MemberDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -56,6 +58,7 @@ public class CommentDTO {
         }
     }
 
+
     public static CommentDTO toCommentDto(Comment comment) {
         CommentDTO commentDTO = CommentDTO.builder()
                 .id(comment.getId())
@@ -77,9 +80,19 @@ public class CommentDTO {
         return  commentDTO;
 
     }
-
     public static List<CommentDTO> toCommentDtoList(List<Comment> comments) {
         List<CommentDTO> commentList = new ArrayList<>();
+        Map<Long, CommentDTO> commentMap = new HashMap<>();
+
+        comments.stream().forEach(c -> {
+            CommentDTO comment = CommentDTO.toCommentDto(c);
+            commentMap.put(comment.getId(), comment);
+            if(comment.getParent() != null){
+                commentMap.get(comment.getParent().getId()).getChildCommentList().add(comment);
+            } else {
+                commentList.add(comment);
+            }
+        });
         return commentList;
     }
 }

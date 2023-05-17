@@ -16,7 +16,6 @@ import project.springboard.member.domain.entity.Member;
 import project.springboard.member.repository.MemberRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,6 +26,16 @@ public class CommentServiceImpl implements CommentService{
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+
+    /**
+     * 댓글 리스트 조회
+     */
+    @Override
+    public List<CommentDTO> commentList(Long boardId) {
+        List<Comment> comments = commentRepository.commentListByBoardId(boardId);
+        List<CommentDTO> commentList = CommentDTO.toCommentDtoList(comments);
+        return commentList;
+    }
 
     /**
      * 댓글 등록

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import project.springboard.board.domain.dto.CommentDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class CommentForm {
     private LocalDateTime createdDate;
     @JsonFormat(shape =JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime modifiedDate;
+    private List<CommentForm> childCommentList;
 
     public CommentForm (CommentDTO commentDTO) {
         this.id = commentDTO.getId();
@@ -41,5 +44,13 @@ public class CommentForm {
         if(commentDTO.getParent() != null) {
             this.parentId = commentDTO.getParent().getId();
         }
+        if(commentDTO.getChildCommentList() != null) {
+            this.childCommentList =  commentDTO.getChildCommentList().stream().map(CommentForm::new).collect(Collectors.toList());
+        }
+    }
+
+    public static List<CommentForm> toCommentFormList(List<CommentDTO> commentList) {
+        List<CommentForm> commentFormList = commentList.stream().map(CommentForm::new).collect(Collectors.toList());
+        return commentFormList;
     }
 }

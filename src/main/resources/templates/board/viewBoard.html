@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../../static/css/boardStyle.css" rel="stylesheet">
-    <title>Title</title>
 </head>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
@@ -19,7 +18,25 @@ const boardId = [[${boardId}]];
 document.addEventListener("DOMContentLoaded", function (){
 scrollHandler();
 findBoard(boardId, false);
+findComments(boardId);
 });
+
+const findComments = (boardId) => {
+    fetch("/api/comment/list/" + boardId).then(response => {
+        if(!response.ok) {
+            throw new Error("오류가 발생하였습니다.")
+        }
+        return response.json();
+    }).then(data => {
+        if(data.length !=  0) {
+            data.forEach(d => {
+                createRegisteredCommentHtml(true,false, d);
+            })
+
+        }
+    }).catch(err => alert(err));
+}
+
 
 const addComment = (isFirst, parentId) => {
    const param = {
@@ -41,11 +58,11 @@ const addComment = (isFirst, parentId) => {
        }
        return response.json();
    }).then(data => {
-       createRegisteredCommentHtml(isFirst, data);
+       createRegisteredCommentHtml(isFirst, true, data);
    }).catch(err => alert(err));
 }
 
-const createRegisteredCommentHtml = (isFirst, data) => {
+const createRegisteredCommentHtml = (isFirst, isAdd, data) => {
     const padding = 25;
     const commentPadding = padding * data["level"];
     let commentList;
@@ -56,14 +73,14 @@ const createRegisteredCommentHtml = (isFirst, data) => {
     html = `<div class="commentArea" style="padding-left: ${commentPadding}px">
                     <img class="userIcon" src="/images/userIcon.png" >
                     <div class="commentBox">
-                        <div class="commentBox_loginId">admin</div>
+                        <div class="commentBox_loginId">${data["loginId"]}</div>
                         <div class="commentBox_comment">
                             <p><span>${data["comment"]}</span></p>
                         </div>
                         <div class="commentInfoBox">
                             <span class="commentCreateDate">${data["createdDate"]}</span>
                             <button onclick="reqAddComment(this)" data-id="${data["id"]}" data-parentid="${data["parentId"]}" type="button">답글</button>`
-        if(idOfLoginMember === data["id"] || typeOfLoginMember != "USER") {
+        if(idOfLoginMember === data["memberId"] || typeOfLoginMember != "USER") {
             html += `            <button onclick="reqEditComment(${data["id"]})" type="button">수정</button>
                             <button onclick="deleteComment(${data["id"]})" type="button">삭제</button>`
         }
@@ -82,13 +99,27 @@ const createRegisteredCommentHtml = (isFirst, data) => {
             commentList = document.getElementById("comment" + data["parentId"])
         } else { // 처음이 아닌경우 마지막 대댓글 뒤에 등록
             commentList = childClass[childClass.length-1];
+                // 대댓글의 대댓글이 있는경우 대댓글의 마지막에 추가하기 위함
+                const checkChildComment = commentList.id.replace("comment", "pre")
+                const childCommentTag = document.getElementsByClassName(checkChildComment);
+            if(childCommentTag.length != 0) {
+                commentList = childCommentTag[childCommentTag.length-1];
+            }
         }
-        // 댓글 입력 창 삭제
-        document.getElementById("writer" + data["parentId"]).remove()
-        // parent 댓글의 답글 버튼 활성화
-        const commentDiv = document.getElementById("comment" + data["parentId"]);
-        commentDiv.getElementsByTagName("button")[0].disabled = false;
+        if(isAdd) {
+            // 댓글 입력 창 삭제
+            document.getElementById("writer" + data["parentId"]).remove()
+            // parent 댓글의 답글 버튼 활성화
+            const commentDiv = document.getElementById("comment" + data["parentId"]);
+            commentDiv.getElementsByTagName("button")[0].disabled = false;
+        }
         commentList.after(div);
+    }
+
+    if(data["childCommentList"].length != 0){
+        data["childCommentList"].forEach(c => {
+            createRegisteredCommentHtml(false, false, c);
+        })
     }
 }
 
