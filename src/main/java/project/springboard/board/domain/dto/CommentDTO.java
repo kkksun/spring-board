@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Check;
 import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.form.CommentForm;
@@ -48,19 +47,13 @@ public class CommentDTO {
     private List<CommentDTO> childCommentList = new ArrayList<>();
 
     public CommentDTO (CommentForm comment)  {
-        System.out.println("여기1");
         this.member.setId(comment.getMemberId());
-        System.out.println("여기2");
         this.board.setId(comment.getBoardId());
-        System.out.println("여기3");
         this.comment = comment.getComment();
-        System.out.println("여기4");
         if(comment.getParentId() != null) {
-            System.out.println("여기5");
             this.parent = new CommentDTO();
             parent.setId(comment.getParentId());
         }
-        System.out.println("여기6");
     }
 
     public static CommentDTO toCommentDto(Comment comment) {
@@ -82,6 +75,10 @@ public class CommentDTO {
         }
 
         return  commentDTO;
+
+    }
+
+    public static List<Comment> toCommentDtoList(List<Comment> comments) {
 
     }
 }
