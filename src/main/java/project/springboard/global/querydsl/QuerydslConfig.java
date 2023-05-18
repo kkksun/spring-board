@@ -1,4 +1,4 @@
-package project.springboard.global.config;
+package project.springboard.global.querydsl;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;

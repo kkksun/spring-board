@@ -1,4 +1,4 @@
-package project.springboard.global.config.interceptor;
+package project.springboard.global.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import project.springboard.member.domain.SessionConst;
