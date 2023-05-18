@@ -534,6 +534,15 @@ table .top {
     margin-left: 5px;
 }
 
+.arrowIcon {
+    float: left;
+    background-size: 30px;
+    width:30px;
+    height:30px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
 .commentBox {
     display: block;
     padding-left: 50px;
