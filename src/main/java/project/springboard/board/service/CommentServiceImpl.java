@@ -43,9 +43,9 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     @Transactional
-    public CommentDTO addComment(CommentDTO addComment) {
-        Member findMember = memberRepository.findById(addComment.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Board findBoard = boardRepository.findById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+    public List<CommentDTO> addComment(CommentDTO addComment) {
+        Member findMember = memberRepository.findById(addComment.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Board findBoard = boardRepository.findById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         Long parentId = addComment.getParent() == null ? null : addComment.getParent().getId();
         Comment parent = parentId == null ? null : commentRepository.findById(parentId).get();
@@ -55,23 +55,27 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.save(comment);
 
-        return CommentDTO.toCommentDto(comment);
+//        return CommentDTO.toCommentDto(comment);
+        return commentList(comment.getBoard().getId());
     }
 
     @Override
     @Transactional
-    public CommentDTO editComment(Long commentId, CommentDTO editComment) {
+    public List<CommentDTO> editComment(Long commentId, CommentDTO editComment) {
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         comment.setComment(editComment.getComment());
 
-        return CommentDTO.toCommentDto(comment);
+//        return CommentDTO.toCommentDto(comment);
+        return commentList(comment.getBoard().getId());
     }
 
     @Override
     @Transactional
-    public void deleteComment(Long commentId) {
-        log.info("commentId = {}", commentId);
+    public List<CommentDTO> deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        Long boardId = comment.getBoard().getId();
         commentRepository.deleteById(commentId);
+        return commentList(boardId);
     }
 }

@@ -33,34 +33,33 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping("/comment/add")
-    public CommentForm addComment(@RequestBody CommentForm comment) {
+    public List<CommentForm> addComment(@RequestBody CommentForm comment) {
         CommentDTO addComment = new CommentDTO(comment);
-        CommentDTO commentDTO = commentService.addComment(addComment);
-        CommentForm savedComment = new CommentForm(commentDTO);
+//        CommentDTO commentDTO = commentService.addComment(addComment);
+//        CommentForm savedComment = new CommentForm(commentDTO);
 
-        return savedComment;
+        return CommentForm.toCommentFormList(commentService.addComment(addComment));
     }
 
     /**
      * 댓글 수정
      */
     @PatchMapping("/comment/edit/{commentId}")
-    public CommentForm editComment( @PathVariable("commentId") Long commentId, @RequestBody CommentForm comment) {
+    public List<CommentForm> editComment( @PathVariable("commentId") Long commentId, @RequestBody CommentForm comment) {
         CommentDTO editComment = new CommentDTO(comment);
-        CommentDTO commentDTO = commentService.editComment(commentId, editComment);
-        CommentForm editedComment = new CommentForm(commentDTO);
+//        CommentDTO commentDTO = commentService.editComment(commentId, editComment);
+//        CommentForm editedComment = new CommentForm(commentDTO);
 
-        return editedComment;
+        return CommentForm.toCommentFormList(commentService.editComment(commentId, editComment));
     }
 
     /**
      * 댓글 삭제
      */
     @DeleteMapping("/comment/delete/{commentId}")
-    public String deleteComment(@PathVariable("commentId") Long commentId) {
-        commentService.deleteComment(commentId);
-
-        return "ok";
+    public List<CommentForm> deleteComment(@PathVariable("commentId") Long commentId) {
+//        commentService.deleteComment(commentId);
+        return CommentForm.toCommentFormList(commentService.deleteComment(commentId));
     }
 
 }

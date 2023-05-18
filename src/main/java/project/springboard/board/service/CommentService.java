@@ -10,10 +10,10 @@ public interface CommentService {
 
     List<CommentDTO> commentList(Long boardId);
 
-    CommentDTO addComment(CommentDTO addComment);
+    List<CommentDTO> addComment(CommentDTO addComment);
 
-    CommentDTO editComment(Long commentId, CommentDTO editComment);
+    List<CommentDTO> editComment(Long commentId, CommentDTO editComment);
 
-    void deleteComment(Long commentId);
+    List<CommentDTO> deleteComment(Long commentId);
 
 }
