@@ -13,7 +13,7 @@ const boardList = (page) => {
             prevPage: data["prevPage"],
             nextPage: data["nextPage"]
         }
-            createBoardListHtml(data["pagingBoardList"], data["totalCount"] != 0? true : false);
+        createBoardListHtml(data["pagingBoardList"], data["totalCount"] != 0? true : false);
         createPagingHtml(pageParam)
     }).catch(err => alert(err));
 }

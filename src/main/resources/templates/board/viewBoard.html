@@ -9,215 +9,27 @@
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditBoard.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteBoard.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditComment.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqAddComment.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createWriteBoxHtml.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findCommentList.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/addComment.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/editComment.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteComment.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createCommentListHtml.js}"></script>
+
 <script th:inline="javascript">
 const typeOfLoginMember = [[${session.loginMember.type}]];
 const idOfLoginMember = [[${session.loginMember.id}]];
 const loginIdOfLoginMember = [[${session.loginMember.loginId}]];
 let memberIdOfBoard;
 const boardId = [[${boardId}]];
+
 document.addEventListener("DOMContentLoaded", function (){
-scrollHandler();
-findBoard(boardId, false);
-findComments(boardId);
+    scrollHandler();
+    findBoard(boardId, false);
+    findCommentList(boardId);
 });
-
-const findComments = (boardId) => {
-    fetch("/api/comment/list/" + boardId).then(response => {
-        if(!response.ok) {
-            throw new Error("오류가 발생하였습니다.")
-        }
-        return response.json();
-    }).then(data => {
-        if(data.length !=  0) {
-            data.forEach(d => {
-                createRegisteredCommentHtml(true,false, d);
-            })
-
-        }
-    }).catch(err => alert(err));
-}
-
-
-const addComment = (isFirst, parentId) => {
-   const param = {
-       memberId: idOfLoginMember,
-       boardId: boardId,
-       comment: document.getElementsByClassName("commentInBoxText")[0].value,
-       parentId: parentId
-    }
-
-   fetch("/api/comment/add", {
-       method: "POST",
-       headers: {
-           "Content-Type": "application/json",
-       },
-       body: JSON.stringify(param)
-   }).then(response => {
-       if(!response.ok) {
-           throw new Error("오류가 발생하였습니다.")
-       }
-       return response.json();
-   }).then(data => {
-       createRegisteredCommentHtml(isFirst, true, data);
-   }).catch(err => alert(err));
-}
-
-const createRegisteredCommentHtml = (isFirst, isAdd, data) => {
-    const padding = 25;
-    const commentPadding = padding * data["level"];
-    let commentList;
-    const div = document.createElement("div");
-    div.setAttribute("class", "comment");
-    div.setAttribute("id", "comment" + data["id"]);
-    let html;
-    html = `<div class="commentArea" style="padding-left: ${commentPadding}px">
-                    <img class="userIcon" src="/images/userIcon.png" >
-                    <div class="commentBox">
-                        <div class="commentBox_loginId">${data["loginId"]}</div>
-                        <div class="commentBox_comment">
-                            <p><span>${data["comment"]}</span></p>
-                        </div>
-                        <div class="commentInfoBox">
-                            <span class="commentCreateDate">${data["createdDate"]}</span>
-                            <button onclick="reqAddComment(this)" data-id="${data["id"]}" data-parentid="${data["parentId"]}" type="button">답글</button>`
-        if(idOfLoginMember === data["memberId"] || typeOfLoginMember != "USER") {
-            html += `            <button onclick="reqEditComment(${data["id"]})" type="button">수정</button>
-                            <button onclick="deleteComment(${data["id"]})" type="button">삭제</button>`
-        }
-        html += `       </div>
-                    </div>
-                </div>`
-        div.innerHTML = html;
-        document.getElementsByClassName("commentInBoxText")[0].value="";
-    if(isFirst) {
-        commentList = document.getElementById("commentList");
-        commentList.append(div);
-    } else {
-        div.setAttribute("class", "comment pre" +data["parentId"])
-        const childClass = document.getElementsByClassName("pre" + data["parentId"]);
-        if(childClass.length == 0) { // 대댓글이 처음인 경우
-            commentList = document.getElementById("comment" + data["parentId"])
-        } else { // 처음이 아닌경우 마지막 대댓글 뒤에 등록
-            commentList = childClass[childClass.length-1];
-                // 대댓글의 대댓글이 있는경우 대댓글의 마지막에 추가하기 위함
-                const checkChildComment = commentList.id.replace("comment", "pre")
-                const childCommentTag = document.getElementsByClassName(checkChildComment);
-            if(childCommentTag.length != 0) {
-                commentList = childCommentTag[childCommentTag.length-1];
-            }
-        }
-        if(isAdd) {
-            // 댓글 입력 창 삭제
-            document.getElementById("writer" + data["parentId"]).remove()
-            // parent 댓글의 답글 버튼 활성화
-            const commentDiv = document.getElementById("comment" + data["parentId"]);
-            commentDiv.getElementsByTagName("button")[0].disabled = false;
-        }
-        commentList.after(div);
-    }
-
-    if(data["childCommentList"].length != 0){
-        data["childCommentList"].forEach(c => {
-            createRegisteredCommentHtml(false, false, c);
-        })
-    }
-}
-
-const reqAddComment = (e) => {
-    const parentId = e.dataset.id
-    const parentTag = document.getElementById("comment"+parentId);
-    const div = createWriteBoxHtml(parentId, false)
-    parentTag.after(div);
-
-    e.disabled = true;
-}
-
-const createWriteBoxHtml = (id, isEdit, comment) => {
-    const editComment = isEdit ? comment : "";
-    const div = document.createElement("div");
-    div.setAttribute("class", "commentWriter");
-    div.setAttribute("id", "writer"+id);
-    let html = `<div class="commentInBox">
-                       <div><em class="commentInBoxLoginId">${loginIdOfLoginMember}</em></div>
-                       <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요.">${editComment}</textarea>
-                  </div>
-                  <div class="commentAttach">`;
-    if(isEdit) {
-        html += `      <button onclick="editComment(${id})" type="button">등록</button>
-                       <button onclick="reqEditCancel(${id})" type="button">취소</button>`
-    } else {
-        html += `      <button onclick="addComment(false,${id})" type="button">등록</button>
-                      <button onclick="reqAddCancel(this)" data-id="${id}" type="button">취소</button>`
-    }
-        html += "</div>";
-
-    div.innerHTML = html;
-    return div;
-}
-
-const reqAddCancel = (e) => {
-    const writerBox = document.getElementById("writer" + e.dataset.id);
-    const commentDiv = document.getElementById("comment" + e.dataset.id);
-    commentDiv.getElementsByTagName("button")[0].disabled = false;
-
-    writerBox.remove();
-}
-
-const reqEditComment = (id) => {
-    const comment = document.getElementById("comment" + id) ;
-    const div = createWriteBoxHtml(id, true, comment.getElementsByTagName("span")[0].innerText);
-
-    comment.before(div);
-    comment.style.display="none";
-}
-
-const reqEditCancel = (id) => {
-    document.getElementById("writer"+id).remove();
-    document.getElementById("comment" + id).style.removeProperty("display");
-}
-
-const editComment = (id) => {
-    const editBox = document.getElementById("writer"+id);
-    const editComment = editBox.getElementsByClassName("commentInBoxText")[0].value;
-    const currentComment = document.getElementById("comment"+id);
-
-    const param = {
-        comment: editComment
-    }
-
-    fetch("/api/comment/edit/"+id, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(param)
-    }).then(response => {
-        if(!response.ok) {
-            throw new Error("오류가 발생하였습니다.")
-        }
-        return response.json();
-    }).then(data => {
-        currentComment.getElementsByTagName("span")[0].innerText = data["comment"];
-        editBox.remove();
-        currentComment.style.removeProperty("display")
-    }).catch(err => alert(err));
-}
-const deleteComment = (id) => {
-    if(confirm("댓글을 삭제하시겠습니까?")) {
-        fetch("/api/comment/delete/" + id, {
-            method: "DELETE"
-        }).then(response => {
-            if(!response.ok) {
-                throw new Error("오류가 발생하였습니다.")
-            } else {
-                document.getElementById("comment" + id).remove();
-            }
-        }).catch(err => alert(err));
-
-    }
-
-}
-
 </script>
 <body>
     <div class="container">
@@ -226,13 +38,13 @@ const deleteComment = (id) => {
         <div class="viewBoardForm">
             <div class="viewBoard">
                 <div class="title">
-                    <div  id="title" ></div>
+                    <div id="title" ></div>
                 </div>
                 <div class="loginId">
-                    <div  id="loginId"></div>
+                    <div id="loginId"></div>
                 </div>
                 <div class="createDate">
-                    <div  id="createDate" ></div>
+                    <div id="createDate"></div>
                 </div>
                 <div class="line"></div>
                 <div class="content">
@@ -244,8 +56,7 @@ const deleteComment = (id) => {
                     <div class="commentOption">
                         <h3 class="commentTitle">댓글</h3>
                     </div>
-                    <div class="commentList" id="commentList">
-                    </div>
+                    <div class="commentList" id="commentList"> </div>
                     <div class="commentWriter">
                         <div class="commentInBox">
                             <div><em class="commentInBoxLoginId" th:text="${session.loginMember.loginId}"></em></div>
@@ -265,7 +76,6 @@ const deleteComment = (id) => {
                 </div>
             </div>
         </div>
-
     </div>
 </body>
 </html>
