@@ -1,4 +1,4 @@
-package project.springboard.global.config;
+package project.springboard.global.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
