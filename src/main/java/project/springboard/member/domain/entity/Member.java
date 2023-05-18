@@ -6,23 +6,27 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.springboard.board.domain.entity.Check;
+import project.springboard.board.domain.entity.Comment;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.form.RequestedPage;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends Auditable {
+public class Member extends Auditable<Long>  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
-    private Long id;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "USER_ID")
+//    private Long id;
 
     @Column(name = "LOGIN_ID", unique = true, nullable = false)
     private String loginId;
@@ -44,6 +48,13 @@ public class Member extends Auditable {
     @Enumerated(EnumType.STRING)
     @Column(name = "DEL_YN")
     private Check delCheck;
+
+//    @OneToMany(mappedBy = "createdBy")
+//    List<Member> createdMemberList = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "modifiedBy")
+//    List<Member> midifiedMemberList = new ArrayList<>();
+
 
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
