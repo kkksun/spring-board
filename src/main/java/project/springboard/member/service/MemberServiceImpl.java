@@ -126,7 +126,7 @@ public class MemberServiceImpl implements MemberService{
      * 아이디로 회원 조회*/
     @Override
     public MemberDTO findMember(Long memberId) {
-        return MemberDTO.toMemberDTO(memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND)));
+        return MemberDTO.toMemberDTO(memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)));
     }
 
 
@@ -136,7 +136,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public void editMember(Long memberId, MemberDTO editMember, RequestedPage requestedPage) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         if(editMember.getPassword() != null) {editMember.setPassword(passwordEncoder.encode(editMember.getPassword())); }
         member.updateMember(editMember, requestedPage);
@@ -148,7 +148,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));;
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));;
 
         member.deleteMember();
     }

@@ -15,7 +15,9 @@ public enum ErrorCode {
     /*
      * 404 NOT_FOUND: 리소스를 찾을 수 없음
      */
-    NOT_FOUND(HttpStatus.NOT_FOUND, "정보를 찾을 수 없습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다."),
+    BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글 정보를 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글 정보를 찾을 수 없습니다."),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "파일 다운로드를 실패하였습니다."),
 
     /*
