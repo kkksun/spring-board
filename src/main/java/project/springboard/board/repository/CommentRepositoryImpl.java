@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.springboard.board.domain.dto.CommentLevelDTO;
+import project.springboard.board.domain.entity.Check;
 import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.entity.QComment;
 
@@ -62,5 +63,21 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .orderBy(comment1.parent.id.asc().nullsFirst(), comment1.groupId.asc(),comment1.level.asc(), comment1.levelOrder.asc())
                 .fetch();
         return  commentList;
+    }
+
+    @Override
+    public void childCommentsUpdate(Long parentId) {
+        QComment pComment = new QComment("pComment");
+        Comment comment = queryFactory.selectFrom(pComment)
+                .where(pComment.id.eq(parentId))
+                .fetchOne();
+
+        queryFactory.update(comment1)
+                .set(comment1.parentDelCheck, Check.Y)
+                .set(comment1.deletedParentId, comment.getId())
+                .set(comment1.parent, comment.getParent())
+                .set(comment1.deletedParentOrder, comment.getLevelOrder())
+                .where(comment1.parentDelCheck.isNull())
+                .execute();
     }
 }

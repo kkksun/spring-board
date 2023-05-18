@@ -15,6 +15,7 @@ import project.springboard.global.exception.ErrorCode;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.member.repository.MemberRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -74,8 +75,11 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public List<CommentDTO> deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        commentRepository.childCommentsUpdate(commentId);
+        commentRepository.flush();
+
         Long boardId = comment.getBoard().getId();
         commentRepository.deleteById(commentId);
-        return commentList(boardId);
+        return new ArrayList<>(); // commentList(boardId);
     }
 }

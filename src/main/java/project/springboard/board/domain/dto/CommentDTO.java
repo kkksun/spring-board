@@ -23,11 +23,9 @@ public class CommentDTO {
 
     private Long id;
 
-//    @Builder.Default
-    private MemberDTO member = new MemberDTO();
+    private MemberDTO member;
 
-//    @Builder.Default
-    private BoardDTO board = new BoardDTO();
+    private BoardDTO board;
 
     private String comment;
 
@@ -39,7 +37,7 @@ public class CommentDTO {
 
     private Long levelOrder;
 
-    private Check delCheck;
+    private Check parentDelCheck;
 
     private LocalDateTime createdDate;
 
@@ -49,8 +47,10 @@ public class CommentDTO {
     private List<CommentDTO> childCommentList = new ArrayList<>();
 
     public CommentDTO (CommentForm comment)  {
-        this.member.setId(comment.getMemberId());
-        this.board.setId(comment.getBoardId());
+        this.member = new MemberDTO();
+        member.setId(comment.getMemberId());
+        this.board = new BoardDTO();
+        board.setId(comment.getBoardId());
         this.comment = comment.getComment();
         if(comment.getParentId() != null) {
             this.parent = new CommentDTO();
@@ -68,7 +68,7 @@ public class CommentDTO {
                 .groupId(comment.getGroupId())
                 .level(comment.getLevel())
                 .levelOrder(comment.getLevelOrder())
-                .delCheck(comment.getDelCheck())
+                .parentDelCheck(comment.getParentDelCheck())
                 .createdDate(comment.getCreatedDate())
                 .modifiedDate(comment.getModifiedDate())
                 .build();

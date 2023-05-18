@@ -10,4 +10,6 @@ public interface CommentRepositoryCustom {
     CommentLevelDTO referGroupIdAndLevelId(Long BoardId, Long parentId);
 
     List<Comment> commentListByBoardId(Long boardId);
+
+    void childCommentsUpdate(Long parentId);
 }
