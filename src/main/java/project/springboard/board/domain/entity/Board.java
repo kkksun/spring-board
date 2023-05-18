@@ -18,9 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Board extends Auditable<Long>  {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "BOARD_ID")
-//    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BOARD_ID")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -37,11 +37,11 @@ public class Board extends Auditable<Long>  {
     private Check delCheck;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board")
     private List<AttachFile> attachFileList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board")
     private List<Comment> commentList = new ArrayList<>();
 
 

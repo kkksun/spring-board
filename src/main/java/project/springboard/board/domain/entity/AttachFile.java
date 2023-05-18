@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AttachFile extends Auditable<Long> {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "FILE_ID")
-//    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "FILE_ID")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")

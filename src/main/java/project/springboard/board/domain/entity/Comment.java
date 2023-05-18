@@ -20,9 +20,9 @@ import java.util.List;
 @Table(name ="COMMENTS")
 public class Comment extends Auditable<Long>  {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "COMMENT_ID")
-//     private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "COMMENT_ID")
+     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -46,11 +46,17 @@ public class Comment extends Auditable<Long>  {
     @Column(name = "LEVEL_ORDER")
     private Long levelOrder;
 
-    @Column(name = "DEL_YN")
-    private Check delCheck;
+    @Column(name = "PARENT_DEL_YN")
+    private Check parentDelCheck;
+
+    @Column(name ="DEL_PARENT_ID")
+    private Long  deletedParentId;
+
+    @Column(name = "PARENT_ORDER")
+    private Long deletedParentOrder;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent")
     private List<Comment> childCommentList = new ArrayList<>();
 
 
@@ -60,7 +66,6 @@ public class Comment extends Auditable<Long>  {
         comment.setComment(addComment.getComment());
         comment.setMember(member);
         comment.setBoard(board);
-        comment.setDelCheck(Check.N);
         if(parent != null) {
             comment.setParent(parent);
         }

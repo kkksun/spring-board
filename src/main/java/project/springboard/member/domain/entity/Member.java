@@ -24,9 +24,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Member extends Auditable<Long>  {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "USER_ID")
-//    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
+    private Long id;
 
     @Column(name = "LOGIN_ID", unique = true, nullable = false)
     private String loginId;
@@ -48,13 +48,6 @@ public class Member extends Auditable<Long>  {
     @Enumerated(EnumType.STRING)
     @Column(name = "DEL_YN")
     private Check delCheck;
-
-//    @OneToMany(mappedBy = "createdBy")
-//    List<Member> createdMemberList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "modifiedBy")
-//    List<Member> midifiedMemberList = new ArrayList<>();
-
 
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
@@ -92,4 +85,11 @@ public class Member extends Auditable<Long>  {
         this.delCheck = Check.Y;
         this.status = MemberStatus.DELETE;
     }
+
+//    @PrePersist
+//    public void setCreatedBy(){
+//      this.createdBy = this;
+//      this.modifiedBy = this;
+//    }
+
 }
