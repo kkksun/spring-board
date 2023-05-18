@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 public class LoginSessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+        log.info("interceptor");
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession(false);
 

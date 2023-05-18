@@ -7,18 +7,27 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurity extends WebSecurityConfigurerAdapter {
+public class SpringSecurity  {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-        .cors().disable()
+//        .cors().disable()
         .csrf().disable()
-        .formLogin().disable()
-        .headers().frameOptions().disable();
+        .formLogin()
+            .loginPage("/login") // 사용자 정의 로그인 페이지
+            .usernameParameter("loginId") // 아이디 파라미터명 설정
+            .passwordParameter("password") // 비밀번호 파라미터명 설정
+            .loginProcessingUrl("/login") //로그인 form Action url
+            .defaultSuccessUrl("/board?page=") // 로그인 성공 후 이동 페이지
+            .successForwardUrl("/board?page=") //로그인 성공 url
+            .failureHandler(new ExtensibleAuthenticationFailureHandler());
+
+        return http.build();
     }
 
     @Bean
