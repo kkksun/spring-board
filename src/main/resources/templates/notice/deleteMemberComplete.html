@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/layoutComplete :: notiLayout(~{::script}, ${type.equals('MANAGE')}? '삭제가 완료되었습니다.':'탈퇴가 완료되었습니다.', ~{::button})}" xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{layout/layoutComplete :: notiLayout(~{::script}, '탈퇴가 완료되었습니다.', ~{::button})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <script>
         history.pushState(null, null, location.href);
@@ -9,6 +9,6 @@
     </script>
 </head>
 <body>
-    <button id = "complete" class="btn_o" th:onclick="|location.href=${type.equals('MANAGE')}?'@{/manage/member}' : '@{/login}'|"  type="button">확인</button>
+    <button id = "complete" class="btn_o" th:onclick="|location.href='@{/login}'|"  type="button">확인</button>
 </body>
 </html>

@@ -51,4 +51,13 @@ public class MainPageController {
 
         return"redirect:/login";
     }
+
+    /**
+     * 회원 가입 완료
+     */
+    @GetMapping("/complete/join")
+    public String joinComplete() {
+        return "notice/joinComplete";
+    }
+
 }

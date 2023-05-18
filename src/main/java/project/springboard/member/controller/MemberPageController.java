@@ -71,4 +71,13 @@ public class MemberPageController {
 
         return "member/editMember";
     }
+
+    /**
+     * 탈퇴 완료
+     */
+    @GetMapping("/complete/delete/member")
+    public String deleteComplete() {
+        return "notice/deleteMemberComplete";
+    }
+
 }

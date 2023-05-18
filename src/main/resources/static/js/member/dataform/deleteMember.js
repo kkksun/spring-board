@@ -1,6 +1,6 @@
 const deleteMember = () => {
     let reqUrl ="/api/member/delete/" + memberId + "?isMember=" + (requestedPage === "MEMBER"?  true : false);
-    let url = window.location.origin;
+    let url = window.location.origin + (requestedPage === "MEMBER"?  "/complete/delete/member" : "/manage/members");
 
     if(requestedPage === "MANAGE" && typeOfLoginMember === "MANAGER" ) {
         alert("Manager는 회원 조회만 가능합니다.")
@@ -12,8 +12,10 @@ const deleteMember = () => {
                 method : "DELETE"
             }).then(response => {
                 if (response.ok) {
-                    alert("탈퇴가 완료되었습니다.")
-                    location.href = url + (requestedPage === "MEMBER"?  "" : "/manage/members")
+                    if(requestedPage !== "MEMBER") {
+                        alert("탈퇴가 완료되었습니다.")
+                    }
+                    location.href = url;
                 } else {
                     throw new Error('회원 정보가 존재하지 않습니다.');
                 }

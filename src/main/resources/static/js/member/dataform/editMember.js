@@ -26,7 +26,7 @@ const editMember = () => {
     }).then(data => {
         console.log(data);
         if (JSON.stringify(data) === '{}') {
-            location.href = window.location.origin + (requestedPage === 'MANAGE'? "/manage" : "/member" ) + "/info/" + memberId;
+            location.href = window.location.origin + (requestedPage === 'MANAGE'? "/manage/members" : `/member/info/${memberId}` );
         } else {
             let errorTag = document.querySelectorAll(".field-error");
             if (errorTag.length != 0) {

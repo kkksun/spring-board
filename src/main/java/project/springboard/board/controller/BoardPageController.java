@@ -39,13 +39,22 @@ public class BoardPageController {
     }
 
     /**
-     * 게시판 수정
+     * 게시글 수정
      */
-    @GetMapping("board/edit/{boardId}")
+    @GetMapping("/board/edit/{boardId}")
     public String editBoardForm( @PathVariable("boardId") Long boardId, Model model) {
         model.addAttribute("boardId", boardId);
 
         return "board/writeBoard";
+    }
+
+    /**
+     * 게시글 등록 /삭제 완료
+     */
+    @GetMapping("/complete/board")
+    public String deleteComplete(@RequestParam("type") String type, Model model) {
+        model.addAttribute("type", type);
+        return "notice/boardComplete";
     }
 
 }

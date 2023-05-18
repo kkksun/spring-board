@@ -20,7 +20,7 @@ const addBoard = () => {
         return response.json();
     }).then(data => {
         if (JSON.stringify(data) === '{}') {
-            location.href = window.location.origin + "/board?page=1";
+            location.href = window.location.origin + "/complete/board?type=ADD";
         } else {
             let errorTag = document.querySelectorAll(".field-error");
             if (errorTag.length != 0) {

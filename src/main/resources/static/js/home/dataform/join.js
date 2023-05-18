@@ -32,8 +32,8 @@ const joinMember = () => {
             }
             return response.json();
         }).then(data => {
-            if (JSON.stringify(data) === '{}') {
-                location.href = window.location.origin
+               if (JSON.stringify(data) === '{}') {
+                location.href = window.location.origin + "/complete/join";
             } else {
                 let errorTag = document.querySelectorAll(".field-error");
                 if (errorTag.length != 0) {
@@ -43,7 +43,6 @@ const joinMember = () => {
             }
         }).catch(err => {
             alert(err)
-            console.log(err);
         })
     }
 }
