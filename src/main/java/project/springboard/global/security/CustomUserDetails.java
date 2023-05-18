@@ -23,6 +23,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
           return authorities;
     }
 
@@ -44,21 +45,25 @@ public class CustomUserDetails implements UserDetails {
         return type;
     }
 
+    // 계정 만료 여부 반환
     @Override
     public boolean isAccountNonExpired() {
         return false;
     }
 
+    // 계정 잠금 여부 반환
     @Override
     public boolean isAccountNonLocked() {
         return false;
     }
 
+    // 패스워드의 만료 여부 반환
     @Override
     public boolean isCredentialsNonExpired() {
         return false;
     }
 
+    // 계정 사용 가능 여부 반환
     @Override
     public boolean isEnabled() {
         return false;

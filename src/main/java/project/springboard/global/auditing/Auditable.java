@@ -21,19 +21,19 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<PK extends Serializable> extends AbstractPersistable<PK> {
+public abstract class Auditable<PK extends Serializable>{ // extends AbstractPersistable<PK> {
 
-    @ManyToOne
-    @CreatedBy
-    protected Member createdBy;
+//    @ManyToOne
+//    @CreatedBy
+//    protected Member createdBy;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     protected LocalDateTime createdDate;
 
-    @ManyToOne
-    @LastModifiedBy
-    protected Member modifiedBy;
+//    @ManyToOne
+//    @LastModifiedBy
+//    protected Member modifiedBy;
 
     @LastModifiedDate
     protected LocalDateTime modifiedDate;

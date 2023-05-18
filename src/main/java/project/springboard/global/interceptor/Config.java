@@ -18,10 +18,9 @@ public class Config implements WebMvcConfigurer {
 /*        registry.addInterceptor(new BoardAuthInterceptor())
                 .order(2)
                 .addPathPatterns("/board/edit/{memberId}/{boardId}**", "/board/delete/{memberId}/{boardId}**");*/
-
-        registry.addInterceptor(new ManageAuthInterceptor())
+/*        registry.addInterceptor(new ManageAuthInterceptor())
                 .order(2)
-                .addPathPatterns("/manage/**");
+                .addPathPatterns("/manage/**");*/
 
     }
 
