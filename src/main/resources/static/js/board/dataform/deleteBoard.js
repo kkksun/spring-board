@@ -5,8 +5,7 @@ const deleteBoard = () => {
                 method : "DELETE"
             }).then(response => {
                 if (response.ok) {
-                    alert("삭제가 완료되었습니다.")
-                    location.href = document.location.origin + "/board?page=1"
+                    location.href = document.location.origin + "/complete/board?type=DELETE";
                 } else {
                     throw new Error('오류가 발생하였습니다.');
                 }
