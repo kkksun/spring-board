@@ -45,7 +45,6 @@ public class MemberServiceImpl implements MemberService{
                                        .email("admin@gmail.com")
                                        .type(MemberType.ADMIN)
                                        .status(MemberStatus.ACTIVE)
-                                       .delCheck(Check.N)
                                        .build();
 
             memberRepository.save(adminMember);
@@ -57,7 +56,6 @@ public class MemberServiceImpl implements MemberService{
                     .email("test@gmail.com")
                     .type(MemberType.USER)
                     .status(MemberStatus.STANDBY)
-                    .delCheck(Check.N)
                     .build();
 
             memberRepository.save(testMember);
@@ -149,7 +147,9 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));;
+        String loginId = member.getLoginId();
+        Integer loginIdLength = memberRepository.findDeletedLoginLid(loginId.substring(0,1), loginId.substring(loginId.length() - 1));
 
-        member.deleteMember();
+        member.deleteMember(loginIdLength);
     }
 }

@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriUtils;
 import project.springboard.board.domain.dto.BoardDTO;
+import project.springboard.board.domain.dto.CommentDTO;
 import project.springboard.board.domain.entity.AttachFile;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.board.domain.entity.Check;
+import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.repository.AttachFileRepository;
 import project.springboard.board.repository.BoardRepository;
+import project.springboard.board.repository.CommentRepository;
 import project.springboard.global.exception.CustomException;
 import project.springboard.global.exception.ErrorCode;
 import project.springboard.global.paging.PagingParam;
@@ -45,6 +48,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final AttachFileRepository attachFileRepository;
+    private final CommentRepository commentRepository;
 
 
     @Value("${file.dir}")
@@ -102,7 +106,12 @@ public class BoardServiceImpl implements BoardService{
      */
     @Override
     public BoardDTO findBoard(Long boardId) {
-        return BoardDTO.toBoardDTO(boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND)));
+        Board board = boardRepository.findBoardById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+        List<Comment> commentList = commentRepository.commentListByBoardId(boardId);
+        BoardDTO findBoard = BoardDTO.toBoardDTO(board);
+        findBoard.setCommentList(CommentDTO.toCommentDtoList(commentList));
+
+        return findBoard;
     }
 
     /**
