@@ -75,11 +75,12 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public List<CommentDTO> deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
-        commentRepository.childCommentsUpdate(commentId);
-        commentRepository.flush();
+        Comment comment1 = comment.getParent();
+//        commentRepository.childCommentsUpdate(commentId);
+//        commentRepository.flush();
 
-        Long boardId = comment.getBoard().getId();
-        commentRepository.deleteById(commentId);
+//        Long boardId = comment.getBoard().getId();
+//        commentRepository.deleteById(commentId);
         return new ArrayList<>(); // commentList(boardId);
     }
 }

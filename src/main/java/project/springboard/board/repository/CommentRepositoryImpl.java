@@ -8,7 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.springboard.board.domain.dto.CommentLevelDTO;
-import project.springboard.board.domain.entity.Check;
 import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.entity.QComment;
 
@@ -20,7 +19,7 @@ import static project.springboard.member.domain.entity.QMember.*;
 
 @Component
 @RequiredArgsConstructor
-public class CommentRepositoryImpl implements CommentRepositoryCustom {
+public class CommentRepositoryImpl implements CommentCustomRepository {
 
     private final JPAQueryFactory queryFactory;
     @Override
@@ -72,12 +71,5 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .where(pComment.id.eq(parentId))
                 .fetchOne();
 
-        queryFactory.update(comment1)
-                .set(comment1.parentDelCheck, Check.Y)
-                .set(comment1.deletedParentId, comment.getId())
-                .set(comment1.parent, comment.getParent())
-                .set(comment1.deletedParentOrder, comment.getLevelOrder())
-                .where(comment1.parentDelCheck.isNull())
-                .execute();
     }
 }

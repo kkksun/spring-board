@@ -5,7 +5,7 @@ import project.springboard.board.domain.entity.Comment;
 
 import java.util.List;
 
-public interface CommentRepositoryCustom {
+public interface CommentCustomRepository {
 
     CommentLevelDTO referGroupIdAndLevelId(Long BoardId, Long parentId);
 
