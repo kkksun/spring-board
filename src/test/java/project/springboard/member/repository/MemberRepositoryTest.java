@@ -30,7 +30,16 @@ class MemberRepositoryTest {
         boolean result = memberRepository.existsByLoginId("admin");
 
         Assertions.assertThat(result).isTrue();
+    }
 
+    @Test
+    public void findDeletedLoginLid() {
+        String loginId= "test9";
+        System.out.println(loginId.substring(loginId.length()-1));
+
+        Integer deletedLoginLidCount = memberRepository.findDeletedLoginLid(loginId.substring(0,1), loginId.substring(loginId.length()-1));
+
+        System.out.println("deletedLoginLidCount = " + deletedLoginLidCount);
     }
 
 

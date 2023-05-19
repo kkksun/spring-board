@@ -2,6 +2,8 @@ package project.springboard.board.domain.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import project.springboard.board.domain.dto.CommentDTO;
 import project.springboard.board.domain.dto.CommentLevelDTO;
 import project.springboard.global.auditing.Auditable;
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Builder
+@DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name ="COMMENTS")
@@ -46,14 +49,14 @@ public class Comment extends Auditable<Long>  {
     @Column(name = "LEVEL_ORDER")
     private Long levelOrder;
 
-    @Column(name = "PARENT_DEL_YN")
-    private Check parentDelCheck;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEL_YN")
+    @ColumnDefault("'N'")
+    private Check delCheck;
 
-    @Column(name ="DEL_PARENT_ID")
-    private Long  deletedParentId;
-
-    @Column(name = "PARENT_ORDER")
-    private Long deletedParentOrder;
+    @Column(name = "CHILD_CNT")
+    @ColumnDefault("0")
+    private Long childCnt;
 
     @Builder.Default
     @OneToMany(mappedBy = "parent")
@@ -78,16 +81,10 @@ public class Comment extends Auditable<Long>  {
             comment.setGroupId(commentLevel.getParentGroupId());
             comment.setLevel(commentLevel.getChildLevel() != null ? commentLevel.getChildLevel() : (commentLevel.getParentLevel() + 1));
             comment.setLevelOrder(commentLevel.getChildLevelOrder() != null ? (commentLevel.getChildLevelOrder()+1) : Long.valueOf(1));
+            comment.getParent().setChildCnt(comment.getParent().getChildCnt() + 1);
         }
-
-        addChildComment(comment);
 
         return comment ;
     }
-
-    private static void addChildComment(Comment comment) {
-
-    }
-
 
 }

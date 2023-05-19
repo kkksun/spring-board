@@ -2,6 +2,8 @@ package project.springboard.board.domain.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.entity.Member;
@@ -14,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Builder
+@DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board extends Auditable<Long>  {
@@ -34,10 +37,11 @@ public class Board extends Auditable<Long>  {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DEL_YN")
+    @ColumnDefault("'N'")
     private Check delCheck;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<AttachFile> attachFileList = new ArrayList<>();
 
     @Builder.Default
@@ -55,7 +59,6 @@ public class Board extends Auditable<Long>  {
         board.setMember(member);
         board.setTitle(boardDTO.getTitle());
         board.setContent(boardDTO.getContent());
-        board.setDelCheck(Check.N);
         if(attachFiles != null) {
             for (AttachFile file : attachFiles) {
                 board.addAttachFile(file);

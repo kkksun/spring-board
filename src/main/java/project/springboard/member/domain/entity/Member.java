@@ -1,6 +1,8 @@
 package project.springboard.member.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +22,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Builder
+@DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member extends Auditable<Long>  {
@@ -47,6 +50,7 @@ public class Member extends Auditable<Long>  {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DEL_YN")
+    @ColumnDefault("'N'")
     private Check delCheck;
 
 
@@ -59,7 +63,6 @@ public class Member extends Auditable<Long>  {
                 .email(memberDTO.getEmail())
                 .type(memberDTO.getType())
                 .status(memberDTO.getStatus())
-                .delCheck(Check.N)
                 .build();
 
         return member;
@@ -77,13 +80,22 @@ public class Member extends Auditable<Long>  {
         }
     }
 
-    public void deleteMember() {
-        String loginId = this.loginId;
-        this.loginId = loginId.charAt(0) + "***"+ loginId.charAt(loginId.length()-1);
+    public void deleteMember(Integer loginIdLength) {
         this.userName = "*****";
         this.email = "*****";
         this.delCheck = Check.Y;
         this.status = MemberStatus.DELETE;
+
+        String masking = "";
+        if(loginIdLength != 0) {
+            for(int i = 1; i < loginIdLength; i++) {
+                masking += "*";
+            }
+        }else {
+            masking = "***";
+        }
+        this.loginId = loginId.substring(0,1) + masking + loginId.substring(loginId.length() - 1);
+
     }
 
 //    @PrePersist

@@ -1,6 +1,8 @@
 package project.springboard.board.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Builder
+@DynamicInsert
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttachFile extends Auditable<Long> {
@@ -40,6 +43,7 @@ public class AttachFile extends Auditable<Long> {
 
     @Enumerated(EnumType.STRING)
     @Column(name ="DEL_YN")
+    @ColumnDefault("'N'")
     private Check delCheck;
 
     @Transient
@@ -50,7 +54,6 @@ public class AttachFile extends Auditable<Long> {
         AttachFile file = new AttachFile();
         file.setOriginalFileName(attachFile.getOriginalFileName());
         file.setServerFileName(attachFile.getServerFileName());
-        file.setDelCheck(Check.N);
         file.setMultipartFile(attachFile.getMultipartFile());
         return file;
     }
