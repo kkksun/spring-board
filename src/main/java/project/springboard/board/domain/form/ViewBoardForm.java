@@ -18,6 +18,7 @@ public class ViewBoardForm {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
     private List<AttachFileForm> attachFileList;
+    private List<CommentForm> commentList;
 
     public ViewBoardForm(BoardDTO findBoard) {
         this.id = findBoard.getId();
@@ -27,5 +28,6 @@ public class ViewBoardForm {
         this.content = findBoard.getContent();
         this.createdDate = findBoard.getCreatedDate();
         this.attachFileList = findBoard.getAttachFileList().stream().map(AttachFileForm :: new).collect(Collectors.toList());
+        this.commentList = findBoard.getCommentList().stream().map(CommentForm::new).collect(Collectors.toList());
     }
 }

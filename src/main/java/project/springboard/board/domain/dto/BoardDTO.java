@@ -2,6 +2,7 @@ package project.springboard.board.domain.dto;
 
 import lombok.*;
 import project.springboard.board.domain.entity.Check;
+import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.form.WriteBoardForm;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.member.domain.dto.MemberDTO;
@@ -32,39 +33,41 @@ public class BoardDTO {
     @Builder.Default
     private List<AttachFileDTO> attachFileList = new ArrayList<>();
 
-            public BoardDTO(Board board) {
-                    this.id = board.getId();
-                    this.member =  MemberDTO.toMemberDTO(board.getMember());
-                    this.title = board.getTitle();
-                    this.content = board.getContent();
-                    this.delCheck = board.getDelCheck();
-                    this.createdDate = board.getCreatedDate();
+    private List<CommentDTO> commentList;
 
-            }
+    public BoardDTO(Board board) {
+            this.id = board.getId();
+            this.member =  MemberDTO.toMemberDTO(board.getMember());
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.delCheck = board.getDelCheck();
+            this.createdDate = board.getCreatedDate();
 
-            public BoardDTO(WriteBoardForm form) {
-                    this.title = form.getTitle();
-                    this.content = form.getContent();
-                    this.member = new MemberDTO();
-                    this.member.setId(form.getMemberId());
-                    this.attachFileList = form.getAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList());
-            }
+    }
 
-            public static BoardDTO toBoardDTO(Board board) {
-                    BoardDTO viewBoard = BoardDTO.builder()
-                            .id(board.getId())
-                            .member(MemberDTO.toMemberDTO(board.getMember()))
-                            .title(board.getTitle())
-                            .content(board.getContent())
-                            .delCheck(board.getDelCheck())
-                            .createdDate(board.getCreatedDate())
-                            .attachFileList(board.getAttachFileList().stream()
-                                                                     .filter(f -> f.getDelCheck() == Check.N)
-                                                                     .map(AttachFileDTO::new)
-                                                                     .collect(Collectors.toList()))
-                            .build();
-                    return viewBoard;
-            }
+    public BoardDTO(WriteBoardForm form) {
+            this.title = form.getTitle();
+            this.content = form.getContent();
+            this.member = new MemberDTO();
+            this.member.setId(form.getMemberId());
+            this.attachFileList = form.getAttachFileList().stream().filter(f -> !f.isEmpty()).map(AttachFileDTO::new).collect(Collectors.toList());
+    }
+
+    public static BoardDTO toBoardDTO(Board board) {
+            BoardDTO viewBoard = BoardDTO.builder()
+                    .id(board.getId())
+                    .member(MemberDTO.toMemberDTO(board.getMember()))
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .delCheck(board.getDelCheck())
+                    .createdDate(board.getCreatedDate())
+                    .attachFileList(board.getAttachFileList().stream()
+                                                             .filter(f -> f.getDelCheck() == Check.N)
+                                                             .map(AttachFileDTO::new)
+                                                             .collect(Collectors.toList()))
+                    .build();
+            return viewBoard;
+    }
 }
 
 

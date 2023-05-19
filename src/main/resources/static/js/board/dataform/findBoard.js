@@ -60,6 +60,11 @@ const findBoard = (boardId, isEdit) => {
                 if(key === "memberId") {
                     memberIdOfBoard = data[key];
                 }
+                if(key === "commentList" && !isEdit) {
+                    if(data["commentList"] !=  0) {
+                        createCommentListHtml(true, data["commentList"]);
+                    }
+                }
             })
         }).catch(err => alert(err))
     }

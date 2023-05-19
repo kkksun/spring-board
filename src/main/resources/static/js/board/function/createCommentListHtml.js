@@ -19,7 +19,7 @@ const createCommentListHtml = (isFirst, data) => {
             html += `        <img class="arrowIcon" src="/images/arrowIcon.png" >`;
         }
          html += `           <img class="userIcon" src="/images/userIcon.png" >
-                            <div class="commentBox">
+                            <div class="commentBox" style="margin-left: ${commentMargin}">
                                 <div class="commentBox_loginId">${d["loginId"]}</div>
                                 <div class="commentBox_comment">
                                     <p><span>${d["comment"]}</span></p>
