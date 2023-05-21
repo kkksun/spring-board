@@ -2,6 +2,7 @@ let html;
 const createCommentListHtml = (isFirst, data) => {
     let commentList= document.getElementById("commentList");
     document.getElementsByClassName("commentInBoxText")[0].value="";
+    document.getElementsByClassName("commentInBoxText")[0].style.height = "30px";
     if(isFirst) {
         commentList.innerHTML = "";
         html = "";
@@ -12,8 +13,8 @@ const createCommentListHtml = (isFirst, data) => {
     data.forEach(d => {
         const commentPadding = padding * d["level"];
         const commentMargin = d["parentId"] != null ? margin : "0px";
-        const addClass = d["parentId"] != null ?  `pre${d["parentId"]}` : "" ;
-        html += `<div clss= "comment ${addClass}" id = "comment${d["id"]}">
+        const addClass = d["parentId"] != null ?  ` pre${d["parentId"]}` : "" ;
+        html += `<div class= "comment${addClass}" id = "comment${d["id"]}">
                       <div class="commentArea" style="padding-left: ${commentPadding}px">`
         if(d["parentId"] != null) {
             html += `        <img class="arrowIcon" src="/images/arrowIcon.png" >`;
@@ -24,13 +25,15 @@ const createCommentListHtml = (isFirst, data) => {
                                 <div class="commentBox_comment">
                                     <p><span>${d["comment"]}</span></p>
                                 </div>
-                                <div class="commentInfoBox">
-                                     <span class="commentCreateDate">${d["createdDate"]}</span>
+                                <div class="commentInfoBox">`
+             if(d["delCheck"] === "N") {
+                 html += `           <span class="commentCreateDate">${d["createdDate"]}</span>
                                      <button onclick="reqAddComment(this)" data-id="${d["id"]}" data-parentid="${d["parentId"]}" type="button">답글</button>`
-        if(idOfLoginMember === d["memberId"] || typeOfLoginMember != "USER") {
-            html += `            <button onclick="reqEditComment(${d["id"]})" type="button">수정</button>
+                 if (idOfLoginMember === d["memberId"] || typeOfLoginMember != "USER") {
+                     html += `            <button onclick="reqEditComment(${d["id"]})" type="button">수정</button>
                                      <button onclick="deleteComment(${d["id"]})" type="button">삭제</button>`
-        }
+                 }
+             }
         html += `               </div>
                             </div>
                       </div>

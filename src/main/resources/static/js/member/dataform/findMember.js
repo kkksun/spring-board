@@ -2,7 +2,7 @@ const findMember = (page) => {
     fetch("/api/member/find/"+memberId)
         .then(response=> {
             if (!response.ok) {
-                throw new Error('회원 정보가 존재하지 않습니다.');
+                throw new Error(response.status + " 오류가 발생하였습니다.")
             }
             return response.json();
         }).then(data => {
@@ -31,7 +31,6 @@ const findMember = (page) => {
                 password.value = null;
                 memberPassword = data["password"];
             }
-        })
-        .catch(err => alert(err))
+        }).catch(err => alert(err))
 }
 

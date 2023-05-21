@@ -28,3 +28,9 @@ const scrollHandler = () => {
         }
     }
 }
+
+const commentResizeHeightHandler = () => {
+    const content =  document.getElementsByClassName("commentInBoxText")[0];
+    content.style.height = "auto";
+    content.style.height = content.scrollHeight + "px";
+}

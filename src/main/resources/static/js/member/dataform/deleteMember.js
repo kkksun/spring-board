@@ -17,7 +17,7 @@ const deleteMember = () => {
                     }
                     location.href = url;
                 } else {
-                    throw new Error('회원 정보가 존재하지 않습니다.');
+                    throw new Error(response.status + " 오류가 발생하였습니다.")
                 }
             }).catch(err => alert(err))
         }

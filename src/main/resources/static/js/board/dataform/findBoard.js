@@ -4,8 +4,7 @@ const findBoard = (boardId, isEdit) => {
     } else {
         fetch("/api/board/view/"+boardId).then(response => {
             if(!response.ok) {
-                throw new Error();
-                // console.log(response.body);
+                throw new Error(response.status + " 오류가 발생하였습니다.")
             }
             return response.json();
         }).then(data => {
@@ -21,6 +20,7 @@ const findBoard = (boardId, isEdit) => {
                 if(key === "attachFileList") {
                     let fileList = [];
                     fileList = data[key];
+                    console.log(fileList);
                     let parent;
                     let div;
                     if(!isEdit) {

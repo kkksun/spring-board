@@ -505,15 +505,10 @@ table .top {
     margin-bottom: 5px;
 }
 
-.comment {
-    /*display: inline-block;*/
-    /*margin: 0px;*/
+.comment  {
     /*float: left;*/
     width: 100%;
-}
-
-.comment {
-    /*float: left;*/
+    min-height: 70px;
     margin-bottom: 10px;
     border-bottom: 1px solid #cccccc;
 }

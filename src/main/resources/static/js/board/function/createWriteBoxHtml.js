@@ -5,7 +5,7 @@ const createWriteBoxHtml = (id, isEdit, comment) => {
     div.setAttribute("id", "writer"+id);
     let html = `<div class="commentInBox">
                        <div><em class="commentInBoxLoginId">${loginIdOfLoginMember}</em></div>
-                       <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요.">${editComment}</textarea>
+                       <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요." rows="{1}" onkeyup="commentResizeHeightHandler()">${editComment}</textarea>
                   </div>
                   <div class="commentAttach">`;
     if(isEdit) {

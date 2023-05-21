@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" content="{{_csrf.token}}"/>
+    <meta id="_csrf_header" name="_csrf_header" content="{{_csrf.headerName}}"/>
     <link th:href="@{/css/boardStyle.css}"
           href="../css/boardStyle.css" rel="stylesheet">
     <script type="text/javascript" th:inline="javascript" th:src="@{/js/home/dataform/login.js}"></script>
@@ -12,7 +14,7 @@
     <div th:replace="~{fragment/topFrag :: topTitle ('로그인')}"></div>
     <div class ="loginForm">
         <a href="/join" th:href="@{/join}"> 회원 가입 </a>
-        <form id="form" >
+        <form id="form"  action="sign-in" method="post">
             <div>
                 <label for="loginId" >아이디  </label><br>
                 <input type="text" id="loginId" name="loginId">
@@ -24,7 +26,7 @@
             <div class="line"></div>
             <div class="row">
                 <div class="btn">
-                    <button class="btn_l" id="submit" type="button" onclick="login()" >로그인 </button>
+                    <button class="btn_l" id="submit" type="button"  onclick="login()" >로그인 </button>
                 </div>
             </div>
         </form>

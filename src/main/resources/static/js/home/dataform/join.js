@@ -28,7 +28,7 @@ const joinMember = () => {
             body: JSON.stringify(param)
         }).then(response => {
             if (!response.ok) {
-                throw new Error('오류가 발생하였습니다. 다시 시도해 주세요.');
+                throw new Error(response.status + " 오류가 발생하였습니다.")
             }
             return response.json();
         }).then(data => {

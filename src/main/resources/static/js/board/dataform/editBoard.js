@@ -17,7 +17,7 @@ const editBoard = () => {
         body: param
     }).then(response => {
         if(!response.ok) {
-            throw new Error("오류가 발생하였습니다.")
+            throw new Error(response.status + " 오류가 발생하였습니다.")
         }
         return response.json();
     }).then(data => {
@@ -30,5 +30,5 @@ const editBoard = () => {
             }
             createErrorMsgHtml(data, false);
         }
-    })
+    }).catch(err => alert(err))
 }

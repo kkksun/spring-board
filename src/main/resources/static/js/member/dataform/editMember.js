@@ -20,7 +20,7 @@ const editMember = () => {
         body: JSON.stringify(param)
     }).then(response => {
         if(!response.ok) {
-            throw new Error("회원 정보 수정에 실패하였습니다.")
+            throw new Error(response.status + " 오류가 발생하였습니다.")
         }
         return response.json()
     }).then(data => {

@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function (){
                     <div class="commentWriter">
                         <div class="commentInBox">
                             <div><em class="commentInBoxLoginId" th:text="${session.loginMember.loginId}"></em></div>
-                            <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요."></textarea>
+                            <textarea class="commentInBoxText" placeholder="댓글을 입력해주세요." rows="{1}" onkeyup="commentResizeHeightHandler()"></textarea>
                         </div>
                         <div class="commentAttach">
                             <button onclick="addComment(true)" type="button">등록</button>
