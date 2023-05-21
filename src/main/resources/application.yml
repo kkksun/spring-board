@@ -6,7 +6,7 @@ server:
 
 spring:
   profiles:
-    active: ${profile:dev}
+    active: ${profile:prod}
 
   servlet:
     multipart:
