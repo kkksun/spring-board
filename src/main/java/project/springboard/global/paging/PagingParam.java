@@ -38,10 +38,6 @@ public class PagingParam {
 
     @Builder.Default
     private List<BoardDTO> boardList = new ArrayList<>();
-    @Builder.Default
-    private List<MemberDTO> MemberList = new ArrayList<>();
-    @Builder.Default
-    private List<BoardForm> pagingBoardList = new ArrayList<>();
 
     public PagingParam(Page<Board> pageBoardList) {
         this.boardList = pageBoardList.getContent().stream()
@@ -77,11 +73,4 @@ public class PagingParam {
         }
     }
 
-
-    public void toBoardForm() {
-        pagingBoardList = boardList.stream()
-                .map(BoardForm :: new)
-                .sorted(Comparator.comparing(BoardForm::getCreatedDate).reversed())
-                .collect(Collectors.toList());
-    }
 }

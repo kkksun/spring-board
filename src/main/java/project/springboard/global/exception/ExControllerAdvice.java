@@ -15,6 +15,7 @@ public class ExControllerAdvice{
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResult> illegalExHandler(IllegalArgumentException e) {
         log.error("[IllegalArgumentException] {}", e.getMessage());
+        e.printStackTrace();
         ErrorResult errorResult = new ErrorResult("CUSTOM-EX", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
@@ -23,6 +24,7 @@ public class ExControllerAdvice{
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ErrorResult> handleCustomException(CustomException e) {
         log.error("[handleCustomException] {} = {}", e.getErrorCode(), e.getErrorCode().getMessage());
+        e.printStackTrace();
         ErrorResult errorResult = new ErrorResult("CUSTOM-EX", e.getErrorCode().getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
@@ -31,12 +33,14 @@ public class ExControllerAdvice{
     @ExceptionHandler(ModelAndViewDefiningException.class)
     public ModelAndView ex(ModelAndViewDefiningException e) {
         log.info("[ModelAndViewDefiningException] {}", e.getMessage());
+        e.printStackTrace();
         return new ModelAndView("error");
     }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResult> handleException(final Exception e) {
         log.error("[handleException] {}", e.getMessage());
+        e.printStackTrace();
         ErrorResult errorResult = new ErrorResult("GLOBAL-EX", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
