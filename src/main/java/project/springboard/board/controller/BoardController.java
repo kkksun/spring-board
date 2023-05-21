@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import project.springboard.board.domain.form.BoardListForm;
 import project.springboard.board.domain.form.ViewBoardForm;
 import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.board.domain.form.WriteBoardForm;
@@ -33,11 +34,10 @@ public class BoardController {
      * 메인 페이지 - 게시판
      */
     @GetMapping("/board/list")
-    public PagingParam boardHome(@RequestParam("page") String page) {
+    public BoardListForm boardHome(@RequestParam("page") String page) {
         int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
         PagingParam pagingParam = boardService.pageBoardList(currentPage);
-        pagingParam.toBoardForm();
-        return pagingParam;
+        return new BoardListForm(pagingParam);
     }
 
     /**
@@ -105,9 +105,9 @@ public class BoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/board/delete/{boardId}")
-    public String deleteBoard( @PathVariable("boardId")Long boardId) {
+    public HttpStatus deleteBoard( @PathVariable("boardId")Long boardId) {
         boardService.deleteBoard(boardId);
-        return "ok";
+        return HttpStatus.OK;
     }
 
 }

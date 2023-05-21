@@ -11,5 +11,7 @@ public interface CommentCustomRepository {
 
     List<Comment> commentListByBoardId(Long boardId);
 
-    void childCommentsUpdate(Long parentId);
+    Long countByBoardId(Long boardId);
+
+    void updateDelStatusOfComment(Long boardId);
 }

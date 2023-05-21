@@ -12,5 +12,7 @@ public interface BoardCustomRepository {
 
 //    List<Board> findBoardList(Pageable pageable);
     Optional<Board> findBoardById(Long boardId);
+
+   Page<Board> boardListOfPage(Pageable pageable);
 }
 

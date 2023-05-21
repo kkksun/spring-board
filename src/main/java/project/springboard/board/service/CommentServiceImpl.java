@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.springboard.board.domain.dto.CommentDTO;
 import project.springboard.board.domain.dto.CommentLevelDTO;
 import project.springboard.board.domain.entity.Board;
+import project.springboard.board.domain.entity.Check;
 import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.repository.BoardRepository;
 import project.springboard.board.repository.CommentRepository;
@@ -35,6 +36,7 @@ public class CommentServiceImpl implements CommentService{
     public List<CommentDTO> commentList(Long boardId) {
         List<Comment> comments = commentRepository.commentListByBoardId(boardId);
         List<CommentDTO> commentList = CommentDTO.toCommentDtoList(comments);
+
         return commentList;
     }
 
@@ -46,28 +48,24 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public List<CommentDTO> addComment(CommentDTO addComment) {
         Member findMember = memberRepository.findById(addComment.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        Board findBoard = boardRepository.findById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+        Board findBoard = boardRepository.findBoardById(addComment.getBoard().getId()).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         Long parentId = addComment.getParent() == null ? null : addComment.getParent().getId();
         Comment parent = parentId == null ? null : commentRepository.findById(parentId).get();
         CommentLevelDTO commentLevel = commentRepository.referGroupIdAndLevelId(addComment.getBoard().getId(), parentId);
 
         Comment comment = Comment.createComment(findMember, findBoard, addComment, commentLevel, parent);
-
         commentRepository.save(comment);
 
-//        return CommentDTO.toCommentDto(comment);
         return commentList(comment.getBoard().getId());
     }
 
     @Override
     @Transactional
     public List<CommentDTO> editComment(Long commentId, CommentDTO editComment) {
-
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         comment.setComment(editComment.getComment());
 
-//        return CommentDTO.toCommentDto(comment);
         return commentList(comment.getBoard().getId());
     }
 
@@ -75,12 +73,23 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public List<CommentDTO> deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
-        Comment comment1 = comment.getParent();
-//        commentRepository.childCommentsUpdate(commentId);
-//        commentRepository.flush();
+        Long boardId = comment.getBoard().getId();
+        deleteCommentAndDeletedComment(comment);
 
-//        Long boardId = comment.getBoard().getId();
-//        commentRepository.deleteById(commentId);
-        return new ArrayList<>(); // commentList(boardId);
+        return commentList(boardId);
+    }
+
+    public void deleteCommentAndDeletedComment(Comment comment) {
+        if(comment.getChildCnt() != 0) {
+            comment.setDelCheck(Check.Y);
+        } else {
+            if (comment.getParent() != null) {
+                comment.getParent().setChildCnt(comment.getParent().getChildCnt() - 1);
+                if (comment.getParent().getChildCnt() == 0 && comment.getParent().getDelCheck() == Check.Y) {
+                    deleteCommentAndDeletedComment(comment.getParent());
+                }
+            }
+            commentRepository.deleteById(comment.getId());
+        }
     }
 }

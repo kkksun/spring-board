@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -69,11 +70,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public PagingParam pageBoardList(int page) {
+
         PageRequest pageRequest = PageRequest.of(page-1, pageSize, Sort.by(Sort.Direction.DESC, "createdDate"));
-        Page<Board> pageBoardList = boardRepository.findByDelCheck(Check.N, pageRequest);
+        Page<Board> pageBoardList = boardRepository.boardListOfPage(pageRequest);
 
         return new PagingParam(pageBoardList);
-
     }
 
     /**
@@ -82,6 +83,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void addBoard(BoardDTO addBoard) throws IOException {
+        log.info("addBoard.getMember.getID = {} ", addBoard.getMember().getId());
         Member member = memberRepository.findById(addBoard.getMember().getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         List<AttachFile> attachFiles = null;
@@ -120,20 +122,21 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void editBoard(Long boardId, BoardDTO editBoard, List<Long> preFileIdList) throws IOException {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+        Board board = boardRepository.findBoardById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         board.setTitle(editBoard.getTitle());
         board.setContent(editBoard.getContent());
 
         if(!board.getAttachFileList().isEmpty() ) {
            if(preFileIdList != null) { //이전과 동일 또는 일부 삭제
-               board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).forEach(f -> f.setDelCheck(Check.Y));
                List<AttachFile> deleteFileList = board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).collect(Collectors.toList());
                for (AttachFile attachFile : deleteFileList) {
                    deleteFile(createDeleteFilePath(attachFile));
+                   board.getAttachFileList().remove(attachFile);
                }
+
            } else { // 이전 파일 전체 삭제
-               board.getAttachFileList().stream().forEach(f -> f.setDelCheck(Check.Y));
                deleteFolder(createDeleteFolderPath(boardId));
+               board.getAttachFileList().clear();
            }
         }
 
@@ -156,12 +159,17 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void deleteBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        board.setDelCheck(Check.Y);
+        Board board = boardRepository.findBoardById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
-        board.getAttachFileList().stream().forEach(file -> file.setDelCheck(Check.Y));
-        deleteFolder(createDeleteFolderPath(boardId));
-
+        Long countCommentOfBoard = commentRepository.countByBoardId(boardId);
+        if(countCommentOfBoard != 0) {
+            board.setDelCheck(Check.Y);
+            attachFileRepository.updateDelStatusOfFile(boardId);
+            commentRepository.updateDelStatusOfComment(boardId);
+        } else {
+            deleteFolder(createDeleteFolderPath(boardId));
+            boardRepository.delete(board);
+        }
     }
 
     /**

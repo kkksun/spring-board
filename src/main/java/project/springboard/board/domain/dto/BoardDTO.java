@@ -30,8 +30,7 @@ public class BoardDTO {
 
     private LocalDateTime createdDate;
 
-    @Builder.Default
-    private List<AttachFileDTO> attachFileList = new ArrayList<>();
+    private List<AttachFileDTO> attachFileList;
 
     private List<CommentDTO> commentList;
 

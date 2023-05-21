@@ -41,7 +41,7 @@ public class Board extends Auditable<Long>  {
     private Check delCheck;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board",orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<AttachFile> attachFileList = new ArrayList<>();
 
     @Builder.Default

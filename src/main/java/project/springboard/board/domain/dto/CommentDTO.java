@@ -64,7 +64,7 @@ public class CommentDTO {
                 .id(comment.getId())
                 .member(MemberDTO.toMemberDTO(comment.getMember()))
                 .board(BoardDTO.toBoardDTO(comment.getBoard()))
-                .comment(comment.getComment())
+                .comment(comment.getDelCheck() == Check.N? comment.getComment() : "삭제된 댓글입니다.")
                 .groupId(comment.getGroupId())
                 .level(comment.getLevel())
                 .levelOrder(comment.getLevelOrder())

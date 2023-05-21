@@ -42,7 +42,7 @@ public class AttachFile extends Auditable<Long> {
     private String path;
 
     @Enumerated(EnumType.STRING)
-    @Column(name ="DEL_YN")
+    @Column(name = "DEL_YN")
     @ColumnDefault("'N'")
     private Check delCheck;
 
@@ -55,6 +55,7 @@ public class AttachFile extends Auditable<Long> {
         file.setOriginalFileName(attachFile.getOriginalFileName());
         file.setServerFileName(attachFile.getServerFileName());
         file.setMultipartFile(attachFile.getMultipartFile());
+        file.setDelCheck(Check.N);
         return file;
     }
 

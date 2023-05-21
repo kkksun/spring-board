@@ -149,7 +149,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));;
         String loginId = member.getLoginId();
         Integer loginIdLength = memberRepository.findDeletedLoginLid(loginId.substring(0,1), loginId.substring(loginId.length() - 1));
-
+        System.out.println("loginIdLength = " + loginIdLength);
         member.deleteMember(loginIdLength);
     }
 }

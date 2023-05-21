@@ -24,7 +24,7 @@ public class MainPageController {
     /**
      * 로그인
      */
-    @GetMapping("/login")
+    @GetMapping({"", "/","/login"})
     public String mainLogin(@ModelAttribute("loginMember") LoginForm form) {
         return "home/login";
     }

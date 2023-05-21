@@ -18,7 +18,6 @@ public class MemberRepositoryImpl implements MemberCustomRepository {
     @Override
     public Integer findDeletedLoginLid(String firstStr, String lastStr) {
         String likeStr = firstStr+ "%" + lastStr;
-        System.out.println("likeStr = " + likeStr);
 
         Integer cnt = queryFactory.select(member.loginId.length())
                 .from(member)

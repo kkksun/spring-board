@@ -57,7 +57,9 @@ public class MainController {
             if (findMember.getMsg() == null) {
                 HttpSession session = request.getSession();
                 //세션에는 필요한 정보만 담기 위해 DTO를 따로 생성
+                System.out.println("세션 담았나????");
                 session.setAttribute(SessionConst.LOGIN_MEMBER, new LoginSessionDTO(findMember));
+                System.out.println(session.getAttribute(SessionConst.LOGIN_MEMBER));
             } else {
                 msg.put("global", findMember.getMsg());
             }

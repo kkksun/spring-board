@@ -69,6 +69,7 @@ public class Comment extends Auditable<Long>  {
         comment.setComment(addComment.getComment());
         comment.setMember(member);
         comment.setBoard(board);
+        comment.setDelCheck(Check.N);
         if(parent != null) {
             comment.setParent(parent);
         }
@@ -83,7 +84,6 @@ public class Comment extends Auditable<Long>  {
             comment.setLevelOrder(commentLevel.getChildLevelOrder() != null ? (commentLevel.getChildLevelOrder()+1) : Long.valueOf(1));
             comment.getParent().setChildCnt(comment.getParent().getChildCnt() + 1);
         }
-
         return comment ;
     }
 

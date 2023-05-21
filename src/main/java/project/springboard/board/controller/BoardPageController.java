@@ -16,7 +16,6 @@ public class BoardPageController {
     public String boardHome(@RequestParam("page") String page, Model model) {
         int currentPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
         model.addAttribute("page", currentPage);
-
         return "board/mainBoard";
     }
 

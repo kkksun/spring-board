@@ -53,6 +53,8 @@ public class Member extends Auditable<Long>  {
     @ColumnDefault("'N'")
     private Check delCheck;
 
+    @Transient
+    private String role;
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
         Member member = Member.builder()
@@ -87,7 +89,7 @@ public class Member extends Auditable<Long>  {
         this.status = MemberStatus.DELETE;
 
         String masking = "";
-        if(loginIdLength != 0) {
+        if(loginIdLength != null) {
             for(int i = 1; i < loginIdLength; i++) {
                 masking += "*";
             }

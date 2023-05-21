@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.springboard.board.domain.dto.CommentDTO;
+import project.springboard.board.domain.entity.Check;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CommentForm {
     private Long groupId;
     private Long level;
     private Long levelOrder;
+    private Check delCheck;
     @JsonFormat(shape =JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
     @JsonFormat(shape =JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -41,6 +43,7 @@ public class CommentForm {
         this.levelOrder = commentDTO.getLevelOrder();
         this.createdDate = commentDTO.getCreatedDate();
         this.modifiedDate = commentDTO.getModifiedDate();
+        this.delCheck = commentDTO.getDelCheck();
         if(commentDTO.getParent() != null) {
             this.parentId = commentDTO.getParent().getId();
         }
