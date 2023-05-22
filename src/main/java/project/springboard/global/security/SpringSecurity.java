@@ -17,8 +17,9 @@ public class SpringSecurity  {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
 //        .cors().disable()
-            .csrf().disable()
+//            .csrf().disable()
 //         .and()
+//                .csrf().ignoringAntMatchers("/api/**")
         .formLogin()
                 .loginPage("/login") // 사용자 정의 로그인 페이지
                 .usernameParameter("loginId") // 아이디 파라미터명 설정
