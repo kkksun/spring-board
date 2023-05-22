@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <title>게시판</title>
     <meta charset="UTF-8">
     <link th:href="@{/css/boardStyle.css}"
           href="../../static/css/boardStyle.css" rel="stylesheet">
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findCommentList.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteBoard.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditComment.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqAddComment.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createWriteBoxHtml.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/addComment.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/editComment.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteComment.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createCommentListHtml.js}"></script>
+
+    <script th:inline="javascript">
+        const typeOfLoginMember = [[${session.loginMember.type}]];
+        const idOfLoginMember = [[${session.loginMember.id}]];
+        const loginIdOfLoginMember = [[${session.loginMember.loginId}]];
+        let memberIdOfBoard;
+        const boardId = [[${boardId}]];
+
+        document.addEventListener("DOMContentLoaded", function (){
+            scrollHandler();
+            findBoard(boardId, false);
+            // findCommentList(boardId);
+        });
+    </script>
 </head>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditBoard.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findCommentList.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteBoard.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditComment.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqAddComment.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createWriteBoxHtml.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/addComment.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/editComment.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteComment.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createCommentListHtml.js}"></script>
-
-<script th:inline="javascript">
-const typeOfLoginMember = [[${session.loginMember.type}]];
-const idOfLoginMember = [[${session.loginMember.id}]];
-const loginIdOfLoginMember = [[${session.loginMember.loginId}]];
-let memberIdOfBoard;
-const boardId = [[${boardId}]];
-
-document.addEventListener("DOMContentLoaded", function (){
-    scrollHandler();
-    findBoard(boardId, false);
-    // findCommentList(boardId);
-});
-</script>
 <body>
     <div class="container">
         <div th:replace="~{fragment/topFrag :: topTitle ('게시글')}"></div>

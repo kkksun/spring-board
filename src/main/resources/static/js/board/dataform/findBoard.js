@@ -13,7 +13,7 @@ const findBoard = (boardId, isEdit) => {
                     if(isEdit && key === "title") {document.getElementById(key).value = data[key];}
                     else if(key === "content") {
                         document.getElementById(key).style.whiteSpace= "pre-line";
-                        document.getElementById(key).innerText = data[key];
+                        document.getElementById(key).value = data[key];
                     }
                     else { document.getElementById(key).innerText = data[key] };
                 }

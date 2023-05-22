@@ -548,6 +548,7 @@ table .top {
 }
 .commentBox_comment > p {
     margin:0px;
+    white-space: pre-line;
 }
 .commentInfoBox > span, .commentInfoBox > button  {
     font-size: 12px;
