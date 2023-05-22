@@ -8,11 +8,11 @@
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/scrollHandler.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findBoard.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditBoard.js}"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findCommentList.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteBoard.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqEditComment.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/reqAddComment.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/function/createWriteBoxHtml.js}"></script>
-<script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/findCommentList.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/addComment.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/editComment.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/js/board/dataform/deleteComment.js}"></script>
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function (){
             <div class="row">
                 <div class="btn">
                     <a class="btn_e" th:onclick="reqEditBoard()" type="button">수정</a>
-                    <a class="btn_c" th:onclick="deleteBoard()" type="button">삭제</a>
+                    <a class="btn_c" onclick="findCommentList(this.getAttribute('boardId'))" th:boardId="${boardId}" type="button">삭제</a>
                 </div>
             </div>
         </div>

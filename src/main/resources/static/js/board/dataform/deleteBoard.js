@@ -1,8 +1,5 @@
-const deleteBoard = () => {
-
-    findCommentList(boardId);
-    const commentList = document.getElementsByClassName("commentList")[0];
-    const commentCnt =commentList.getElementsByClassName("comment").length;
+const deleteBoard = (data) => {
+    const commentCnt = data.length;
     if(memberIdOfBoard === idOfLoginMember && commentCnt != 0) {
         alert("게시글 삭제가 불가합니다. 관리자에게 문의해 주세요.");
     }

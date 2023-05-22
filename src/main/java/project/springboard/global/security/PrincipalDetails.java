@@ -13,7 +13,6 @@ public class PrincipalDetails implements UserDetails {
 
         public PrincipalDetails(Member member) {
         this.member = member;
-            System.out.println(member.getRole());
     }
 
     @Override

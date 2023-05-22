@@ -13,7 +13,7 @@
     loginInfo.append("loginId", form.loginId.value);
     loginInfo.append("password", form.password.value);
 
-    fetch("/api/login", {
+    fetch("/sign-in", {
         method: "post",
         headers: {
             'header': header,

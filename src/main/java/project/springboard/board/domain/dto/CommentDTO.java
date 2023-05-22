@@ -39,6 +39,8 @@ public class CommentDTO {
 
     private Check delCheck;
 
+    private Long childCnt;
+
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
@@ -69,6 +71,7 @@ public class CommentDTO {
                 .level(comment.getLevel())
                 .levelOrder(comment.getLevelOrder())
                 .delCheck(comment.getDelCheck())
+                .childCnt(comment.getChildCnt())
                 .createdDate(comment.getCreatedDate())
                 .modifiedDate(comment.getModifiedDate())
                 .build();

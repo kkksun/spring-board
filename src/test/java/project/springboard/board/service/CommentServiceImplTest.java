@@ -76,25 +76,32 @@ class CommentServiceImplTest {
         BoardDTO board = boardList.get(0);
         MemberDTO member = memberService.findMember(1L);
 
-        CommentDTO comment = CommentDTO.builder()
-                .comment("comment test")
+        CommentDTO comment1 = CommentDTO.builder()
+                .comment("comment test1")
                 .board(board)
                 .member(member)
                 .build();
-        List<CommentDTO> commentList = commentService.addComment(comment);
+        CommentDTO comment2 = CommentDTO.builder()
+                .comment("comment test2")
+                .board(board)
+                .member(member)
+                .build();
+        commentService.addComment(comment1);
+        commentService.addComment(comment2);
+        List<CommentDTO> commentList = commentService.commentList(board.getId());
 
         CommentDTO childComment = CommentDTO.builder()
-                .comment("comment test")
+                .comment("comment test3")
                 .board(board)
                 .member(member)
                 .parent(commentList.get(0))
                 .build();
+
         List<CommentDTO> commentList2 = commentService.addComment(childComment);
+        assertThat(commentList.size()).isEqualTo(2);
+        assertThat(commentList2.size()).isEqualTo(2);
+        assertThat(commentList2.get(0).getChildCnt()).isEqualTo(1);
+        assertThat(commentList2.get(0).getChildCommentList().get(0).getComment()).isEqualTo(childComment.getComment());
 
-
-
-        assertThat(commentList.get(0)).isEqualTo(commentList2.get(0));
-
-//        Assertions.assertThat(commentList.get(0).getComment()).isEqualTo(comment.getComment());
     }
 }

@@ -19,10 +19,10 @@ import java.util.Optional;
 
 
 @Slf4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class CustomAuditorAware implements AuditorAware<Member> {
 
-//    private final HttpServletRequest httpServletRequest;
+    private final HttpServletRequest request;
 
 
     public Optional<Member> getCurrentAuditor() {
@@ -30,11 +30,10 @@ public class CustomAuditorAware implements AuditorAware<Member> {
 
         HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 
-//        request.getRequestURI();
         HttpSession session = request.getSession();
                 LoginSessionDTO sessionMember = (LoginSessionDTO) session.getAttribute(SessionConst.LOGIN_MEMBER);
         Member member = sessionMember == null ? null : Member.builder()
-                        .id(sessionMember.getId())
+//                        .id(sessionMember.getId())
                         .loginId(sessionMember.getLoginId())
                         .type(sessionMember.getType())
                         .build();

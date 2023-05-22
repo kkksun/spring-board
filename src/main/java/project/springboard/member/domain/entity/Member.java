@@ -27,10 +27,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Member extends Auditable<Long>  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
-    private Long id;
-
     @Column(name = "LOGIN_ID", unique = true, nullable = false)
     private String loginId;
 

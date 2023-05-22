@@ -21,12 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Board extends Auditable<Long>  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID")
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(referencedColumnName = "ID", name = "USER_ID")
     private Member member;
 
     @Column(nullable = false)

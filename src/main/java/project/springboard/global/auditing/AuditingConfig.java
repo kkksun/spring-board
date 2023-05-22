@@ -1,5 +1,6 @@
 package project.springboard.global.auditing;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -11,14 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 
 //@Configuration
 //@EnableJpaAuditing
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class AuditingConfig {
 
-//    private final HttpServletRequest httpServletRequest;
+    private final HttpServletRequest httpServletRequest;
 
     @Bean
     public AuditorAware<Member> auditorAware() {
-        return new CustomAuditorAware();
+        return new CustomAuditorAware(httpServletRequest);
     }
 
 

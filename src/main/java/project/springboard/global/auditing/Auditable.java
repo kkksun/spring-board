@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<PK extends Serializable>{ // extends AbstractPersistable<PK> {
+public abstract class Auditable<PK extends Serializable> extends AbstractPersistable<PK> {
 
 //    @ManyToOne
 //    @CreatedBy

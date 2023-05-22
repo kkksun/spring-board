@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import project.springboard.board.domain.dto.CommentDTO;
-import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.form.CommentForm;
 import project.springboard.board.service.CommentService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,8 +33,6 @@ public class CommentController {
     @PostMapping("/comment/add")
     public List<CommentForm> addComment(@RequestBody CommentForm comment) {
         CommentDTO addComment = new CommentDTO(comment);
-//        CommentDTO commentDTO = commentService.addComment(addComment);
-//        CommentForm savedComment = new CommentForm(commentDTO);
 
         return CommentForm.toCommentFormList(commentService.addComment(addComment));
     }
@@ -47,8 +43,6 @@ public class CommentController {
     @PatchMapping("/comment/edit/{commentId}")
     public List<CommentForm> editComment( @PathVariable("commentId") Long commentId, @RequestBody CommentForm comment) {
         CommentDTO editComment = new CommentDTO(comment);
-//        CommentDTO commentDTO = commentService.editComment(commentId, editComment);
-//        CommentForm editedComment = new CommentForm(commentDTO);
 
         return CommentForm.toCommentFormList(commentService.editComment(commentId, editComment));
     }
@@ -58,7 +52,6 @@ public class CommentController {
      */
     @DeleteMapping("/comment/delete/{commentId}")
     public List<CommentForm> deleteComment(@PathVariable("commentId") Long commentId) {
-//        commentService.deleteComment(commentId);
         return CommentForm.toCommentFormList(commentService.deleteComment(commentId));
     }
 

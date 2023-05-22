@@ -5,8 +5,10 @@ const findCommentList = (boardId) => {
         }
         return response.json();
     }).then(data => {
+        document.getElementById("commentList").innerHTML ="";
         if(data.length !=  0) {
             createCommentListHtml(true, data);
         }
+        deleteBoard(data)
     }).catch(err => alert(err));
 }

@@ -24,12 +24,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AttachFile extends Auditable<Long> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FILE_ID")
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_ID")
+    @JoinColumn(referencedColumnName = "ID", name = "BOARD_ID")
     private Board board;
 
     @Column(name = "ORIGINAL_FILE_NAME")

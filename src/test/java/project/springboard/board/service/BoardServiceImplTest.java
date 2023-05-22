@@ -90,6 +90,7 @@ class BoardServiceImplTest {
     @Transactional
     @DisplayName("게시글 삭제 - 댓글이 없는 경우")
     public void deleteBoard2() throws IOException {
+
         List<BoardDTO> boardList  = boardService.allBoard();
 
         BoardDTO board = boardList.get(0);

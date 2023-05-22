@@ -23,22 +23,18 @@ import java.util.List;
 @Table(name ="COMMENTS")
 public class Comment extends Auditable<Long>  {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "COMMENT_ID")
-     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(referencedColumnName = "ID", name = "USER_ID")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BOARD_ID")
+    @JoinColumn(referencedColumnName = "ID", name = "BOARD_ID")
     private Board board;
 
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
+    @JoinColumn(referencedColumnName = "ID", name ="PARENT_ID")
     private Comment parent;
 
     @Column(name = "GROUP_ID")
@@ -82,7 +78,7 @@ public class Comment extends Auditable<Long>  {
             comment.setGroupId(commentLevel.getParentGroupId());
             comment.setLevel(commentLevel.getChildLevel() != null ? commentLevel.getChildLevel() : (commentLevel.getParentLevel() + 1));
             comment.setLevelOrder(commentLevel.getChildLevelOrder() != null ? (commentLevel.getChildLevelOrder()+1) : Long.valueOf(1));
-            comment.getParent().setChildCnt(comment.getParent().getChildCnt() + 1);
+            comment.getParent().setChildCnt((comment.getParent().getChildCnt() == null ? 0 :comment.getParent().getChildCnt() )  + 1);
         }
         return comment ;
     }
