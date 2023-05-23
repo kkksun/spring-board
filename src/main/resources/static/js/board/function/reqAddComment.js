@@ -1,9 +1,6 @@
 const reqAddComment = (e) => {
     const commentId = e.dataset.id
-    console.log(commentId);
-    console.log("comment"+commentId);
     const parentTag = document.getElementById("comment"+commentId);
-    console.log(parentTag);
     const div = createWriteBoxHtml(commentId, false)
     parentTag.after(div);
 
