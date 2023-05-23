@@ -7,8 +7,6 @@
 
     const header = document.querySelector('meta[name="_csrf_header"]').content;
     const token = document.querySelector('meta[name="_csrf"]').content;
-    console.log(header);
-    console.log(token);
     const loginInfo = new FormData();
     loginInfo.append("loginId", form.loginId.value);
     loginInfo.append("password", form.password.value);
@@ -50,10 +48,9 @@ const login = () => {
         password : form.password.value
     }
     fetch("/api/login", {
-        method: "post",
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
-            // 'X-CSRF-Token': token,
         },
         body: JSON.stringify(param),
     }).then(response => {

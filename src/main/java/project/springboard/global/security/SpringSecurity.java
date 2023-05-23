@@ -17,17 +17,19 @@ public class SpringSecurity  {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
 //        .cors().disable()
-//            .csrf().disable()
-//         .and()
-//                .csrf().ignoringAntMatchers("/api/**")
-        .formLogin()
-                .loginPage("/login") // 사용자 정의 로그인 페이지
-                .usernameParameter("loginId") // 아이디 파라미터명 설정
-                .passwordParameter("password") // 비밀번호 파라미터명 설정
-                .loginProcessingUrl("/sign-in") //로그인 form Action url
-                .defaultSuccessUrl("/board") // 로그인 성공 후 이동 페이지
-                .successForwardUrl("/board") //로그인 성공 url
-                .failureHandler(new ExtensibleAuthenticationFailureHandler());
+            .csrf().disable()
+//            .authorizeRequests()
+//            .antMatchers("/board/**").authenticated()
+//            .anyRequest().permitAll()
+//            .and()
+            .formLogin()
+            .loginPage("/login") // 사용자 정의 로그인 페이지
+            .usernameParameter("loginId") // 아이디 파라미터명 설정
+            .passwordParameter("password") // 비밀번호 파라미터명 설정
+            .loginProcessingUrl("/sign-in") //로그인 form Action url
+            .defaultSuccessUrl("/board") // 로그인 성공 후 이동 페이지
+            .successForwardUrl("/board") //로그인 성공 url
+            .failureHandler(new ExtensibleAuthenticationFailureHandler());
 
         return http.build();
     }
