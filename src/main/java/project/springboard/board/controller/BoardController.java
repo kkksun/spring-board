@@ -105,9 +105,9 @@ public class BoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/board/delete/{boardId}")
-    public HttpStatus deleteBoard( @PathVariable("boardId")Long boardId) {
+    public ResponseEntity<String> deleteBoard( @PathVariable("boardId")Long boardId) {
         boardService.deleteBoard(boardId);
-        return HttpStatus.OK;
+        return ResponseEntity.ok("ok");
     }
 
 }

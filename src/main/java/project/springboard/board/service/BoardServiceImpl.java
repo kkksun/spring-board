@@ -161,8 +161,8 @@ public class BoardServiceImpl implements BoardService{
     public void deleteBoard(Long boardId) {
         Board board = boardRepository.findBoardById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
-        Long countCommentOfBoard = commentRepository.countByBoardId(boardId);
-        if(countCommentOfBoard != 0) {
+        Long commentCountOfBoard = commentRepository.countByBoardId(boardId);
+        if(commentCountOfBoard != 0) {
             board.setDelCheck(Check.Y);
             attachFileRepository.updateDelStatusOfFile(boardId);
             commentRepository.updateDelStatusOfComment(boardId);
