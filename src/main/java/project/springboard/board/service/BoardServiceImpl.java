@@ -2,11 +2,11 @@ package project.springboard.board.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
@@ -92,7 +93,7 @@ public class BoardServiceImpl implements BoardService{
                             .collect(Collectors.toList());
         }
         Board board = Board.createBoard(addBoard, member, attachFiles);
-       boardRepository.save(board);
+        boardRepository.save(board);
 
        if(!board.getAttachFileList().isEmpty()) {
            for (AttachFile attachFile : board.getAttachFileList()) {
@@ -126,16 +127,16 @@ public class BoardServiceImpl implements BoardService{
         board.setTitle(editBoard.getTitle());
         board.setContent(editBoard.getContent());
 
-        if(!board.getAttachFileList().isEmpty() ) {
+        if(!board.getAttachFileList().isEmpty()) {
            if(preFileIdList != null) { //이전과 동일 또는 일부 삭제
                List<AttachFile> deleteFileList = board.getAttachFileList().stream().filter(f -> !preFileIdList.contains(f.getId())).collect(Collectors.toList());
                for (AttachFile attachFile : deleteFileList) {
-                   deleteFile(createDeleteFilePath(attachFile));
+                   deleteFolderAndFile(createDeleteFilePath(attachFile));
                    board.getAttachFileList().remove(attachFile);
                }
 
            } else { // 이전 파일 전체 삭제
-               deleteFolder(createDeleteFolderPath(boardId));
+               deleteFolderAndFile(createDeleteFolderPath(boardId));
                board.getAttachFileList().clear();
            }
         }
@@ -158,7 +159,7 @@ public class BoardServiceImpl implements BoardService{
      */
     @Override
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(Long boardId) throws IOException {
         Board board = boardRepository.findBoardById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         Long commentCountOfBoard = commentRepository.countByBoardId(boardId);
@@ -167,7 +168,7 @@ public class BoardServiceImpl implements BoardService{
             attachFileRepository.updateDelStatusOfFile(boardId);
             commentRepository.updateDelStatusOfComment(boardId);
         } else {
-            deleteFolder(createDeleteFolderPath(boardId));
+            deleteFolderAndFile(createDeleteFolderPath(boardId));
             boardRepository.delete(board);
         }
     }
@@ -208,31 +209,15 @@ public class BoardServiceImpl implements BoardService{
 
 
     /**
-     * 폴더 삭제
+     * 폴더 & 파일 삭제
      */
-    public void deleteFolder(String folderPath) {
-        File folder = new File(folderPath);
-        if(folder.exists()){
-            File[] files = folder.listFiles();
-            for (File file : files) {
-                if(file.isFile()) {
-                    file.delete();
-                } else  {
-                    deleteFolder(file.getPath());
-                }
-            }
-            folder.delete();
-        }
-    }
+     public void deleteFolderAndFile(String filePath) throws IOException {
+        File file = new File(filePath);
 
-    /**
-     * 파일 삭제
-     */
-    public void deleteFile(String deleteFilePath) {
-        File file = new File(deleteFilePath);
-        if(file.exists()) {
-            file.delete();
+        if(file.isDirectory()) {
+            FileUtils.cleanDirectory(file);
         }
+        Files.deleteIfExists(Path.of(filePath));
     }
 
     /**
@@ -243,7 +228,7 @@ public class BoardServiceImpl implements BoardService{
     /**
      *폴더 경로 생성
      */
-    public String createDeleteFolderPath(Long boardId) { return  fileDir + "/" + boardId; }
-    public String createAddFolderPath(Long boardId) { return  "/" + boardId + "/file/"; }
+    public String createDeleteFolderPath(Long boardId) { return  fileDir + File.separator + boardId; }
+    public String createAddFolderPath(Long boardId) { return  File.separator + boardId + File.separator + "file" + File.separator; }
 
 }

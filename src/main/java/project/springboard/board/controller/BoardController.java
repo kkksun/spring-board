@@ -105,7 +105,7 @@ public class BoardController {
      * 게시글 삭제
      */
     @DeleteMapping("/board/delete/{boardId}")
-    public ResponseEntity<String> deleteBoard( @PathVariable("boardId")Long boardId) {
+    public ResponseEntity<String> deleteBoard( @PathVariable("boardId")Long boardId) throws IOException {
         boardService.deleteBoard(boardId);
         return ResponseEntity.ok("ok");
     }

@@ -20,7 +20,7 @@ public interface BoardService {
 
     void editBoard(Long boardId, BoardDTO editBoard, List<Long> preFileIdList) throws IOException;
 
-    void deleteBoard(Long boardId);
+    void deleteBoard(Long boardId) throws IOException;
 
     PagingParam pageBoardList(int page);
 }
