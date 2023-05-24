@@ -5,10 +5,9 @@ const deleteBoard = (data) => {
     }
     if ((memberIdOfBoard === idOfLoginMember && commentCnt == 0) || typeOfLoginMember != "USER") {
         if (confirm("삭제하시겠습니까?")) {
-            fetch("/api/board/delete/" + boardId, {
-                method: "DELETE"
-            }).then(response => {
-                if (response.ok) {
+            axios.delete("/api/board/delete/" + boardId)
+            .then(response => {
+                if (response.status == 200) {
                     location.href = document.location.origin + "/complete/board?type=DELETE";
                 } else {
                     throw new Error(response.status + " 오류가 발생하였습니다.")

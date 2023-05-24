@@ -11,38 +11,27 @@ const joinMember = () => {
             }
         })
 
-        const param = {
-            loginId: form.loginId.value,
-            password: form.password.value,
-            passwordConfirm: form.passwordConfirm.value,
-            userName: form.userName.value,
-            email: form.email.value,
-            type: currentCheckedVal
-        }
-
-        fetch("/api/join", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(param)
+        axios.post("/api/join", {
+                loginId: form.loginId.value,
+                password: form.password.value,
+                passwordConfirm: form.passwordConfirm.value,
+                userName: form.userName.value,
+                email: form.email.value,
+                type: currentCheckedVal
         }).then(response => {
-            if (!response.ok) {
+            if(response.status != 200) {
                 throw new Error(response.status + " 오류가 발생하였습니다.")
             }
-            return response.json();
-        }).then(data => {
-               if (JSON.stringify(data) === '{}') {
+               if (JSON.stringify(response.data) === '{}') {
                 location.href = window.location.origin + "/complete/join";
             } else {
                 let errorTag = document.querySelectorAll(".field-error");
                 if (errorTag.length != 0) {
                     errorTag.forEach(tag => tag.remove())
                 }
-                createErrorMsgHtml(data, false);
+                createErrorMsgHtml(response.data, false);
             }
-        }).catch(err => {
-            alert(err)
+        }).catch(err => { alert(err)
         })
     }
 }

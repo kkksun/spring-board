@@ -2,12 +2,11 @@ const findBoard = (boardId, isEdit) => {
     if(boardId == null) {
         alert("오류가 발생하였습니다.");
     } else {
-        fetch("/api/board/view/"+boardId).then(response => {
-            if(!response.ok) {
+        axios.get("/api/board/view/"+boardId).then(response => {
+            if(response.status != 200) {
                 throw new Error(response.status + " 오류가 발생하였습니다.")
             }
-            return response.json();
-        }).then(data => {
+            const data = response.data;
             Object.keys(data).forEach(key => {
                 if(document.getElementById(key) != undefined && key != "attachFileList") {
                     if(isEdit && key === "title") {document.getElementById(key).value = data[key];}

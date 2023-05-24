@@ -1,11 +1,9 @@
 const memberList = () => {
-    fetch("/api/member/list")
+    axios.get("/api/member/list")
         .then(response => {
-            if(!response.ok) {
+            if(response.status != 200) {
                 throw new Error(response.status + " 오류가 발생하였습니다.")
             }
-            return response.json();
-        }).then(data => {
-        createMemberListHtml(data);
+       createMemberListHtml(response.data);
     }).catch(err => alert(err));
 }

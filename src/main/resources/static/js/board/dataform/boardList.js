@@ -1,10 +1,9 @@
 const boardList = (page) => {
-    fetch('/api/board/list?page=' + page).then(response => {
-        if(!response.ok) {
+    axios.get('/api/board/list?page=' + page).then(response => {
+        if(response.status != 200) {
             throw new Error(response.status + " 오류가 발생하였습니다.")
         }
-        return response.json();
-    }).then(data => {
+        const data = response.data();
         const pageParam = {
             currentPage : data["currentPage"],
             startPage: data["startPage"],

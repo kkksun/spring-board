@@ -1,11 +1,10 @@
 const findMember = (page) => {
-    fetch("/api/member/find/"+memberId)
+    axios.get("/api/member/find/"+memberId)
         .then(response=> {
-            if (!response.ok) {
+            if(response.status != 200) {
                 throw new Error(response.status + " 오류가 발생하였습니다.")
             }
-            return response.json();
-        }).then(data => {
+            const data = response.data;
             Object.keys(data).forEach(key => {
                 if (document.getElementById(key) != undefined) {
                     document.getElementById(key).value = data[key]

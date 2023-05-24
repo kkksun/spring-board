@@ -13,26 +13,27 @@ const editMember = () => {
         status: selectedStatus,
         requestedPage: requestedPage
     }
-    fetch("/api/member/edit/" + memberId, {
-        method: "PATCH",
-        headers: {"Content-Type": "application/json",
-        },
-        body: JSON.stringify(param)
+    axios.patch("/api/member/edit/" + memberId, {
+        password: isPwChange ? form.password.value : memberPassword,
+        pwChange: isPwChange,
+        userName: form.userName.value,
+        email: form.email.value,
+        type: selectedType,
+        status: selectedStatus,
+        requestedPage: requestedPage
     }).then(response => {
-        if(!response.ok) {
+        if(response.status != 200) {
             throw new Error(response.status + " 오류가 발생하였습니다.")
         }
-        return response.json()
-    }).then(data => {
-        console.log(data);
-        if (JSON.stringify(data) === '{}') {
+        console.log(response.data);
+        if (JSON.stringify(response.data) === '{}') {
             location.href = window.location.origin + (requestedPage === 'MANAGE'? "/manage/members" : `/member/info/${memberId}` );
         } else {
             let errorTag = document.querySelectorAll(".field-error");
             if (errorTag.length != 0) {
                 errorTag.forEach(tag => tag.remove())
             }
-            createErrorMsgHtml(data, true);
+            createErrorMsgHtml(response.data, true);
         }
 
     }).catch(err => alert(err))

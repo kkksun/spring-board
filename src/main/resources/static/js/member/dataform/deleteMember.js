@@ -8,10 +8,8 @@ const deleteMember = () => {
         alert("admin 계정은 탈퇴 불가합니다.");
     } else {
         if(confirm('탈퇴하시겠습니까?')) {
-            fetch(reqUrl, {
-                method : "DELETE"
-            }).then(response => {
-                if (response.ok) {
+            axios.delete(reqUrl).then(response => {
+                if (response.status == 200) {
                     if(requestedPage !== "MEMBER") {
                         alert("탈퇴가 완료되었습니다.")
                     }
