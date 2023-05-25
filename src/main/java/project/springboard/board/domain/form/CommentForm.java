@@ -53,7 +53,6 @@ public class CommentForm {
     }
 
     public static List<CommentForm> toCommentFormList(List<CommentDTO> commentList) {
-        List<CommentForm> commentFormList = commentList.stream().map(CommentForm::new).collect(Collectors.toList());
-        return commentFormList;
+        return commentList.stream().map(CommentForm::new).collect(Collectors.toList());
     }
 }

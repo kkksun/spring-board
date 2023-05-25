@@ -2,13 +2,11 @@ package project.springboard.board.domain.dto;
 
 import lombok.*;
 import project.springboard.board.domain.entity.Check;
-import project.springboard.board.domain.entity.Comment;
 import project.springboard.board.domain.form.WriteBoardForm;
 import project.springboard.board.domain.entity.Board;
 import project.springboard.member.domain.dto.MemberDTO;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +51,7 @@ public class BoardDTO {
     }
 
     public static BoardDTO toBoardDTO(Board board) {
-            BoardDTO viewBoard = BoardDTO.builder()
+        return BoardDTO.builder()
                     .id(board.getId())
                     .member(MemberDTO.toMemberDTO(board.getMember()))
                     .title(board.getTitle())
@@ -65,7 +63,6 @@ public class BoardDTO {
                                                              .map(AttachFileDTO::new)
                                                              .collect(Collectors.toList()))
                     .build();
-            return viewBoard;
     }
 }
 

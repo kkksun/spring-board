@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.springboard.board.domain.entity.Check;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.member.domain.entity.MemberStatus;
 import project.springboard.member.domain.dto.MemberDTO;
@@ -102,8 +101,7 @@ public class MemberServiceImpl implements MemberService{
      * 중복아이디 체크 */
     public boolean loginIdDuplicateCheck(String loginId) {
 
-        boolean result = memberRepository.existsByLoginId(loginId);
-        return result;
+        return memberRepository.existsByLoginId(loginId);
     }
 
 
@@ -149,7 +147,6 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));;
         String loginId = member.getLoginId();
         Integer loginIdLength = memberRepository.findDeletedLoginLid(loginId.substring(0,1), loginId.substring(loginId.length() - 1));
-        System.out.println("loginIdLength = " + loginIdLength);
         member.deleteMember(loginIdLength);
     }
 }

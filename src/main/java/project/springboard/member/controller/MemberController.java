@@ -40,9 +40,7 @@ public class MemberController {
      */
     @GetMapping("/member/find/{memberId}")
     public MemberDTO memberInfo(@PathVariable Long memberId) {
-        MemberDTO findMember = memberService.findMember(memberId);
-
-        return findMember;
+        return memberService.findMember(memberId);
     }
 
     /**
@@ -69,7 +67,7 @@ public class MemberController {
      * 회원 탈퇴
      */
     @DeleteMapping("/member/delete/{memberId}")
-    public String deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request)  {
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId,@RequestParam("isMember") boolean isMember, HttpServletRequest request)  {
         memberService.deleteMember(memberId);
         if(isMember) {
             HttpSession session = request.getSession(false);
@@ -78,7 +76,7 @@ public class MemberController {
             }
         }
 
-        return "ok";
+        return ResponseEntity.ok("ok");
     }
 
 }

@@ -3,21 +3,13 @@ package project.springboard.member.domain.entity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import project.springboard.board.domain.entity.Check;
-import project.springboard.board.domain.entity.Comment;
 import project.springboard.global.auditing.Auditable;
 import project.springboard.member.domain.dto.MemberDTO;
 import project.springboard.member.domain.form.RequestedPage;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Getter @Setter
@@ -53,17 +45,15 @@ public class Member extends Auditable<Long>  {
     private String role;
 
     public static Member toMemberEntity(MemberDTO memberDTO) {
-        Member member = Member.builder()
+        return Member.builder()
 //                .id(memberDTO.getId())
-                .loginId(memberDTO.getLoginId())
-                .password(memberDTO.getPassword())
-                .userName(memberDTO.getUserName())
-                .email(memberDTO.getEmail())
-                .type(memberDTO.getType())
-                .status(memberDTO.getStatus())
-                .build();
-
-        return member;
+                     .loginId(memberDTO.getLoginId())
+                     .password(memberDTO.getPassword())
+                     .userName(memberDTO.getUserName())
+                     .email(memberDTO.getEmail())
+                     .type(memberDTO.getType())
+                     .status(memberDTO.getStatus())
+                     .build();
     }
 
     public void updateMember(MemberDTO editMember, RequestedPage requestedPage) {
@@ -95,11 +85,5 @@ public class Member extends Auditable<Long>  {
         this.loginId = loginId.substring(0,1) + masking + loginId.substring(loginId.length() - 1);
 
     }
-
-//    @PrePersist
-//    public void setCreatedBy(){
-//      this.createdBy = this;
-//      this.modifiedBy = this;
-//    }
 
 }

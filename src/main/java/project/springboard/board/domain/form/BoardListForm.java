@@ -2,7 +2,6 @@ package project.springboard.board.domain.form;
 
 import lombok.Builder;
 import lombok.Data;
-import project.springboard.board.domain.dto.BoardDTO;
 import project.springboard.global.paging.PagingParam;
 
 import java.util.ArrayList;
@@ -42,9 +41,9 @@ public class BoardListForm {
         this.isLast = pagingParam.isLast();
 
         this.pagingBoardList = pagingParam.getBoardList().stream()
-                .map(BoardForm :: new)
-                .sorted(Comparator.comparing(BoardForm::getCreatedDate).reversed())
-                .collect(Collectors.toList());
+                               .map(BoardForm :: new)
+                               .sorted(Comparator.comparing(BoardForm::getCreatedDate).reversed())
+                               .collect(Collectors.toList());
 
 
     }

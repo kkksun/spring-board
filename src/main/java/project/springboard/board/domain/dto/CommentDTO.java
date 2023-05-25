@@ -87,7 +87,7 @@ public class CommentDTO {
         List<CommentDTO> commentList = new ArrayList<>();
         Map<Long, CommentDTO> commentMap = new HashMap<>();
 
-        comments.stream().forEach(c -> {
+        comments.forEach(c -> {
             CommentDTO comment = CommentDTO.toCommentDto(c);
             commentMap.put(comment.getId(), comment);
             if(comment.getParent() != null){

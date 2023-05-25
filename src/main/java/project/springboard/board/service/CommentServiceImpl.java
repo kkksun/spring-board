@@ -16,7 +16,6 @@ import project.springboard.global.exception.ErrorCode;
 import project.springboard.member.domain.entity.Member;
 import project.springboard.member.repository.MemberRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,9 +34,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<CommentDTO> commentList(Long boardId) {
         List<Comment> comments = commentRepository.commentListByBoardId(boardId);
-        List<CommentDTO> commentList = CommentDTO.toCommentDtoList(comments);
-
-        return commentList;
+        return CommentDTO.toCommentDtoList(comments);
     }
 
     /**

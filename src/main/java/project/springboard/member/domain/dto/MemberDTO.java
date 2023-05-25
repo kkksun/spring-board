@@ -57,18 +57,17 @@ public class MemberDTO {
     }
 
     public static MemberDTO toMemberDTO(Member member) {
-        MemberDTO memberDTO = MemberDTO.builder()
-                                       .id(member.getId())
-                                       .loginId(member.getLoginId())
-                                       .password(member.getPassword())
-                                       .userName(member.getUserName())
-                                       .email(member.getEmail())
-                                       .type(member.getType())
-                                       .status(member.getStatus())
-                                       .createdDate(member.getCreatedDate())
-                                       .modifiedDate(member.getModifiedDate())
-                                       .build();
-        return memberDTO;
+        return MemberDTO.builder()
+                        .id(member.getId())
+                        .loginId(member.getLoginId())
+                        .password(member.getPassword())
+                        .userName(member.getUserName())
+                        .email(member.getEmail())
+                        .type(member.getType())
+                        .status(member.getStatus())
+                        .createdDate(member.getCreatedDate())
+                        .modifiedDate(member.getModifiedDate())
+                        .build();
     }
 
     public void addMsg() {

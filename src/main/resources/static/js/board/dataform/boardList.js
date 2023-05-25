@@ -3,7 +3,8 @@ const boardList = (page) => {
         if(response.status != 200) {
             throw new Error(response.status + " 오류가 발생하였습니다.")
         }
-        const data = response.data();
+        const data = response.data;
+        console.log(data);
         const pageParam = {
             currentPage : data["currentPage"],
             startPage: data["startPage"],

@@ -65,8 +65,7 @@ public class BoardController {
 
     @GetMapping("/board/view/{boardId}")
     public ViewBoardForm viewBoard(@PathVariable("boardId") Long boardId) {
-        ViewBoardForm findBoard = new ViewBoardForm(boardService.findBoard(boardId));
-        return findBoard;
+        return new ViewBoardForm(boardService.findBoard(boardId));
     }
 
     /**
